@@ -7,16 +7,8 @@ const ProductContext = createContext();
 export const useProductContext = () => useContext(ProductContext);
 
 export const ProductContextProvider = (props) => {
-  // const { loginWithRedirect, isAuthenticated, logout, isLoading, user } =
-  //   useAuth0();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const { user, error } = useSelector((state) => state.user);
-  useEffect(() => {
-    if (user) {
-      setIsAuthenticated(true);
-    }
-  }, [user]);
-  console.log(isAuthenticated, "isAuthenticated");
+  const { isAuthenticated } = useSelector((state) => state.user)
+
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCartProducts, setSelectedCartProducts] = useState([]);
   const [selectedCompareProducts, setSelectedCompareProducts] = useState([]);
@@ -75,8 +67,6 @@ export const ProductContextProvider = (props) => {
         searchInput,
         setSearchInput,
         filterProducts,
-        setIsAuthenticated,
-        isAuthenticated,
         // logout,
         isLoading,
         setIsLoading,
@@ -84,6 +74,7 @@ export const ProductContextProvider = (props) => {
         removeFromCart,
         addToCompare,
         removeFromCompare,
+        isAuthenticated,
       }}
     >
       {props.children}

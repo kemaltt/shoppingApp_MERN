@@ -23,7 +23,7 @@ export default function ProductCard({ product, i, id }) {
   const navigate = useNavigate();
 
   const productDetail = () => {
-    navigate(isAuthenticated ? `/product/${id}` : '/login');
+    navigate(`/product/${id}`);
   };
 
   return (

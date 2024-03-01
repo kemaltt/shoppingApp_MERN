@@ -10,9 +10,7 @@ export default function Cart() {
   const badge = selectedCartProducts.length;
   return (
     <div
-      onClick={() =>
-        isAuthenticated ? navigate("/cart") : alert("please login")
-      }
+      onClick={() => navigate("/cart")}
       className="cart_container"
     >
       <FaCartArrowDown />

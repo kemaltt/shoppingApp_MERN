@@ -10,9 +10,7 @@ export default function CompareSide() {
   const badge = selectedCompareProducts.length;
   return (
     <div
-      onClick={() =>
-        isAuthenticated ? navigate("/compare") : alert("please login")
-      }
+      onClick={() => navigate("/compare")}
       className="compare-side"
     >
       <MdOutlineCompareArrows />
