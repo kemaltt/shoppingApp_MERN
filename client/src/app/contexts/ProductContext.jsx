@@ -22,35 +22,29 @@ export const ProductContextProvider = (props) => {
     );
   };
   const addToCart = (product) => {
-    if (isAuthenticated) {
-      if (selectedCartProducts.includes(product)) {
-        product.count++;
-      } else {
-        product.count = 1;
-        setSelectedCartProducts([...selectedCartProducts, product]);
-      }
+
+    if (selectedCartProducts.includes(product)) {
+      product.count++;
     } else {
-      alert("Please login");
+      product.count = 1;
+      setSelectedCartProducts([...selectedCartProducts, product]);
     }
+
   };
   const removeFromCart = (product) => {
     setSelectedCartProducts([
       ...selectedCartProducts.filter(
-        (el) => el.product_id !== product.product_id
+        (el) => el._id !== product._id
       ),
     ]);
   };
   const addToCompare = (product) => {
-    if (isAuthenticated) {
-      setSelectedCompareProducts([...selectedCompareProducts, product]);
-    } else {
-      alert("Please login");
-    }
+    setSelectedCompareProducts([...selectedCompareProducts, product]);
   };
   const removeFromCompare = (product) => {
     setSelectedCompareProducts([
       ...selectedCompareProducts.filter(
-        (el) => el.product_id !== product.product_id
+        (el) => el._id !== product._id
       ),
     ]);
   };
