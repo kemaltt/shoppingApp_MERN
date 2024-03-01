@@ -7,7 +7,7 @@ export default function Contact() {
   const { selectedCartProducts, setSelectedCartProducts, removeFromCart } =
     useProductContext();
   // const [quantity, setQuantity] = useState(1)
-  // console.log(selectedProducts)
+  console.log(selectedCartProducts)
   let total = 0;
 
   const decreaseQuantity = (product) => {
