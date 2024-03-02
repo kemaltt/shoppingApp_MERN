@@ -6,7 +6,7 @@ import { verifyToken } from '../middleware/auth.js';
 const router = express.Router();
 
 router.get('/products', getAllProducts);
-router.get('/product/:id', verifyToken, getSingleProduct);
+router.get('/product/:id', getSingleProduct);
 
 
 export default router;
