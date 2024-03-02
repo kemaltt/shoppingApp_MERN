@@ -17,7 +17,7 @@ export const ProductContextProvider = (props) => {
   const [searchInput, setSearchInput] = useState("");
 
   const filterProducts = (item) => {
-    return item.filter((el) =>
+    return item?.filter((el) =>
       el.name?.toLowerCase().includes(searchInput?.toLowerCase())
     );
   };

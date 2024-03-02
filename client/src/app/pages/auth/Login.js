@@ -74,7 +74,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate()
-  const { loading, error, user } = useSelector((state) => state.user);
+  const { loading, error } = useSelector((state) => state.user);
 
   const handleClick = (e) => {
     e.preventDefault();

@@ -8,10 +8,11 @@ import Button from "@mui/material/Button";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
+import { useDispatch } from "react-redux";
+import { fetchSingleProduct } from "../../middlewares/authApiCalls";
 
 export default function ProductCard({ product, i, id }) {
   const {
-    isAuthenticated,
     selectedCartProducts,
     selectedCompareProducts,
     addToCart,
@@ -19,10 +20,11 @@ export default function ProductCard({ product, i, id }) {
     addToCompare,
     removeFromCompare,
   } = useProductContext();
-
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const productDetail = () => {
+    fetchSingleProduct(dispatch, id);
     navigate(`/product/${id}`);
   };
 
