@@ -114,7 +114,8 @@ td {
 .main {
   text-align: center;
   padding-bottom: 10vh;
-  min-height: 75vh;
+  width: 90%;
+  margin: 0 auto;
 }
 
 .products_container {

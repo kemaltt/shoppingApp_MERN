@@ -23,7 +23,8 @@ const reviewSchema = new mongoose.Schema({
 const productSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   image: {
     type: String,

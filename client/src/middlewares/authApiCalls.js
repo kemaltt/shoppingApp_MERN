@@ -1,5 +1,6 @@
 import { publicRequest } from "../constants/api/apiUrl";
 import { loginFail, loginStart, loginSuccess, registerFail, registerStart, registerSuccess } from "../redux/authSlice";
+import { addToCartFail, addToCartStart, addToCartSuccess, getCartFail, getCartStart, getCartSuccess } from "../redux/cartSlice";
 import { fetchAllProducts, fetchProduct, fetchProductsFail, fetchProductsSuccess, fetchProductFail, fetchProductSuccess } from "../redux/productSlice";
 
 
@@ -45,5 +46,25 @@ export const fetchSingleProduct = async (dispatch, id) => {
     dispatch(fetchProductSuccess(response.data));
   } catch (error) {
     dispatch(fetchProductFail(error.response.data.message || 'Something went wrong!'))
+  }
+}
+
+export const addToCart = async (dispatch, product) => {
+  dispatch(addToCartStart())
+  try {
+    const response = await publicRequest.post(`api/add-to-cart`, product);
+    dispatch(addToCartSuccess(response.data));
+  } catch (error) {
+    dispatch(addToCartFail(error.response.data.message || 'Something went wrong!'))
+  }
+}
+
+export const getCart = async (dispatch) => {
+  dispatch(getCartStart())
+  try {
+    const response = await publicRequest.get(`api/cart`);
+    dispatch(getCartSuccess(response?.data?.products));
+  } catch (error) {
+    dispatch(getCartFail(error?.response?.data?.message || 'Something went wrong!'))
   }
 }

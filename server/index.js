@@ -5,6 +5,7 @@ import cors from 'cors';
 import { connect } from './src/config/MongoDb.js';
 import authRoute from './src/routers/authRoute.js';
 import productRoute from './src/routers/productRoute.js';
+import cartRoute from './src/routers/cartRoute.js';
 import cookieParser from 'cookie-parser';
 
 
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 
 app.use('/api', authRoute)
 app.use('/api', productRoute)
+app.use('/api', cartRoute)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
