@@ -22,7 +22,7 @@ export default function Contact() {
   }, [dispatch]);
 
   const selectedCartProducts = products.filter((product) => {
-    return cart?.some((cart) => cart.product_id === product._id);
+    return cart?.find((cart) => cart.product_id === product._id);
   }
   );
 
@@ -44,7 +44,7 @@ export default function Contact() {
   };
 
   const totalAmount = selectedCartProducts.map((product) => {
-    return product.price * product.count;
+    return product?.price;
   });
   totalAmount.map((el) => (total += el));
 
@@ -76,9 +76,9 @@ export default function Contact() {
                 <td>{i + 1}</td>
                 <td>
                   <img
-                    src={product.image}
+                    src={product?.image}
                     style={{ width: "25px" }}
-                    alt={product.name}
+                    alt={product?.name}
                   />
                 </td>
                 <td>{product?.name}</td>
@@ -89,7 +89,7 @@ export default function Contact() {
                   >
                     -
                   </button>
-                  <span> {product.count} </span>
+                  <span> {product?.count} </span>
                   <button
                     onClick={() => increaseQuantity(product)}
                     style={{ background: "yellowgreen" }}
@@ -97,10 +97,10 @@ export default function Contact() {
                     +
                   </button>
                 </td>
-                <td>${(product.price * product.count).toFixed(2)} </td>
+                <td>${(product?.price)?.toFixed(2)} </td>
                 <td style={{ textAlign: "center" }}>
                   <RiDeleteBin6Fill
-                    onClick={() => removeFromCart(product)}
+                    onClick={() => removeFromCart(product._id)}
                     style={{ color: "red" }}
                   />
                 </td>

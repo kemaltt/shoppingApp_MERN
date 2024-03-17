@@ -2,7 +2,6 @@ import CartModel from "../models/CartModel.js";
 
 export const getCart = async (req, res) => {
   const user_id = req.user.id;
-  console.log(user_id);
 
   try {
     const cart = await CartModel.findOne({ user_id: user_id });
@@ -19,7 +18,6 @@ export const getCart = async (req, res) => {
 }
 
 export const addToCart = async (req, res) => {
-  console.log(req.body);
   const { _id, countInStock, price } = req.body;
   const user_id = req.user.id;
 
@@ -42,4 +40,33 @@ export const addToCart = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
+}
+
+export const removeFromCart = async (req, res) => {
+  const user_id = req.user.id;
+  const product_id = req.params.id;
+  try {
+    const cart = await CartModel.findOne({
+      user_id
+    });
+    if (!cart) {
+      return res.status(404).json({
+        status: "error",
+        message: "Cart not found"
+      });
+    }
+    const product = cart.products.find(p => p.product_id == product_id);
+    if (!product) {
+      return res.status(404).json({
+        status: "error",
+        message: "Product not found"
+      });
+    }
+    cart.products = cart.products.filter(p => p.product_id != product_id);
+    await cart.save();
+    res.status(200).json(cart);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+
 }

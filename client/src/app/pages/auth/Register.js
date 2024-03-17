@@ -77,15 +77,14 @@ const Register = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate()
   const { loading, error, user } = useSelector((state) => state.user);
-  console.log(user);
   const handleClick = (e) => {
     e.preventDefault();
     const user = { name, email, password };
     register(dispatch, user);
-    if (user.status === 'success') {
-      navigate('/login')
-    }
   };
+  if (user?.status === 'success') {
+    navigate('/login')
+  }
 
   return (
     <Container>

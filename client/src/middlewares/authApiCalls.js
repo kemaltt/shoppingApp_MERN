@@ -1,6 +1,6 @@
 import { publicRequest, userRequest } from "../constants/api/apiUrl";
 import { loginFail, loginStart, loginSuccess, logout, registerFail, registerStart, registerSuccess } from "../redux/authSlice";
-import { addToCartFail, addToCartStart, addToCartSuccess, getCartFail, getCartStart, getCartSuccess } from "../redux/cartSlice";
+import { addToCartFail, addToCartStart, addToCartSuccess, getCartFail, getCartStart, getCartSuccess, removeFromCart, removeFromCartFail, removeFromCartSuccess } from "../redux/cartSlice";
 import { fetchAllProducts, fetchProduct, fetchProductsFail, fetchProductsSuccess, fetchProductFail, fetchProductSuccess } from "../redux/productSlice";
 
 
@@ -29,7 +29,7 @@ export const logoutBE = async (dispatch) => {
   dispatch(logout())
   try {
     const response = await userRequest.get(`/api/logout`);
-    console.log(response);
+
   } catch (error) {
     console.log(error);
   }
@@ -73,5 +73,15 @@ export const getCart = async (dispatch) => {
     dispatch(getCartSuccess(response?.data?.products));
   } catch (error) {
     dispatch(getCartFail(error?.response?.data?.message || 'Something went wrong!'))
+  }
+}
+
+export const removeCart = async (dispatch, id) => {
+  dispatch(removeFromCart())
+  try {
+    const response = await userRequest.delete(`api/remove-from-cart/${id}`);
+    dispatch(removeFromCartSuccess(response.data));
+  } catch (error) {
+    dispatch(removeFromCartFail(error.response.data.message || 'Something went wrong!'))
   }
 }

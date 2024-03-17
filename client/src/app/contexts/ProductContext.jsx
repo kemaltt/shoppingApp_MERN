@@ -1,6 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { addCart } from "../../middlewares/authApiCalls";
+import { addCart, removeCart } from "../../middlewares/authApiCalls";
 // import data from "../products";
 // import { useAuth0 } from "@auth0/auth0-react";
 
@@ -36,10 +36,11 @@ export const ProductContextProvider = (props) => {
     }
 
   };
-  const removeFromCart = (product) => {
+  const removeFromCart = (id) => {
+    removeCart(dispatch, id);
     setSelectedCartProducts([
       ...selectedCartProducts.filter(
-        (el) => el._id !== product._id
+        (el) => el._id !== id
       ),
     ]);
   };
