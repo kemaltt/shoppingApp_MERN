@@ -4,7 +4,6 @@ import Navbar from '../components/Navbar';
 import Register from '../pages/auth/Register';
 import Compare from '../pages/Compare';
 import ProductDetail from '../pages/ProductDetail';
-import Footer from '../components/Footer';
 import AuthRoute from './AuthRoute';
 import ProtectedRoute from './ProtectedRoute'
 import Login from '../pages/auth/Login';
@@ -17,9 +16,9 @@ export default function Router() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
         <Route element={<AuthRoute />} >
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route path="/cart" element={<Cart />} />

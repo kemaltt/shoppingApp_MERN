@@ -13,7 +13,7 @@ const CartSchema = new mongoose.Schema({
         required: true,
         ref: 'Product'
       },
-      quantity: {
+      countInStock: {
         type: Number,
         required: true,
         default: 1

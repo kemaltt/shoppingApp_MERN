@@ -5,7 +5,6 @@ import { useSelector } from 'react-redux';
 
 export default function AuthRoute() {
   const { isAuthenticated } = useSelector((state) => state.user)
-  console.log(isAuthenticated);
 
   if (!isAuthenticated) {
     return (

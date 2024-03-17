@@ -7,7 +7,9 @@ import { BsCartCheck } from "react-icons/bs";
 import Badge from "react-bootstrap/Badge";
 import { useProductContext } from "../contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/authSlice";
+import { logoutBE } from "../../middlewares/authApiCalls";
+import { clearCart } from "../../redux/cartSlice";
+
 
 
 export default function Navbar() {
@@ -17,9 +19,14 @@ export default function Navbar() {
   } = useProductContext();
   const { user, error, isAuthenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const { cart, loading } = useSelector((state) => state.cart);
 
+  const removePersist = () => {
+    dispatch(clearCart())
+    localStorage.removeItem('persist:root')
+  }
 
-  const badge = selectedCartProducts.length;
+  const badge = cart.length;
   const badge2 = selectedCompareProducts.length;
 
   const navigate = useNavigate();
@@ -87,7 +94,7 @@ export default function Navbar() {
               </li>
 
               <li className="logout">
-                <div onClick={() => { dispatch(logout()); navigate('/') }} >
+                <div onClick={() => { logoutBE(dispatch); removePersist(); navigate('/') }} >
                   <MdLogout style={{ fontSize: "3rem" }} />
                 </div>
               </li>
@@ -152,7 +159,7 @@ export default function Navbar() {
                   </Link>
                 </li>
                 <li>
-                  <div onClick={() => { dispatch(logout()); navigate('/') }} >
+                  <div onClick={() => { logoutBE(dispatch); removePersist(); navigate('/') }} >
                     <MdLogout style={{ fontSize: "2.5rem" }} /> {user.user.name}
                   </div>
                 </li>

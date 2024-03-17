@@ -11,10 +11,10 @@ export default function Contact() {
   // const [quantity, setQuantity] = useState(1)
 
   let total = 0;
-  const { carts, loading } = useSelector((state) => state.cart);
+  const { cart, loading } = useSelector((state) => state.cart);
   const { products } = useSelector((state) => state.products);
 
-
+  console.log(cart);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -22,7 +22,7 @@ export default function Contact() {
   }, [dispatch]);
 
   const selectedCartProducts = products.filter((product) => {
-    return carts?.some((cart) => cart.product_id === product._id);
+    return cart?.some((cart) => cart.product_id === product._id);
   }
   );
 
