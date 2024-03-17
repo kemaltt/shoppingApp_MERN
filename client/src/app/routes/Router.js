@@ -16,9 +16,9 @@ export default function Router() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/register" element={<Register />} />
         <Route element={<AuthRoute />} >
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route path="/cart" element={<Cart />} />

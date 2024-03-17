@@ -8,6 +8,7 @@ import Badge from "react-bootstrap/Badge";
 import { useProductContext } from "../contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
 import { logoutBE } from "../../middlewares/authApiCalls";
+import { clearCart } from "../../redux/cartSlice";
 
 
 
@@ -18,12 +19,14 @@ export default function Navbar() {
   } = useProductContext();
   const { user, error, isAuthenticated } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const { cart, loading } = useSelector((state) => state.cart);
+
   const removePersist = () => {
-    console.log('remove persist');
+    dispatch(clearCart())
     localStorage.removeItem('persist:root')
   }
 
-  const badge = selectedCartProducts.length;
+  const badge = cart.length;
   const badge2 = selectedCompareProducts.length;
 
   const navigate = useNavigate();

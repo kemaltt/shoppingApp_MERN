@@ -3,11 +3,14 @@ import { FaCartArrowDown } from "react-icons/fa";
 import Badge from "react-bootstrap/Badge";
 import { useNavigate } from "react-router-dom";
 import { useProductContext } from "../contexts/ProductContext";
+import { useSelector } from "react-redux";
 
 export default function Cart() {
   const { selectedCartProducts, isAuthenticated } = useProductContext();
+  const { cart, loading } = useSelector((state) => state.cart);
+
   const navigate = useNavigate();
-  const badge = selectedCartProducts.length;
+  const badge = cart.length;
   return (
     <div
       onClick={() => navigate("/cart")}
