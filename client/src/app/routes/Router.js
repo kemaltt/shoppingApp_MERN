@@ -10,14 +10,16 @@ import Login from '../pages/auth/Login';
 import Home from '../pages/Home';
 import Cart from '../pages/Cart';
 
+
 export default function Router() {
   return (
     <>
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/register" element={<Register />} />
         <Route element={<AuthRoute />} >
+          <Route path="/register" element={<Register />} />
+          {/* <Route path="/register" element={<SignUp />} /> */}
           <Route path="/login" element={<Login />} />
         </Route>
         <Route element={<ProtectedRoute />}>

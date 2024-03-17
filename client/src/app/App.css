@@ -337,6 +337,57 @@ td {
   border-radius: 50%;
 }
 
+.login {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.login-form {
+    flex: 1;
+    padding: 4rem;
+    color: black;
+    background-color: white;
+}
+
+.form-title {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.form-label {
+    padding-left: 1.5rem;
+    margin-bottom: 5px;
+    font-size: 1.5rem;
+}
+
+.form-control {
+    width: 90%;
+    margin: 1rem;
+}
+
+.register {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.register-form {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    flex: 1;
+    padding: 2rem;
+    color: black;
+    background-color: white;
+}
+
+.register-control {
+    width: 90%;
+    margin: 20px;
+}
+
 @media only screen and (max-width: 600px) {
   .navbar_ nav .nav_item_desktop {
     display: none;

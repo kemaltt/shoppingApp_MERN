@@ -4,17 +4,26 @@ import { useEffect } from "react";
 import { useProductContext } from "./contexts/ProductContext";
 import Router from "./routes/Router";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { fetchProducts } from "../middlewares/authApiCalls";
-import { useDispatch } from "react-redux";
+import { fetchProducts, getCart } from "../middlewares/authApiCalls";
+import { useDispatch, useSelector } from "react-redux";
+
+
 
 
 function App() {
+
   const dispatch = useDispatch();
+  const { user, error } = useSelector((state) => state.user);
+
   useEffect(() => {
 
     fetchProducts(dispatch);
+
+    if (user?.status === "success") {
+      getCart(dispatch);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [user, dispatch]);
 
   return (
     <div className="App">
