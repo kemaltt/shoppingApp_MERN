@@ -24,9 +24,21 @@ export const register = async (req, res) => {
       password: hashedPassword,
     });
 
-    res.status(201).json({ message: "User created successfully" });
+    res.status(201).json({
+      status: "success",
+      message: "User created successfully",
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      status: "error",
+      message: error.message
+    });
   }
 };
 
@@ -46,15 +58,16 @@ export const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const access_token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
 
-    res.cookie("access_token", token, {
+    res.status(200).cookie("access_token", access_token, {
       httpOnly: true,
     })
-      .status(200)
       .json({
-        token, user: {
+        status: "success",
+        access_token,
+        user: {
           id: user._id,
           name: user.name,
           email: user.email,
@@ -62,7 +75,10 @@ export const login = async (req, res) => {
         }
       });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({
+      status: "error",
+      message: error.message
+    });
   }
 };
 
@@ -84,4 +100,7 @@ export const updateUser = async (req, res) => {
 }
 
 
-export const logout = async (req, res) => { };
+export const logout = async (req, res) => {
+  res.clearCookie("access_token").json({ message: "Logged out" });
+  res.user = null;
+};

@@ -1,12 +1,16 @@
 import CartModel from "../models/CartModel.js";
 
 export const getCart = async (req, res) => {
-  const user_id = '65dbad52da17b2a8460126fc';
+  const user_id = req.user.id;
+  console.log(user_id);
 
   try {
     const cart = await CartModel.findOne({ user_id: user_id });
     if (!cart) {
-      return res.status(404).json({ message: "Cart not found" });
+      return res.status(404).json({
+        status: "error",
+        message: "Cart not found"
+      });
     }
     res.status(200).json(cart);
   } catch (error) {
@@ -15,23 +19,24 @@ export const getCart = async (req, res) => {
 }
 
 export const addToCart = async (req, res) => {
-  const { product_id, quantity, price } = req.body;
-  // const user_id = req.user._id;
-  const user_id = '65dbad52da17b2a8460126fc';
+  console.log(req.body);
+  const { _id, countInStock, price } = req.body;
+  const user_id = req.user.id;
+
   try {
     const cart = await CartModel.findOne({ user_id });
     if (!cart) {
-      const newCart = new CartModel({ user_id, products: [{ product_id, quantity, price }] });
+      const newCart = new CartModel({ user_id, products: [{ product_id: _id, countInStock, price }] });
       await newCart.save();
       return res.status(201).json(newCart);
     }
-    const product = cart.products.find(p => p.product_id == product_id);
+    const product = cart.products.find(p => p.product_id == _id);
     if (product) {
-      product.quantity += quantity;
+      product.countInStock += countInStock;
       await cart.save();
       return res.status(200).json(cart);
     }
-    cart.products.push({ product_id, quantity, price });
+    cart.products.push({ product_id: _id, countInStock, price });
     await cart.save();
     res.status(200).json(cart);
   } catch (error) {

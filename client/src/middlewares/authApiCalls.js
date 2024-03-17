@@ -1,5 +1,5 @@
-import { publicRequest } from "../constants/api/apiUrl";
-import { loginFail, loginStart, loginSuccess, registerFail, registerStart, registerSuccess } from "../redux/authSlice";
+import { publicRequest, userRequest } from "../constants/api/apiUrl";
+import { loginFail, loginStart, loginSuccess, logout, registerFail, registerStart, registerSuccess } from "../redux/authSlice";
 import { addToCartFail, addToCartStart, addToCartSuccess, getCartFail, getCartStart, getCartSuccess } from "../redux/cartSlice";
 import { fetchAllProducts, fetchProduct, fetchProductsFail, fetchProductsSuccess, fetchProductFail, fetchProductSuccess } from "../redux/productSlice";
 
@@ -25,8 +25,14 @@ export const register = async (dispatch, user) => {
   }
 }
 
-export const logout = async (dispatch) => {
+export const logoutBE = async (dispatch) => {
   dispatch(logout())
+  try {
+    const response = await userRequest.get(`/api/logout`);
+    console.log(response);
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export const fetchProducts = async (dispatch) => {
@@ -42,17 +48,17 @@ export const fetchProducts = async (dispatch) => {
 export const fetchSingleProduct = async (dispatch, id) => {
   dispatch(fetchProduct())
   try {
-    const response = await publicRequest.get(`api/product/${id}`);
+    const response = await userRequest.get(`api/product/${id}`);
     dispatch(fetchProductSuccess(response.data));
   } catch (error) {
     dispatch(fetchProductFail(error.response.data.message || 'Something went wrong!'))
   }
 }
 
-export const addToCart = async (dispatch, product) => {
+export const addCart = async (dispatch, product) => {
   dispatch(addToCartStart())
   try {
-    const response = await publicRequest.post(`api/add-to-cart`, product);
+    const response = await userRequest.post(`api/add-to-cart`, product);
     dispatch(addToCartSuccess(response.data));
   } catch (error) {
     dispatch(addToCartFail(error.response.data.message || 'Something went wrong!'))
@@ -62,7 +68,8 @@ export const addToCart = async (dispatch, product) => {
 export const getCart = async (dispatch) => {
   dispatch(getCartStart())
   try {
-    const response = await publicRequest.get(`api/cart`);
+    const response = await userRequest.get(`api/cart`);
+    console.log(response);
     dispatch(getCartSuccess(response?.data?.products));
   } catch (error) {
     dispatch(getCartFail(error?.response?.data?.message || 'Something went wrong!'))

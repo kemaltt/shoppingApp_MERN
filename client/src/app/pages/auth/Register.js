@@ -80,8 +80,9 @@ const Register = () => {
   console.log(user);
   const handleClick = (e) => {
     e.preventDefault();
-    register(dispatch, { name, email, password });
-    if (user && !loading) {
+    const user = { name, email, password };
+    register(dispatch, user);
+    if (user.status === 'success') {
       navigate('/login')
     }
   };

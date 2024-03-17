@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { addCart } from "../../middlewares/authApiCalls";
 // import data from "../products";
 // import { useAuth0 } from "@auth0/auth0-react";
 
@@ -7,6 +8,8 @@ const ProductContext = createContext();
 export const useProductContext = () => useContext(ProductContext);
 
 export const ProductContextProvider = (props) => {
+
+  const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.user)
 
   const [isLoading, setIsLoading] = useState(true);
@@ -23,10 +26,12 @@ export const ProductContextProvider = (props) => {
   };
   const addToCart = (product) => {
 
+    addCart(dispatch, product);
+
     if (selectedCartProducts.includes(product)) {
-      product.count++;
+      console.log('product already in cart');
     } else {
-      product.count = 1;
+      console.log('product added to cart');
       setSelectedCartProducts([...selectedCartProducts, product]);
     }
 
