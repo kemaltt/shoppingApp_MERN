@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../../middlewares/authApiCalls";
+import { Spinner } from "react-bootstrap";
 
 
 const Container = styled.div`
@@ -95,8 +96,9 @@ const Login = () => {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button onClick={handleClick} disabled={loading}>
-            LOGIN
+          <Button onClick={handleClick} >
+            LOGIN {loading && <Spinner animation="border" size="sm" />
+            }
           </Button>
           {error && <Error> {error}</Error>}
           <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
