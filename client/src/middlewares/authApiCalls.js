@@ -1,7 +1,8 @@
+import { toast } from "react-toastify";
 import { publicRequest, userRequest } from "../constants/api/apiUrl";
 import { loginFail, loginStart, loginSuccess, logout, registerFail, registerStart, registerSuccess } from "../redux/authSlice";
 import { addToCartFail, addToCartStart, addToCartSuccess, getCartFail, getCartStart, getCartSuccess, removeFromCart, removeFromCartFail, removeFromCartSuccess } from "../redux/cartSlice";
-import { fetchAllProducts, fetchProduct, fetchProductsFail, fetchProductsSuccess, fetchProductFail, fetchProductSuccess } from "../redux/productSlice";
+import { fetchAllProducts, fetchProduct, fetchProductsFail, fetchProductsSuccess, fetchProductFail, fetchProductSuccess, fetchProductStart } from "../redux/productSlice";
 
 
 
@@ -9,6 +10,7 @@ export const login = async (dispatch, user) => {
   dispatch(loginStart())
   try {
     const response = await publicRequest.post(`/api/login`, user);
+    console.log(response.data);
     dispatch(loginSuccess(response.data));
   } catch (error) {
     dispatch(loginFail(error.response.data.message || 'Something went wrong!'))
@@ -41,12 +43,12 @@ export const fetchProducts = async (dispatch) => {
     const response = await publicRequest.get(`api/products`);
     dispatch(fetchProductsSuccess(response.data));
   } catch (error) {
-    dispatch(fetchProductsFail(error.response.data.message || 'Something went wrong!'))
+    dispatch(fetchProductsFail(error?.response?.data?.message || 'Something went wrong!'))
   }
 }
 
 export const fetchSingleProduct = async (dispatch, id) => {
-  dispatch(fetchProduct())
+  dispatch(fetchProductStart())
   try {
     const response = await userRequest.get(`api/product/${id}`);
     dispatch(fetchProductSuccess(response.data));

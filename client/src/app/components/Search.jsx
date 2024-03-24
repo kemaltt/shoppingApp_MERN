@@ -37,7 +37,7 @@ export default function Search({ setMessage }) {
         <input
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Search a product..."
-          type="text"
+          type="search"
           value={searchInput}
         />
         {/* <button type="submit">Search</button> */}

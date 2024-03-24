@@ -1,11 +1,12 @@
 import "./App.css";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { useEffect } from "react";
-import { useProductContext } from "./contexts/ProductContext";
 import Router from "./routes/Router";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { fetchProducts, getCart } from "../middlewares/authApiCalls";
 import { useDispatch, useSelector } from "react-redux";
+import { ToastContainer } from 'react-toastify';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 
@@ -27,6 +28,7 @@ function App() {
 
   return (
     <div className="App">
+      <ToastContainer />
       <BrowserRouter>
         <Routes>
           <Route path="*" element={<Router />} />

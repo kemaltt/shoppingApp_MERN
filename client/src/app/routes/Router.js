@@ -1,14 +1,15 @@
 import React from 'react'
 import { Routes, Route } from "react-router-dom";
-import Navbar from '../components/Navbar';
+import Navbar from '../components/navbar/Navbar';
 import Register from '../pages/auth/Register';
-import Compare from '../pages/Compare';
+import CompareList from '../pages/CompareList';
 import ProductDetail from '../pages/ProductDetail';
 import AuthRoute from './AuthRoute';
 import ProtectedRoute from './ProtectedRoute'
 import Login from '../pages/auth/Login';
 import Home from '../pages/Home';
-import Cart from '../pages/Cart';
+import CartList from '../pages/CartList';
+import WishList from '../pages/auth/WishList';
 
 
 export default function Router() {
@@ -23,8 +24,9 @@ export default function Router() {
           <Route path="/login" element={<Login />} />
         </Route>
         <Route element={<ProtectedRoute />}>
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/compare" element={<Compare />} />
+          <Route path="/cart" element={<CartList />} />
+          <Route path="/compare" element={<CompareList />} />
+          <Route path="/wishlist" element={<WishList />} />
           <Route path="/product/:id" element={<ProductDetail />} />
         </Route>
       </Routes>

@@ -8,7 +8,7 @@ import Button from "@mui/material/Button";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchSingleProduct } from "../../middlewares/authApiCalls";
 
 export default function ProductCard({ product, i, id }) {
@@ -22,7 +22,7 @@ export default function ProductCard({ product, i, id }) {
   } = useProductContext();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const { isAuthenticated } = useSelector((state) => state.user);
   const productDetail = () => {
     fetchSingleProduct(dispatch, id);
     navigate(`/product/${id}`);
@@ -55,28 +55,15 @@ export default function ProductCard({ product, i, id }) {
             ></Button>
           ) : (
             <Button
-              onClick={() => addToCompare(product)}
+              onClick={() => !isAuthenticated ? navigate('/login') : addToCompare(product)}
               variant="outlined"
               color="success"
               startIcon={<CompareArrowsIcon />}
             ></Button>
-            // <MdCompareArrows
-            //   onClick={() =>
-            //     !isAuthenticated ? alert("please login") : addToCompare(product)
-            //   }
-            //   style={{ color: "yellowgreen" }}
-            // />
+
           )}
           <div className="cart_buttons">
             {selectedCartProducts && selectedCartProducts.includes(product) ? (
-              // <BsCartCheckFill
-              //   style={{ color: "green" }}
-              //   onClick={
-              //     !isAuthenticated
-              //       ? alert("please login")
-              //       : () => removeFromCart(product)
-              //   }
-              // />
               <Button
                 onClick={() => removeFromCart(product)}
                 variant="outlined"
@@ -86,16 +73,8 @@ export default function ProductCard({ product, i, id }) {
                 Del
               </Button>
             ) : (
-              // <BsCartPlus
-              //   style={{ color: "orange" }}
-              //   onClick={
-              //     !isAuthenticated
-              //       ? alert("please login")
-              //       : () => addToCart(product)
-              //   }
-              // />
               <Button
-                onClick={() => addToCart(product)}
+                onClick={() => !isAuthenticated ? navigate('/login') : addToCart(product)}
                 variant="outlined"
                 color="success"
                 startIcon={<AddShoppingCartIcon />}
