@@ -11,7 +11,7 @@ import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSingleProduct } from "../../middlewares/authApiCalls";
 
-export default function ProductCard({ product, i, id }) {
+export default function ProductCard({ product, i, id, cart }) {
   const {
     selectedCartProducts,
     selectedCompareProducts,
@@ -63,7 +63,7 @@ export default function ProductCard({ product, i, id }) {
 
           )}
           <div className="cart_buttons">
-            {selectedCartProducts && selectedCartProducts.includes(product) ? (
+            {selectedCartProducts && selectedCartProducts.includes(cart) ? (
               <Button
                 onClick={() => removeFromCart(product)}
                 variant="outlined"

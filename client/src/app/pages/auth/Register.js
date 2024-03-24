@@ -106,7 +106,7 @@ const Register = () => {
             type="password"
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button onClick={handleClick} disabled={loading}>
+          <Button onClick={handleClick} >
             REGISTER {loading && <Spinner animation="border" size="sm" />
             }
           </Button>

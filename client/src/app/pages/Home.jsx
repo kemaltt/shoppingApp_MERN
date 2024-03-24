@@ -12,6 +12,7 @@ export default function ProductComparison() {
   const [message, setMessage] = useState("");
   const { filterProducts } = useProductContext();
   const { products, loading } = useSelector((state) => state.products);
+  const { cart } = useSelector((state) => state.cart);
 
   return loading ? (
     <Loading />
@@ -32,6 +33,7 @@ export default function ProductComparison() {
           <ProductCard
             key={i}
             product={product}
+            cart={cart}
             id={product._id}
             i={i}
           />

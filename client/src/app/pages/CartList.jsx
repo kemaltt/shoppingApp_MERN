@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import Table from "react-bootstrap/Table";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useProductContext } from "../contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
