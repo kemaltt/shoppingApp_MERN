@@ -31,16 +31,6 @@ export const authApi = createApi({
         },
       })
     }),
-    wishlist: builder.mutation({
-      query: (token) => ({
-        url: '/wishlist',
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }),
-    }),
-
   }),
 })
 

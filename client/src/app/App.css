@@ -119,6 +119,7 @@ td {
 .main {
   /* text-align: center; */
   padding-bottom: 10vh;
+  padding: 0 5% 10vh 5%;
   width: 90%;
   margin: 0 auto;
 }
@@ -128,7 +129,6 @@ td {
   justify-content: center;
   /* align-items: center; */
   flex-wrap: wrap;
-  ;
   gap: 15px;
   /* padding: 2vh 5%; */
   position: relative;
@@ -221,17 +221,18 @@ td {
   text-align: center;
 }
 
-.search_container {
-  width: 80%;
+/* .search_container {
+  width: 70%;
   margin: 4vh auto;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 10px;
-}
+} */
+
 
 .search_container form input {
-  width: 100%;
+  width: 350px;
   padding: 5px;
   border: none;
   border: solid 1px gray;
@@ -442,10 +443,16 @@ td {
     transition: all 0.4s linear;
   }
 
-  .search_container form {
-    width: 70%;
-    margin: 4vh auto;
+  .search_container {
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    gap: 0;
   }
+
+
 
   .search_container form input {
     width: 100%;

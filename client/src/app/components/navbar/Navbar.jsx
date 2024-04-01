@@ -23,12 +23,12 @@ export default function Navbar() {
     selectedCompareProducts,
   } = useProductContext();
   const [logout] = useLogoutMutation()
-  const dispatch = useDispatch();
   const { user, isAuthenticated } = useSelector((state) => state.user);
+  const { favorite } = useSelector((state) => state.favorite);
   const { cart } = useSelector((state) => state.cart);
 
   const cartBadge = cart?.products?.length;
-  const wishBadge = selectedCompareProducts?.length;
+  const wishBadge = favorite?.length;
   const badge2 = selectedCompareProducts?.length;
 
   const navigate = useNavigate();

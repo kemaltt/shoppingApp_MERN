@@ -105,12 +105,3 @@ export const logout = async (req, res) => {
   res.user = null;
 };
 
-export const getWishlist = async (req, res) => {
-  const userId = req.user.id;
-
-  const foundProduct = await UserModel.findById(userId).populate('favorite');
-  if (!foundProduct) {
-    return res.status(404).json({ message: "Product not found" });
-  }
-  res.status(200).json(foundProduct.favorite);
-}

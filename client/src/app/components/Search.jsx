@@ -45,17 +45,17 @@ export default function Search({ setMessage }) {
     setSearchInput("");
   };
   return (
-    <div className="search_container">
+    <div className="search_container w-75 d-flex justify-content-center align-items-center  gap-4 my-5 mx-auto">
       <Form.Select
         onChange={(e) => setSelectInput(e.target.value)}
-        style={{ height: '35px' }}
-        className="w-25 fs-5 border-black rounded-5 text-center"
+        style={{ height: '35px', width: '100px' }}
+        className="fs-5 border-black rounded-5 text-center"
         aria-label="Default select example">
         {categories.map((el, i) => (
           <option key={i} value={el}>{el}</option>
         ))}
       </Form.Select>
-      <form className="w-50 " onSubmit={getProduct} action="">
+      <form onSubmit={getProduct} action="">
         <input
           className="rounded-5"
           onChange={(e) => setSearchInput(e.target.value)}

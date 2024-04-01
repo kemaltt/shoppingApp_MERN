@@ -3,21 +3,18 @@ import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useProductContext } from "../contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
 import { getCart } from "../../middlewares/authApiCalls";
-import { Col, Form, Row } from "react-bootstrap";
-import { IoHeartOutline, IoHeartSharp } from "react-icons/io5";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import { IoHeartOutline } from "react-icons/io5";
 
 
 
 
 
 export default function Contact() {
-  const { setSelectedCartProducts, removeFromCart } =
-    useProductContext();
-  // const [quantity, setQuantity] = useState(1)
+  const { removeFromCart } = useProductContext();
 
   let total = 0;
   const { cart, error } = useSelector((state) => state.cart);
-  const { products } = useSelector((state) => state.products);
   const { token } = useSelector((state) => state.user);
   const optionValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
   const dispatch = useDispatch();
@@ -26,25 +23,6 @@ export default function Contact() {
     getCart(dispatch, token);
   }, [token, dispatch]);
 
-  // const selectedCartProducts = products.filter((product) => {
-  //   return cart?.find((cart) => cart.product === product._id);
-  // }
-  // );
-
-  // const decreaseQuantity = (product) => {
-  //   if (selectedCartProducts.includes(product)) {
-  //     if (product.count > 1) {
-  //       product.count--;
-  //       setSelectedCartProducts([...selectedCartProducts]);
-  //     }
-  //   }
-  // };
-  // const increaseQuantity = (product) => {
-  //   if (selectedCartProducts.includes(product)) {
-  //     product.count++;
-  //     setSelectedCartProducts([...selectedCartProducts]);
-  //   }
-  // };
   const shipping_cost = 4.99
   const totalAmount = cart?.products?.map((product) => {
     return product?.product?.price;
@@ -52,7 +30,6 @@ export default function Contact() {
   totalAmount?.map((el) => (total += el));
   const totalPrice = total + shipping_cost
 
-  console.log(cart?.products?.length);
   return (
     cart?.products?.length <= 0
       ? <h1 className="text-center text-danger mt-5">{error ?? <span> not found</span>}</h1>
@@ -88,6 +65,7 @@ export default function Contact() {
                           className="las la-star"
                         ></i>
                       ))}</p>
+                      <p>Stock: {product?.product?.countInStock}</p>
                       <div className="d-flex gap-4 ">
                         <p className="m-0">Quantity: </p>
                         <Form.Select className=" w-50  border-black rounded-5" aria-label="Default select example">
@@ -130,7 +108,7 @@ export default function Contact() {
                     <p>Total: {totalPrice.toFixed(2)}€</p>
                   </div>
                   <div className="payment-btn">
-                    <button>Checkout</button>
+                    <Button type="button" variant="success" >Checkout</Button>
                   </div>
                 </div>
               </Col>

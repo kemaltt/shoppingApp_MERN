@@ -3,9 +3,10 @@ import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import { connect } from './src/config/MongoDb.js';
-import authRoute from './src/routers/authRoute.js';
-import productRoute from './src/routers/productRoute.js';
-import cartRoute from './src/routers/cartRoute.js';
+import productRoute from './src/routers/product-route.js';
+import authRoute from './src/routers/auth-route.js';
+import cartRoute from './src/routers/cart-route.js';
+import favRoute from './src/routers/favorite-route.js';
 import cookieParser from 'cookie-parser';
 
 
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 app.use('/api', authRoute)
 app.use('/api', productRoute)
 app.use('/api', cartRoute)
+app.use('/api', favRoute)
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

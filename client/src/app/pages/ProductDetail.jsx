@@ -15,14 +15,7 @@ import { fetchSingleProduct } from "../../middlewares/authApiCalls";
 export default function ProductDetail() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {
-    selectedCartProducts,
-    selectedCompareProducts,
-    addToCart,
-    removeFromCart,
-    addToCompare,
-    removeFromCompare,
-  } = useProductContext();
+  const { addToCart, removeFromCart } = useProductContext();
   const id = useParams().id
   const { product, loading } = useSelector((state) => state.products);
   const { isAuthenticated, token } = useSelector((state) => state.user);
@@ -35,48 +28,50 @@ export default function ProductDetail() {
   return (
     loading
       ? <Loading />
-      : <Row className="">
-        <Col md='6' className="text-center p-5">
-          <img className="img-fluid" src={product?.image} alt={product?.name} />
-        </Col>
-        <Col md='6' className="p-5">
-          <div className=" d-flex justify-content-between  mb-4">
-            <h1 className="m-0">{product.name}</h1>
-            <span style={{ fontSize: "3rem" }}>
-              <IoMdHeartEmpty
-              // onClick={() => addToWish(product._id)}
-              />
-              {/* <IoMdHeart
+      : <Row>
+        <div className="row px-5">
+          <Col md='6' className="text-center p-5">
+            <img className="img-fluid" src={product?.image} alt={product?.name} />
+          </Col>
+          <Col md='6' className="p-5">
+            <div className=" d-flex justify-content-between  mb-4">
+              <h1 className="m-0">{product.name}</h1>
+              <span style={{ fontSize: "3rem" }}>
+                <IoMdHeartEmpty
+                // onClick={() => addToWish(product._id)}
+                />
+                {/* <IoMdHeart
                 className="text-danger"
               // onClick={() => removeFromWish(product._id)}
               /> */}
-            </span>
-          </div>
-          <span className=" fw-bold fs-1">{product?.price}€ </span>
-          <p>category:   {product?.category}</p>
-          <p>{product.description}</p>
-          <div className="cart_buttons">
-            {cart && cart?.products?.some((el) => el.product?._id === product._id) ? (
-              <Button
-                onClick={() => removeFromCart(product._id)}
-                variant="outlined"
-                color="error"
-                startIcon={<RemoveShoppingCartIcon />}
-              >
-                Delete from Cart
-              </Button>
-            ) : (
-              <Button
-                onClick={() => !isAuthenticated ? navigate('/login') : addToCart(product)}
-                variant="outlined"
-                color="success"
-                startIcon={<AddShoppingCartIcon />}
-              >
-                Add to Cart
-              </Button>
-            )}
-          </div>
-        </Col>
+              </span>
+            </div>
+            <span className=" fw-bold fs-1">{product?.price}€ </span>
+            <p>category:   {product?.category}</p>
+            <p>{product.description}</p>
+            <div className="cart_buttons">
+              {cart && cart?.products?.some((el) => el.product?._id === product._id) ? (
+                <Button
+                  onClick={() => removeFromCart(product._id)}
+                  variant="outlined"
+                  color="error"
+                  startIcon={<RemoveShoppingCartIcon />}
+                >
+                  Delete from Cart
+                </Button>
+              ) : (
+                <Button
+                  onClick={() => !isAuthenticated ? navigate('/login') : addToCart(product)}
+                  variant="outlined"
+                  color="success"
+                  startIcon={<AddShoppingCartIcon />}
+                >
+                  Add to Cart
+                </Button>
+              )}
+            </div>
+          </Col>
+        </div>
       </Row>
 
 

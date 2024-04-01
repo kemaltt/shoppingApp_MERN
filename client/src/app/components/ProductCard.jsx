@@ -1,32 +1,22 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-// import { BsCartPlus } from "react-icons/bs";
-// import { BsCartCheckFill } from "react-icons/bs";
-// import { MdCompareArrows } from "react-icons/md";
-import { useProductContext } from "../contexts/ProductContext";
-import Button from "@mui/material/Button";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
-import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchSingleProduct } from "../../middlewares/authApiCalls";
-// import { Card } from "react-bootstrap";
 import { CardActions, CardContent, CardMedia, Typography, Card, IconButton } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
+import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
+import { useSelector } from "react-redux";
+
+
+
 
 export default function ProductCard({ product, i, id, cart }) {
-  const {
-    selectedCartProducts,
-    selectedCompareProducts,
-    addToCart,
-    removeFromCart,
-    addToCompare,
-    removeFromCompare,
-  } = useProductContext();
+  const [addFavorite] = useAddFavoriteMutation()
+  const [deleteFavorite] = useDeleteFavoriteMutation()
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.user);
+  const { token, favorite, isAuthenticated } = useSelector((state) => ({
+    favorite: state.favorite.favorite,
+    token: state.user.token,
+    isAuthenticated: state.user.isAuthenticated
+  }));
   const productDetail = () => {
     // fetchSingleProduct(dispatch, id, token);
     navigate(`/product/${id}`);
@@ -55,12 +45,16 @@ export default function ProductCard({ product, i, id, cart }) {
           </Typography>
         </CardContent>
         <CardActions >
-          <IconButton aria-label="add to favorites" >
-            <FavoriteIcon color='' fontSize='large' />
-          </IconButton>
-          <IconButton aria-label="share">
-            <ShareIcon fontSize='large' />
-          </IconButton>
+          {favorite.some(el => el._id === id) ?
+            <IconButton onClick={() => token && deleteFavorite(id, token)} aria-label="add to favorites" >
+              <FavoriteIcon color='warning' fontSize='large' />
+            </IconButton>
+            :
+            <IconButton onClick={() => token && addFavorite(id, token)} aria-label="add to favorites" >
+              <FavoriteIcon fontSize='large' />
+            </IconButton>
+          }
+
         </CardActions>
       </Card>
       {/* <Card style={{ width: '24rem', height: '45rem' }}>

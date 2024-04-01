@@ -17,7 +17,7 @@ export default function Cart() {
       className="cart_container"
     >
       <FaCartArrowDown />
-      <Badge bg="secondary">{badge}</Badge>
+      <Badge bg="secondary">{badge ? badge : 0}</Badge>
       <span className="visually-hidden">unread messages</span>
     </div>
   );
