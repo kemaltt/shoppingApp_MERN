@@ -10,6 +10,10 @@ import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import CompareArrowsIcon from "@mui/icons-material/CompareArrows";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSingleProduct } from "../../middlewares/authApiCalls";
+// import { Card } from "react-bootstrap";
+import { CardActions, CardContent, CardMedia, Typography, Card, IconButton } from "@mui/material";
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShareIcon from '@mui/icons-material/Share';
 
 export default function ProductCard({ product, i, id, cart }) {
   const {
@@ -22,14 +26,53 @@ export default function ProductCard({ product, i, id, cart }) {
   } = useProductContext();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.user);
+  const { token } = useSelector((state) => state.user);
   const productDetail = () => {
-    fetchSingleProduct(dispatch, id);
+    // fetchSingleProduct(dispatch, id, token);
     navigate(`/product/${id}`);
   };
 
   return (
-    <div key={i} className="product_card">
+    <>
+
+      <Card
+        sx={{
+          maxWidth: 300,
+        }}>
+        <CardMedia
+          onClick={productDetail}
+          component="img"
+          sx={{ objectFit: 'contain', width: '100%', height: '400px', cursor: 'pointer', '&:hover': { opacity: 0.7 } }}
+          image={product.image}
+          title={product.name}
+        />
+        <CardContent sx={{ height: '120px' }} >
+          <Typography gutterBottom variant="h4" component="div">
+            {product.name}
+          </Typography>
+          <Typography variant='h6' color="text.secondary">
+            {product.category}
+          </Typography>
+        </CardContent>
+        <CardActions >
+          <IconButton aria-label="add to favorites" >
+            <FavoriteIcon color='' fontSize='large' />
+          </IconButton>
+          <IconButton aria-label="share">
+            <ShareIcon fontSize='large' />
+          </IconButton>
+        </CardActions>
+      </Card>
+      {/* <Card style={{ width: '24rem', height: '45rem' }}>
+        <Card.Img onClick={productDetail} className="img-fluid" style={{ width: '100%', height: '300px' }} variant="top" src={product.image} />
+        <Card.Body>
+          <Card.Title>{product.name}</Card.Title>
+          <Card.Text>
+            {product.category}
+          </Card.Text>
+        </Card.Body>
+      </Card> */}
+      {/* <div key={i} className="product_card">
       <img onClick={productDetail} src={product.image} alt={product.name} />
       <div className="product_body">
         <h3>{product.name} </h3>
@@ -85,6 +128,8 @@ export default function ProductCard({ product, i, id, cart }) {
           </div>
         </div>
       </div>
-    </div>
+    </div> */}
+    </>
+
   );
 }

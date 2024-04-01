@@ -35,6 +35,18 @@ const productSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    getCategoryProducts: (state) => {
+      state.loading = false;
+    },
+    getCategoryProductsSuccess: (state, action) => {
+      state.products = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    getCategoryProductsFail: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     clearProductReducer: (state) => {
       state.product = {};
       state.loading = false;
@@ -43,6 +55,6 @@ const productSlice = createSlice({
   },
 });
 
-export const { fetchAllProducts, fetchProductsSuccess, fetchProductsFail, fetchProductStart, fetchProductSuccess, fetchProductFail, clearProductReducer } = productSlice.actions;
+export const { fetchAllProducts, fetchProductsSuccess, fetchProductsFail, fetchProductStart, fetchProductSuccess, fetchProductFail, clearProductReducer, getCategoryProducts, getCategoryProductsSuccess, getCategoryProductsFail } = productSlice.actions;
 
 export default productSlice.reducer;

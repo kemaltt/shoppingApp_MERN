@@ -1,9 +1,22 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useProductContext } from "../contexts/ProductContext";
+import { Form } from "react-bootstrap";
+import { fetchCategoryProducts } from "../../middlewares/authApiCalls";
+import { useDispatch } from "react-redux";
 
 export default function Search({ setMessage }) {
+  const dispatch = useDispatch();
+  const [selectInput, setSelectInput] = React.useState('All')
   const { isAuthenticated, searchInput, setSearchInput, filterProducts } =
     useProductContext();
+  const optionValues = ['All', 'Electronics', 'Clothing', 'Books', 'Home', 'Beauty', 'Toys', 'Sports', 'Food', 'Other']
+  const categories = ['All', 'men\'s clothing', 'jewelery', 'electronics', 'women\'s clothing'];
+
+  useEffect(() => {
+    console.log(selectInput);
+    fetchCategoryProducts(dispatch, selectInput)
+  }, [dispatch, selectInput])
+
 
   const getProduct = (e) => {
     e.preventDefault();
@@ -33,8 +46,18 @@ export default function Search({ setMessage }) {
   };
   return (
     <div className="search_container">
-      <form onSubmit={getProduct} action="">
+      <Form.Select
+        onChange={(e) => setSelectInput(e.target.value)}
+        style={{ height: '35px' }}
+        className="w-25 fs-5 border-black rounded-5 text-center"
+        aria-label="Default select example">
+        {categories.map((el, i) => (
+          <option key={i} value={el}>{el}</option>
+        ))}
+      </Form.Select>
+      <form className="w-50 " onSubmit={getProduct} action="">
         <input
+          className="rounded-5"
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Search a product..."
           type="search"
@@ -42,6 +65,7 @@ export default function Search({ setMessage }) {
         />
         {/* <button type="submit">Search</button> */}
       </form>
+
     </div>
   );
 }

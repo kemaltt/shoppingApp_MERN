@@ -10,7 +10,7 @@ export const useProductContext = () => useContext(ProductContext);
 export const ProductContextProvider = (props) => {
 
   const dispatch = useDispatch();
-  const { isAuthenticated } = useSelector((state) => state.user)
+  const { isAuthenticated, token } = useSelector((state) => state.user)
 
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCartProducts, setSelectedCartProducts] = useState([]);
@@ -26,23 +26,23 @@ export const ProductContextProvider = (props) => {
   };
   const addToCart = (product) => {
 
-    addCart(dispatch, product);
+    addCart(dispatch, product, token);
 
-    if (selectedCartProducts.includes(product)) {
-      console.log('product already in cart');
-    } else {
-      console.log('product added to cart');
-      setSelectedCartProducts([...selectedCartProducts, product]);
-    }
+    // if (selectedCartProducts.includes(product)) {
+    //   console.log('product already in cart');
+    // } else {
+    //   console.log('product added to cart');
+    //   setSelectedCartProducts([...selectedCartProducts, product]);
+    // }
 
   };
   const removeFromCart = (id) => {
-    removeCart(dispatch, id);
-    setSelectedCartProducts([
-      ...selectedCartProducts.filter(
-        (el) => el._id !== id
-      ),
-    ]);
+    removeCart(dispatch, id, token);
+    // setSelectedCartProducts([
+    //   ...selectedCartProducts.filter(
+    //     (el) => el._id !== id
+    //   ),
+    // ]);
   };
   const addToCompare = (product) => {
     setSelectedCompareProducts([...selectedCompareProducts, product]);

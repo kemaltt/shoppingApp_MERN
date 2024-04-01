@@ -1,41 +1,10 @@
 import { toast } from "react-toastify";
-import { publicRequest, userRequest } from "../constants/api/apiUrl";
-import { loginFail, loginStart, loginSuccess, logout, registerFail, registerStart, registerSuccess } from "../redux/authSlice";
+import { BASE_URL, publicRequest, userRequest } from "../constants/api/apiUrl";
 import { addToCartFail, addToCartStart, addToCartSuccess, getCartFail, getCartStart, getCartSuccess, removeFromCart, removeFromCartFail, removeFromCartSuccess } from "../redux/cartSlice";
-import { fetchAllProducts, fetchProduct, fetchProductsFail, fetchProductsSuccess, fetchProductFail, fetchProductSuccess, fetchProductStart } from "../redux/productSlice";
+import { fetchAllProducts, fetchProduct, fetchProductsFail, fetchProductsSuccess, fetchProductFail, fetchProductSuccess, fetchProductStart, getCategoryProducts, getCategoryProductsSuccess, getCategoryProductsFail } from "../redux/productSlice";
+import axios from "axios";
 
 
-
-export const login = async (dispatch, user) => {
-  dispatch(loginStart())
-  try {
-    const response = await publicRequest.post(`/api/login`, user);
-    console.log(response.data);
-    dispatch(loginSuccess(response.data));
-  } catch (error) {
-    dispatch(loginFail(error.response.data.message || 'Something went wrong!'))
-  }
-}
-
-export const register = async (dispatch, user) => {
-  dispatch(registerStart())
-  try {
-    const response = await publicRequest.post(`/api/register`, user);
-    dispatch(registerSuccess(response.data));
-  } catch (error) {
-    dispatch(registerFail(error.response.data.message || 'Something went wrong!'))
-  }
-}
-
-export const logoutBE = async (dispatch) => {
-  dispatch(logout())
-  try {
-    const response = await userRequest.get(`/api/logout`);
-
-  } catch (error) {
-    console.log(error);
-  }
-}
 
 export const fetchProducts = async (dispatch) => {
   dispatch(fetchAllProducts())
@@ -47,43 +16,80 @@ export const fetchProducts = async (dispatch) => {
   }
 }
 
-export const fetchSingleProduct = async (dispatch, id) => {
+export const fetchSingleProduct = async (dispatch, id, token) => {
   dispatch(fetchProductStart())
   try {
-    const response = await userRequest.get(`api/product/${id}`);
+    const response = await axios.get(`${BASE_URL}/api/product/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+
+    });
     dispatch(fetchProductSuccess(response.data));
   } catch (error) {
     dispatch(fetchProductFail(error.response.data.message || 'Something went wrong!'))
   }
 }
 
-export const addCart = async (dispatch, product) => {
-  dispatch(addToCartStart())
+export const fetchCategoryProducts = async (dispatch, category) => {
+  dispatch(getCategoryProducts())
   try {
-    const response = await userRequest.post(`api/add-to-cart`, product);
-    dispatch(addToCartSuccess(response.data));
+    const response = await axios.get(`${BASE_URL}/api/category`, {
+      params: {
+        category: category
+      }
+
+    });
+    dispatch(getCategoryProductsSuccess(response.data));
   } catch (error) {
-    dispatch(addToCartFail(error.response.data.message || 'Something went wrong!'))
+    dispatch(getCategoryProductsFail(error?.response?.data?.message || 'Something went wrong!'))
   }
 }
 
-export const getCart = async (dispatch) => {
+export const addCart = async (dispatch, product, token) => {
+  dispatch(addToCartStart())
+  try {
+    const response = await axios.post(`${BASE_URL}/api/add-to-cart`, product, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    console.log(response.data);
+    dispatch(addToCartSuccess(response.data));
+  } catch (error) {
+    dispatch(addToCartFail(error?.response?.data?.message || 'Something went wrong!'))
+  }
+}
+
+export const getCart = async (dispatch, token) => {
   dispatch(getCartStart())
   try {
-    const response = await userRequest.get(`api/cart`);
-    console.log(response);
-    dispatch(getCartSuccess(response?.data?.products));
+    const response = await axios.get(`${BASE_URL}/api/cart`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    dispatch(getCartSuccess(response?.data));
   } catch (error) {
+    console.log(error?.response?.data?.message);
     dispatch(getCartFail(error?.response?.data?.message || 'Something went wrong!'))
   }
 }
 
-export const removeCart = async (dispatch, id) => {
+export const removeCart = async (dispatch, id, token) => {
   dispatch(removeFromCart())
   try {
-    const response = await userRequest.delete(`api/remove-from-cart/${id}`);
-    dispatch(removeFromCartSuccess(response.data));
+    const response = await axios.delete(`${BASE_URL}/api/remove-from-cart/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    dispatch(removeFromCartSuccess(response?.data));
   } catch (error) {
-    dispatch(removeFromCartFail(error.response.data.message || 'Something went wrong!'))
+    dispatch(removeFromCartFail(error.response.data?.message || 'Something went wrong!'))
   }
 }

@@ -10,7 +10,7 @@ export default function Cart() {
   const { cart, loading } = useSelector((state) => state.cart);
 
   const navigate = useNavigate();
-  const badge = cart.length;
+  const badge = cart?.products?.length;
   return (
     <div
       onClick={() => navigate("/cart")}

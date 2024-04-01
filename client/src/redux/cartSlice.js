@@ -30,7 +30,7 @@ const cartSlice = createSlice({
 
     },
     addToCartSuccess: (state, action) => {
-      state.cart = [...state.cart, action.payload];
+      state.cart = action.payload;
       state.error = null;
       state.loading = false;
     },
@@ -43,7 +43,7 @@ const cartSlice = createSlice({
       state.error = null;
     },
     removeFromCartSuccess: (state, action) => {
-      state.cart = action.payload.products;
+      state.cart = action.payload;
       state.loading = false;
       state.error = null;
     },

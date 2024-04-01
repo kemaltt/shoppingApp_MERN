@@ -14,17 +14,17 @@ import 'react-toastify/dist/ReactToastify.css';
 function App() {
 
   const dispatch = useDispatch();
-  const { user, error } = useSelector((state) => state.user);
+  const { user, token } = useSelector((state) => state.user);
 
   useEffect(() => {
 
     fetchProducts(dispatch);
 
-    if (user?.status === "success") {
-      getCart(dispatch);
+    if (user?.status === "success" && token) {
+      getCart(dispatch, user.access_token);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, dispatch]);
+  }, [user?.status, token, dispatch]);
 
   return (
     <div className="App">
