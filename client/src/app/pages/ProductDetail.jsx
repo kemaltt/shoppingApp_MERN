@@ -1,30 +1,36 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Loading from "../components/Loading";
-import { useDispatch, useSelector } from "react-redux";
-import { IoMdHeart, IoMdHeartEmpty } from "react-icons/io";
+import { useSelector } from "react-redux";
+import { IoMdHeartEmpty } from "react-icons/io";
 import Button from "@mui/material/Button";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
-import { useProductContext } from "../contexts/ProductContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
-import { fetchSingleProduct } from "../../middlewares/authApiCalls";
+import { useGetProductByIdQuery } from "../../redux/product/product-api";
+import { useAddToCartMutation, useDeleteFromCartMutation } from "../../redux/cart/cart-api";
 
 
 
 export default function ProductDetail() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const { addToCart, removeFromCart } = useProductContext();
+
+
   const id = useParams().id
   const { product, loading } = useSelector((state) => state.products);
   const { isAuthenticated, token } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
+  useGetProductByIdQuery({ id, token }, { skip: !token });
+  const [deleteFromCart] = useDeleteFromCartMutation()
+  const [addToCart] = useAddToCartMutation();
 
-  useEffect(() => {
-    fetchSingleProduct(dispatch, id, token);
-  }, [dispatch, id, token]);
+  const addCart = async (product) => {
+    await addToCart({ token, product })
+  };
+  const removeFromCart = async (id) => {
+    await deleteFromCart({ id, token })
 
+  };
   return (
     loading
       ? <Loading />
@@ -61,7 +67,7 @@ export default function ProductDetail() {
                 </Button>
               ) : (
                 <Button
-                  onClick={() => !isAuthenticated ? navigate('/login') : addToCart(product)}
+                  onClick={() => !isAuthenticated ? navigate('/login') : addCart(product)}
                   variant="outlined"
                   color="success"
                   startIcon={<AddShoppingCartIcon />}

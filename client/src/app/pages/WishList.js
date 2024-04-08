@@ -1,27 +1,24 @@
-import React, { useEffect } from 'react'
-import { useDeleteFavoriteMutation, useGetFavoriteMutation } from '../../redux/favorite/favorite-api'
+import React from 'react'
+import { useDeleteFavoriteMutation, useGetFavoriteQuery } from '../../redux/favorite/favorite-api'
 import { useSelector } from 'react-redux';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { Col, Row } from 'react-bootstrap';
 
 export default function WishList() {
 
-  const [getFavorite] = useGetFavoriteMutation()
   const [deleteFavorite] = useDeleteFavoriteMutation()
 
   const { token, favorite } = useSelector((state) => ({
     favorite: state.favorite.favorite,
     token: state.user.token
   }));
-
-  useEffect(() => {
-    if (token) {
-      getFavorite(token)
-    }
-  }, [token, getFavorite])
-
+  const delFav = (id) => {
+    deleteFavorite({ token, id })
+  }
+  // const { error } = useGetFavoriteQuery()
+  // console.log(error);
   return (
-    favorite.length <= 0
+    (favorite.length <= 0)
       ? <h1 className="text-center text-danger mt-5">{<span> you have no favourite product</span>}</h1>
       : <>
         <div className="cart-title d-flex justify-content-start align-items-center gap-4 mb-4 p-4">
@@ -57,7 +54,7 @@ export default function WishList() {
 
 
                     <div className="cart-buttons d-flex justify-content-between align-items-center gap-5 mt-5 w-50">
-                      <div type="button" className="cart-delete d-flex justify-content-between align-items-center gap-3" onClick={() => deleteFavorite(product._id, token)} >
+                      <div type="button" className="cart-delete d-flex justify-content-between align-items-center gap-3" onClick={() => delFav(product._id)} >
                         <RiDeleteBin6Fill style={{ color: "red", fontSize: "2rem" }} />
                         <span className="fs-4 border-bottom border-dark">Delete</span>
                       </div>

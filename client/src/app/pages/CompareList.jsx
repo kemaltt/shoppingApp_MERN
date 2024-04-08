@@ -5,7 +5,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { useProductContext } from "../contexts/ProductContext";
 
 export default function Compare() {
-  const { selectedCompareProducts, removeFromCompare, addToCart } =
+  const { selectedCompareProducts, removeFromCompare, addCart } =
     useProductContext();
 
   return (
@@ -72,7 +72,7 @@ export default function Compare() {
                   <tr>
                     <th>
                       <Button
-                        onClick={() => addToCart(el)}
+                        onClick={() => addCart(el)}
                         variant="outlined"
                         color="success"
                         startIcon={<AddShoppingCartIcon />}

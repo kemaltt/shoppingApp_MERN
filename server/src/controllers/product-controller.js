@@ -37,7 +37,6 @@ export const createProduct = async (req, res) => {
 export const getCategory = async (req, res) => {
 
   const { category } = req.query;
-
   try {
     if (category === 'All') {
       const products = await ProductModel.find({});

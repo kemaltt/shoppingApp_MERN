@@ -2,33 +2,32 @@ import "./App.css";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import { useEffect } from "react";
 import Router from "./routes/Router";
-import { fetchProducts, getCart } from "../middlewares/authApiCalls";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { ToastContainer } from 'react-toastify';
+import { useGetFavoriteQuery } from "../redux/favorite/favorite-api";
+import { useGetCartQuery } from "../redux/cart/cart-api";
+import { useLogoutMutation } from "../redux/auth/auth-api";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
-import { useGetFavoriteMutation } from "../redux/favorite/favorite-api";
 
 
 
 
 function App() {
 
-  const dispatch = useDispatch();
-  const [getFavorite] = useGetFavoriteMutation()
-
-  const { user, token } = useSelector((state) => state.user);
+  // useGetProductsQuery()
+  const { token } = useSelector((state) => state.user);
+  const { error } = useGetFavoriteQuery(token, { skip: !token })
+  const [logout] = useLogoutMutation()
 
   useEffect(() => {
-
-    fetchProducts(dispatch);
-
-    if (user?.status === "success" && token) {
-      getCart(dispatch, user.access_token);
-      getFavorite(token)
+    if (error) {
+      logout(token)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.status, token, dispatch]);
+  }, [error, logout, token])
+  useGetCartQuery(token, { skip: !token })
+
+
 
   return (
     <div className="App">

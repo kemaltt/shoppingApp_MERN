@@ -1,9 +1,8 @@
 import { useState } from "react";
 import styled from "styled-components";
 // import { mobile } from "../responsive";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { register } from "../../../middlewares/authApiCalls";
 import { Spinner } from "react-bootstrap";
 import { useRegisterMutation } from "../../../redux/auth/auth-api";
 

@@ -1,23 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useProductContext } from "../contexts/ProductContext";
 import { Form } from "react-bootstrap";
-import { fetchCategoryProducts } from "../../middlewares/authApiCalls";
-import { useDispatch } from "react-redux";
+
+import { useGetProductsMutation } from "../../redux/product/product-api";
 
 export default function Search({ setMessage }) {
-  const dispatch = useDispatch();
-  const [selectInput, setSelectInput] = React.useState('All')
-  const { isAuthenticated, searchInput, setSearchInput, filterProducts } =
-    useProductContext();
-  const optionValues = ['All', 'Electronics', 'Clothing', 'Books', 'Home', 'Beauty', 'Toys', 'Sports', 'Food', 'Other']
+  const [selectInput, setSelectInput] = useState('All')
+  const { isAuthenticated, searchInput, setSearchInput, filterProducts } = useProductContext();
   const categories = ['All', 'men\'s clothing', 'jewelery', 'electronics', 'women\'s clothing'];
 
+
+  console.log(selectInput);
+  // useGetProductsQuery(selectInput)
+  const [getProducts] = useGetProductsMutation()
+
   useEffect(() => {
-    console.log(selectInput);
-    fetchCategoryProducts(dispatch, selectInput)
-  }, [dispatch, selectInput])
 
+    const getProduct = async () => {
+      await getProducts(selectInput)
+    }
 
+    getProduct()
+  }, [selectInput, getProducts])
   const getProduct = (e) => {
     e.preventDefault();
     if (!isAuthenticated) {

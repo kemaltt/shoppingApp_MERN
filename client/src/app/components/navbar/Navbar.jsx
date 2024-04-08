@@ -5,8 +5,6 @@ import { MdLogout } from "react-icons/md";
 import { MdLogin } from "react-icons/md";
 import { useProductContext } from "../../contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutBE } from "../../../middlewares/authApiCalls";
-import { clearCart } from "../../../redux/cartSlice";
 import Compare from "./Compare";
 import Cart from "./Cart";
 import WishList from "./WishList";

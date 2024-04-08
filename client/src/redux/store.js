@@ -1,13 +1,16 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-// import authSlice from "./authSlice";
-import productSlice from "./productSlice";
-import cartSlice from "./cartSlice";
 import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import authSlice from "./auth/auth-slice";
+import favoriteSlice from "./favorite/favorite-slice";
+import productSlice from "./product/product-slice";
+import cartSlice from "./cart/cart-slice";
 import { authApi } from './auth/auth-api'
 import { favApi } from "./favorite/favorite-api";
-import favoriteSlice from "./favorite/favorite-slice";
+import { productApi } from "./product/product-api";
+import { cartApi } from "./cart/cart-api";
+
+
 
 
 const persistConfig = {
@@ -36,13 +39,15 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: persistReducer(persistConfig.user, authSlice),
   favorite: persistReducer(persistConfig.favorite, favoriteSlice),
+  products: persistReducer(persistConfig.products, productSlice),
+  cart: persistReducer(persistConfig.cart, cartSlice),
   [authApi.reducerPath]: authApi.reducer,
   [favApi.reducerPath]: favApi.reducer,
-  products: persistReducer(persistConfig.products, productSlice),
-  cart: persistReducer(persistConfig.cart, cartSlice)
+  [productApi.reducerPath]: productApi.reducer,
+  [cartApi.reducerPath]: cartApi.reducer
 });
 
-const middlewares = [authApi.middleware, favApi.middleware];
+const middlewares = [authApi.middleware, favApi.middleware, productApi.middleware, cartApi.middleware];
 // const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 export const store = configureStore({

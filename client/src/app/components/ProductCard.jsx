@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CardActions, CardContent, CardMedia, Typography, Card, IconButton } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
-import { useSelector } from "react-redux";
+import { useSelector, shallowEqual } from "react-redux";
 
 
 
@@ -12,15 +12,25 @@ export default function ProductCard({ product, i, id, cart }) {
   const [addFavorite] = useAddFavoriteMutation()
   const [deleteFavorite] = useDeleteFavoriteMutation()
   const navigate = useNavigate();
-  const { token, favorite, isAuthenticated } = useSelector((state) => ({
+  const { token, favorite } = useSelector((state) => ({
     favorite: state.favorite.favorite,
     token: state.user.token,
-    isAuthenticated: state.user.isAuthenticated
-  }));
+  }), shallowEqual);
+
   const productDetail = () => {
     // fetchSingleProduct(dispatch, id, token);
     navigate(`/product/${id}`);
   };
+  const delFav = async () => {
+    if (token) {
+      await deleteFavorite({ id, token });
+    }
+  }
+  const addFav = async () => {
+    if (token) {
+      await addFavorite({ token, id });
+    }
+  }
 
   return (
     <>
@@ -46,11 +56,11 @@ export default function ProductCard({ product, i, id, cart }) {
         </CardContent>
         <CardActions >
           {favorite.some(el => el._id === id) ?
-            <IconButton onClick={() => token && deleteFavorite(id, token)} aria-label="add to favorites" >
+            <IconButton onClick={delFav} aria-label="add to favorites" >
               <FavoriteIcon color='warning' fontSize='large' />
             </IconButton>
             :
-            <IconButton onClick={() => token && addFavorite(id, token)} aria-label="add to favorites" >
+            <IconButton onClick={addFav} aria-label="add to favorites" >
               <FavoriteIcon fontSize='large' />
             </IconButton>
           }

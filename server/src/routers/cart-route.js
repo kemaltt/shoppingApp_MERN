@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.get('/cart', verifyToken, getCart);
 router.post('/add-to-cart', verifyToken, addToCart);
-router.delete('/remove-from-cart/:id', verifyToken, removeFromCart);
+router.delete('/delete-from-cart/:id', verifyToken, removeFromCart);
 
 export default router;

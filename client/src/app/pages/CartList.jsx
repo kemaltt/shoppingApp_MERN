@@ -1,27 +1,38 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { useProductContext } from "../contexts/ProductContext";
-import { useDispatch, useSelector } from "react-redux";
-import { getCart } from "../../middlewares/authApiCalls";
+import { shallowEqual, useSelector } from "react-redux";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { IoHeartOutline } from "react-icons/io5";
+import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { useDeleteFromCartMutation } from "../../redux/cart/cart-api";
+import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
 
 
 
 
 
-export default function Contact() {
-  const { removeFromCart } = useProductContext();
-
+export default function CartList() {
+  const [deleteFromCart] = useDeleteFromCartMutation()
+  const [addFavorite] = useAddFavoriteMutation()
+  const [deleteFavorite] = useDeleteFavoriteMutation()
   let total = 0;
-  const { cart, error } = useSelector((state) => state.cart);
-  const { token } = useSelector((state) => state.user);
+  const { cart, error, token, favorite } = useSelector((state) => ({
+    favorite: state.favorite.favorite,
+    token: state.user.token,
+    cart: state.cart.cart,
+    error: state.cart.cart.error
+  }), shallowEqual);
   const optionValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    getCart(dispatch, token);
-  }, [token, dispatch]);
+  const removeFromCart = async (id) => {
+    await deleteFromCart({ id, token })
+  };
+  const delFav = async (id) => {
+    await deleteFavorite({ id, token });
+  }
+  const addFav = async (id) => {
+    await addFavorite({ token, id });
+  }
 
   const shipping_cost = 4.99
   const totalAmount = cart?.products?.map((product) => {
@@ -81,10 +92,17 @@ export default function Contact() {
                           <span className="fs-4 border-bottom border-dark">Delete</span>
                         </div>
                         <div type="button" className="cart-delete d-flex justify-content-between align-items-center gap-3 ">
-                          <IoHeartOutline
-                            // onClick={() => removeFromCart(product?.product._id)}
-                            style={{ fontSize: "2rem" }}
-                          />
+                          {favorite.some(el => el._id === product?.product._id) ?
+                            <FaHeart
+                              onClick={() => delFav(product?.product._id)}
+                              style={{ color: "orange", fontSize: "2rem" }}
+                            />
+                            :
+                            <FaRegHeart
+                              onClick={() => addFav(product?.product._id)}
+                              style={{ fontSize: "2rem" }}
+                            />
+                          }
                           <span className="fs-4 border-bottom border-dark">Favourite</span>
                         </div>
 
