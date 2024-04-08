@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { addCart, removeCart } from "../../middlewares/authApiCalls";
+import React from "react";
+import { createContext, useContext, useState } from "react";
+import { useSelector } from "react-redux";
+import { useAddToCartMutation, useDeleteFromCartMutation } from "../../redux/cart/cart-api";
 // import data from "../products";
 // import { useAuth0 } from "@auth0/auth0-react";
 
@@ -9,9 +10,9 @@ export const useProductContext = () => useContext(ProductContext);
 
 export const ProductContextProvider = (props) => {
 
-  const dispatch = useDispatch();
   const { isAuthenticated } = useSelector((state) => state.user)
-
+  const [addToCart] = useAddToCartMutation()
+  const [deleteFromCart] = useDeleteFromCartMutation()
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCartProducts, setSelectedCartProducts] = useState([]);
   const [selectedCompareProducts, setSelectedCompareProducts] = useState([]);
@@ -24,25 +25,22 @@ export const ProductContextProvider = (props) => {
       el.name?.toLowerCase().includes(searchInput?.toLowerCase())
     );
   };
-  const addToCart = (product) => {
+  const addCart = (product, token) => {
 
-    addCart(dispatch, product);
+    // addCart(dispatch, product, token);
+    addToCart({ token, product })
 
-    if (selectedCartProducts.includes(product)) {
-      console.log('product already in cart');
-    } else {
-      console.log('product added to cart');
-      setSelectedCartProducts([...selectedCartProducts, product]);
-    }
+    // if (selectedCartProducts.includes(product)) {
+    //   console.log('product already in cart');
+    // } else {
+    //   console.log('product added to cart');
+    //   setSelectedCartProducts([...selectedCartProducts, product]);
+    // }
 
   };
-  const removeFromCart = (id) => {
-    removeCart(dispatch, id);
-    setSelectedCartProducts([
-      ...selectedCartProducts.filter(
-        (el) => el._id !== id
-      ),
-    ]);
+  const removeFromCart = (id, token) => {
+    deleteFromCart({ id, token })
+
   };
   const addToCompare = (product) => {
     setSelectedCompareProducts([...selectedCompareProducts, product]);
@@ -70,7 +68,7 @@ export const ProductContextProvider = (props) => {
         // logout,
         isLoading,
         setIsLoading,
-        addToCart,
+        addCart,
         removeFromCart,
         addToCompare,
         removeFromCompare,

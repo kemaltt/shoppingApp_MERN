@@ -5,12 +5,11 @@ import { MdLogout } from "react-icons/md";
 import { MdLogin } from "react-icons/md";
 import { useProductContext } from "../../contexts/ProductContext";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutBE } from "../../../middlewares/authApiCalls";
-import { clearCart } from "../../../redux/cartSlice";
 import Compare from "./Compare";
 import Cart from "./Cart";
 import WishList from "./WishList";
 import UserInfo from "./UserInfo";
+import { useLogoutMutation } from "../../../redux/auth/auth-api";
 
 
 
@@ -21,24 +20,25 @@ export default function Navbar() {
     selectedCartProducts,
     selectedCompareProducts,
   } = useProductContext();
+  const [logout] = useLogoutMutation()
   const { user, isAuthenticated } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+  const { favorite } = useSelector((state) => state.favorite);
   const { cart } = useSelector((state) => state.cart);
 
-  const removePersist = () => {
-    dispatch(clearCart())
-    // localStorage.removeItem('persist:root')
-  }
-
-  const cartBadge = cart.length;
-  const wishBadge = selectedCompareProducts.length;
-  const badge2 = selectedCompareProducts.length;
+  const cartBadge = cart?.products?.length;
+  const wishBadge = favorite?.length;
+  const badge2 = selectedCompareProducts?.length;
 
   const navigate = useNavigate();
   const [toggle, setToggle] = useState(false);
   const handleNavList = () => {
     setToggle(!toggle);
   };
+
+  const logOut = async () => {
+    await logout()
+    navigate('/')
+  }
 
   return (
     <div className="navbar_">
@@ -85,7 +85,7 @@ export default function Navbar() {
                   <Cart badge={cartBadge} />
                 </li>
                 <li>
-                  <div onClick={() => { logoutBE(dispatch); removePersist(); navigate('/') }} >
+                  <div onClick={logOut} >
                     <MdLogout style={{ fontSize: "2.5rem" }} /> {user.user.name}
                   </div>
                 </li>

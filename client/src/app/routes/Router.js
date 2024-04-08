@@ -9,7 +9,7 @@ import ProtectedRoute from './ProtectedRoute'
 import Login from '../pages/auth/Login';
 import Home from '../pages/Home';
 import CartList from '../pages/CartList';
-import WishList from '../pages/auth/WishList';
+import WishList from '../pages/WishList';
 
 
 export default function Router() {

@@ -3,8 +3,54 @@ import styled from "styled-components";
 // import { mobile } from "../responsive";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { login } from "../../../middlewares/authApiCalls";
 import { Spinner } from "react-bootstrap";
+import { useLoginMutation } from "../../../redux/auth/auth-api";
+
+
+
+
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [login, { isError, isLoading, error, data }] = useLoginMutation()
+
+  const navigate = useNavigate()
+  // const { loading, error } = useSelector((state) => state.user);
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    // login(dispatch, { email, password });
+    await login({ email, password });
+  };
+
+  return (
+    <Container>
+      <Wrapper>
+        <Title>SIGN IN</Title>
+        <Form>
+          <Input
+            placeholder="email"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            placeholder="password"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button onClick={handleClick} >
+            LOGIN {isLoading && <Spinner animation="border" size="sm" />
+            }
+          </Button>
+          {isError && <Error> {error?.data?.message}</Error>}
+          <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
+          <Link onClick={() => navigate('/register')}>CREATE A NEW ACCOUNT</Link>
+        </Form>
+      </Wrapper>
+    </Container>
+  );
+};
+
 
 
 const Container = styled.div`
@@ -69,44 +115,6 @@ const Link = styled.a`
 const Error = styled.span`
   color: red;
 `;
-
-const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const dispatch = useDispatch();
-  const navigate = useNavigate()
-  const { loading, error } = useSelector((state) => state.user);
-
-  const handleClick = (e) => {
-    e.preventDefault();
-    login(dispatch, { email, password });
-  };
-
-  return (
-    <Container>
-      <Wrapper>
-        <Title>SIGN IN</Title>
-        <Form>
-          <Input
-            placeholder="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Input
-            placeholder="password"
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button onClick={handleClick} >
-            LOGIN {loading && <Spinner animation="border" size="sm" />
-            }
-          </Button>
-          {error && <Error> {error}</Error>}
-          <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
-          <Link onClick={() => navigate('/register')}>CREATE A NEW ACCOUNT</Link>
-        </Form>
-      </Wrapper>
-    </Container>
-  );
-};
-
 export default Login;
+
+

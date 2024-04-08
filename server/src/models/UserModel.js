@@ -24,6 +24,12 @@ const User = new mongoose.Schema({
   image: {
     type: String
   },
+  favorite: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Product'
+    }
+  ]
 },
   {
     timestamps: true

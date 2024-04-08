@@ -33,3 +33,27 @@ export const createProduct = async (req, res) => {
     res.status(409).json({ message: error.message });
   }
 };
+
+export const getCategory = async (req, res) => {
+
+  const { category } = req.query;
+  try {
+    if (category === 'All') {
+      const products = await ProductModel.find({});
+      if (!products) {
+        return res.status(404).json({ message: "No product found" });
+      }
+      res.status(200).json(products);
+
+    } else {
+      const products = await ProductModel.where({ category: category });
+      if (!products) {
+        return res.status(404).json({ message: "No product found" });
+      }
+      res.status(200).json(products);
+    }
+  }
+  catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}

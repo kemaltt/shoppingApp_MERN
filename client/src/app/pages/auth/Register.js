@@ -1,10 +1,10 @@
 import { useState } from "react";
 import styled from "styled-components";
 // import { mobile } from "../responsive";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { register } from "../../../middlewares/authApiCalls";
 import { Spinner } from "react-bootstrap";
+import { useRegisterMutation } from "../../../redux/auth/auth-api";
 
 
 const Container = styled.div`
@@ -74,17 +74,21 @@ const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [register, { isLoading, error, isError, isSuccess }] = useRegisterMutation()
   const dispatch = useDispatch();
   const navigate = useNavigate()
-  const { loading, error, user } = useSelector((state) => state.user);
-  const handleClick = (e) => {
+  // const { loading, error, user } = useSelector((state) => state.user);
+  const handleClick = async (e) => {
     e.preventDefault();
     const user = { name, email, password };
-    register(dispatch, user);
+    // register(dispatch, user);
+    await register(user)
   };
-  if (user?.status === 'success') {
+  if (isSuccess) {
     navigate('/login')
   }
+
 
   return (
     <Container>
@@ -107,10 +111,10 @@ const Register = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <Button onClick={handleClick} >
-            REGISTER {loading && <Spinner animation="border" size="sm" />
+            REGISTER {isLoading && <Spinner animation="border" size="sm" />
             }
           </Button>
-          {error && <Error> {error}</Error>}
+          {isError && <Error> {error?.data?.message}</Error>}
           <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
           <Link onClick={() => navigate('/login')}>YOU HAVE ALREADY AN ACCOUNT? LOGIN</Link>
         </Form>
