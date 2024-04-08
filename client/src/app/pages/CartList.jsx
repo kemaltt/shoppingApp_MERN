@@ -4,7 +4,7 @@ import { useProductContext } from "../contexts/ProductContext";
 import { shallowEqual, useSelector } from "react-redux";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
-import { useDeleteFromCartMutation } from "../../redux/cart/cart-api";
+import { useDeleteFromCartMutation, useGetCartQuery } from "../../redux/cart/cart-api";
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
 
 
@@ -16,12 +16,12 @@ export default function CartList() {
   const [addFavorite] = useAddFavoriteMutation()
   const [deleteFavorite] = useDeleteFavoriteMutation()
   let total = 0;
-  const { cart, error, token, favorite } = useSelector((state) => ({
+  const { cart, token, favorite } = useSelector((state) => ({
     favorite: state.favorite.favorite,
     token: state.user.token,
     cart: state.cart.cart,
-    error: state.cart.cart.error
   }), shallowEqual);
+  const { error } = useGetCartQuery(token, { refetchOnMountOrArgChange: true })
   const optionValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
   const removeFromCart = async (id) => {
@@ -40,10 +40,11 @@ export default function CartList() {
   });
   totalAmount?.map((el) => (total += el));
   const totalPrice = total + shipping_cost
-
+  console.log(error);
+  console.log(cart?.products?.length);
   return (
-    cart?.products?.length <= 0
-      ? <h1 className="text-center text-danger mt-5">{error ?? <span> not found</span>}</h1>
+    cart?.products?.length <= 0 || error
+      ? <h1 className="text-center text-danger mt-5">{error?.data?.message ?? <span> There are no items in the cart</span>}</h1>
       : <>
         <div className="cart-title d-flex justify-content-start align-items-center gap-4 mb-4 p-4">
           <h1>Warenkorb</h1>

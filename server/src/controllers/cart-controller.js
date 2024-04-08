@@ -8,7 +8,7 @@ export const getCart = async (req, res) => {
     if (!cart) {
       return res.status(404).json({
         status: "error",
-        message: "Cart not found"
+        message: "There are no items in the cart"
       });
     }
     res.status(200).json(cart);
