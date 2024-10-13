@@ -3,7 +3,7 @@ import { RiDeleteBin6Fill } from "react-icons/ri";
 import { shallowEqual, useSelector } from "react-redux";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
-import { useDeleteFromCartMutation, useGetCartQuery } from "../../redux/cart/cart-api";
+import { useDeleteFromCartMutation, useGetCartQuery, useUpdateCartByIdMutation } from "../../redux/cart/cart-api";
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
 import { useUpdateProductByIdMutation } from "../../redux/product/product-api";
 
@@ -17,6 +17,7 @@ export default function CartList() {
   const [addFavorite] = useAddFavoriteMutation()
   const [deleteFavorite] = useDeleteFavoriteMutation()
   const [updateProductById] = useUpdateProductByIdMutation()
+  const[updateCartById] = useUpdateCartByIdMutation()
 
   let total = 0;
   const { cart, token, favorite } = useSelector((state) => ({
@@ -40,14 +41,23 @@ export default function CartList() {
   const updateProduct = async (id, e) => {
     const quantity = e.target.value;
     const foundProduct = cart?.products?.find((el) => el.product._id === id);
-    const updatedCountInStock = foundProduct.product.countInStock - quantity;
-    console.log(id);
-    console.log(foundProduct);
-    console.log(updatedCountInStock);
 
-
-
-    await updateProductById({ id, token, updatedCountInStock });
+    let updatedCountInStock;
+  
+    if (quantity > foundProduct.quantity) {
+      // Yeni quantity büyükse stoğu azalt
+      updatedCountInStock = foundProduct.product.countInStock - (quantity - foundProduct.quantity);
+    } else {
+      // Yeni quantity küçükse stoğu artır
+      updatedCountInStock = foundProduct.product.countInStock + (foundProduct.quantity - quantity);
+    }
+    const data = {
+      quantity: +quantity,
+      price: quantity * foundProduct.product.price,
+      updatedCountInStock
+    }
+    
+    await updateCartById({ id, token, data });
   }
 
   const shipping_cost = 4.99
@@ -96,7 +106,9 @@ export default function CartList() {
                       <p>Stock: {product?.product?.countInStock}</p>
                       <div className="d-flex gap-4 ">
                         <p className="m-0">Quantity: </p>
-                        <Form.Select className="w-50  border-black rounded-5" aria-label="Default select example" onChange={(e) => updateProduct(product?.product._id, e)}>
+                        <Form.Select className="w-50  border-black rounded-5" aria-label="Default select example"
+                          value={product?.quantity}
+                          onChange={(e) => updateProduct(product?.product._id, e)}>
                           {optionValues.map((el, i) => (
                             <option key={i} value={el}>{el}</option>
                           ))}
@@ -126,7 +138,7 @@ export default function CartList() {
                       </div>
                     </div>
                     <div className="price w-25 text-end">
-                      <span className="fs-3 fw-bold"> {product?.product?.price} €</span>
+                      <span className="fs-3 fw-bold"> {product?.price} €</span>
                     </div>
                   </div>
                 </div>

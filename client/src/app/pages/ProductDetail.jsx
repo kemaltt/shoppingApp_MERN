@@ -25,12 +25,18 @@ export default function ProductDetail() {
   const [addToCart] = useAddToCartMutation();
 
   const addCart = async (product) => {
-    await addToCart({ token, product })
+    const data = {
+      _id: product._id,
+      quantity: 1,
+      price: product.price
+    }
+    await addToCart({ token, data })
   };
+
   const removeFromCart = async (id) => {
     await deleteFromCart({ id, token })
-
   };
+
   return (
     loading
       ? <Loading />

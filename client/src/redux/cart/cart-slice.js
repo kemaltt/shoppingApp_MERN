@@ -22,6 +22,9 @@ const cartSlice = createSlice({
     builder.addMatcher(cartApi.endpoints.deleteFromCart.matchFulfilled, (state, action) => {
       state.cart = action.payload;
     });
+    builder.addMatcher(cartApi.endpoints.updateCartById.matchFulfilled, (state, action) => {
+      state.cart = action.payload;
+    });
   },
 });
 

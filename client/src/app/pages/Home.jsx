@@ -9,11 +9,12 @@ import { useProductContext } from "../contexts/ProductContext";
 import { useSelector } from "react-redux";
 
 export default function ProductComparison() {
+
   const [message, setMessage] = useState("");
   const { filterProducts } = useProductContext();
   const { products, loading } = useSelector((state) => state.products);
   const { cart } = useSelector((state) => state.cart);
-
+  
   return loading ? (
     <Loading />
   ) : (

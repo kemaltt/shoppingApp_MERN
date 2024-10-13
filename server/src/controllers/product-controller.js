@@ -57,3 +57,21 @@ export const getCategory = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 }
+
+// Update cart controller make sure to update the product countInStock
+export const updateProductById = async (req, res) => {
+  const { id } = req.params;
+  const { updatedCountInStock } = req.body;
+  
+  try {
+    const updatedProduct = await ProductModel.findByIdAndUpdate(id, { countInStock: updatedCountInStock }, { new: true });
+    
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json(updatedProduct);
+  }
+  catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
