@@ -22,7 +22,17 @@ export const productApi = createApi({
         },
       }),
     }),
+    updateProductById: builder.mutation({
+      query: ({ id, token, updatedCountInStock }) => ({
+        url: `/product/${id}`,
+        method: 'PATCH',
+        body: { updatedCountInStock },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 })
 
-export const { useGetProductsMutation, useGetProductByIdQuery } = productApi
+export const { useGetProductsMutation, useGetProductByIdQuery, useUpdateProductByIdMutation } = productApi

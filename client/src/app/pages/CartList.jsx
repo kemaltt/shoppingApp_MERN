@@ -1,26 +1,30 @@
 import React from "react";
 import { RiDeleteBin6Fill } from "react-icons/ri";
-import { useProductContext } from "../contexts/ProductContext";
 import { shallowEqual, useSelector } from "react-redux";
 import { Button, Col, Form, Row } from "react-bootstrap";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { useDeleteFromCartMutation, useGetCartQuery } from "../../redux/cart/cart-api";
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
+import { useUpdateProductByIdMutation } from "../../redux/product/product-api";
 
 
 
 
 
 export default function CartList() {
+
   const [deleteFromCart] = useDeleteFromCartMutation()
   const [addFavorite] = useAddFavoriteMutation()
   const [deleteFavorite] = useDeleteFavoriteMutation()
+  const [updateProductById] = useUpdateProductByIdMutation()
+
   let total = 0;
   const { cart, token, favorite } = useSelector((state) => ({
     favorite: state.favorite.favorite,
     token: state.user.token,
     cart: state.cart.cart,
   }), shallowEqual);
+
   const { error } = useGetCartQuery(token, { refetchOnMountOrArgChange: true })
   const optionValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
@@ -33,15 +37,27 @@ export default function CartList() {
   const addFav = async (id) => {
     await addFavorite({ token, id });
   }
+  const updateProduct = async (id, e) => {
+    const quantity = e.target.value;
+    const foundProduct = cart?.products?.find((el) => el.product._id === id);
+    const updatedCountInStock = foundProduct.product.countInStock - quantity;
+    console.log(id);
+    console.log(foundProduct);
+    console.log(updatedCountInStock);
+
+
+
+    await updateProductById({ id, token, updatedCountInStock });
+  }
 
   const shipping_cost = 4.99
   const totalAmount = cart?.products?.map((product) => {
     return product?.product?.price;
   });
+
   totalAmount?.map((el) => (total += el));
   const totalPrice = total + shipping_cost
-  console.log(error);
-  console.log(cart?.products?.length);
+
   return (
     cart?.products?.length <= 0 || error
       ? <h1 className="text-center text-danger mt-5">{error?.data?.message ?? <span> There are no items in the cart</span>}</h1>
@@ -80,7 +96,7 @@ export default function CartList() {
                       <p>Stock: {product?.product?.countInStock}</p>
                       <div className="d-flex gap-4 ">
                         <p className="m-0">Quantity: </p>
-                        <Form.Select className=" w-50  border-black rounded-5" aria-label="Default select example">
+                        <Form.Select className="w-50  border-black rounded-5" aria-label="Default select example" onChange={(e) => updateProduct(product?.product._id, e)}>
                           {optionValues.map((el, i) => (
                             <option key={i} value={el}>{el}</option>
                           ))}
