@@ -17,10 +17,10 @@ export const cartApi = createApi({
       }),
     }),
     addToCart: builder.mutation({
-      query: ({ token, product }) => ({
+      query: ({ token, data }) => ({
         url: `/add-to-cart`,
         method: 'POST',
-        body: product,
+        body: data,
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -35,8 +35,17 @@ export const cartApi = createApi({
         },
       })
     }),
-
+    updateCartById: builder.mutation({
+      query: ({ id, token, data }) => ({
+        url: `/update-cart/${id}`,
+        method: 'PATCH',
+        body: data,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 })
 
-export const { useGetCartQuery, useAddToCartMutation, useDeleteFromCartMutation } = cartApi
+export const { useGetCartQuery, useAddToCartMutation, useDeleteFromCartMutation, useUpdateCartByIdMutation } = cartApi

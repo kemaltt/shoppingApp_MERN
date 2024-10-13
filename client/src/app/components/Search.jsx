@@ -9,8 +9,6 @@ export default function Search({ setMessage }) {
   const { isAuthenticated, searchInput, setSearchInput, filterProducts } = useProductContext();
   const categories = ['All', 'men\'s clothing', 'jewelery', 'electronics', 'women\'s clothing'];
 
-
-  console.log(selectInput);
   // useGetProductsQuery(selectInput)
   const [getProducts] = useGetProductsMutation()
 
