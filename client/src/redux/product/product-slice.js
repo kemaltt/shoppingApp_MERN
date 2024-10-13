@@ -17,6 +17,9 @@ const productSlice = createSlice({
     builder.addMatcher(productApi.endpoints.getProductById.matchFulfilled, (state, action) => {
       state.product = action.payload;
     });
+    builder.addMatcher(productApi.endpoints.updateProductById.matchFulfilled, (state, action) => {
+      state.product = action.payload;
+    });
   },
 });
 
