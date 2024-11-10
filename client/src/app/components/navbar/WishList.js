@@ -1,33 +1,43 @@
 import React from 'react'
-import Badge from "react-bootstrap/Badge";
-import { SlHeart } from "react-icons/sl";
 import { Link } from 'react-router-dom'
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import { IconButton } from '@mui/material';
+import { StyledBadge, StyledIcon } from './helper/UIHelper';
+
+
 
 export default function WishList({ badge }) {
 
   return (
-    <Link to="/wishlist" style={{ color: 'white' }}>
-      <SlHeart style={{ fontSize: "3rem" }} />
+    // <Link to="/wishlist" style={{ color: 'white' }}>
+    //   <SlHeart style={{ fontSize: "3rem" }} />
 
-      {badge > 0 && (
+    //   {badge > 0 && (
 
-        <>
-          <Badge
-            style={{
-              position: "absolute",
-              top: "-5px",
-              right: "60px",
-              width: "23px",
-            }}
-            bg="danger"
-          >
-            {badge}
-          </Badge>
-          <span className="visually-hidden">unread messages</span>
-        </>
+    //     <>
+    //       <Badge
+    //         style={{
+    //           position: "absolute",
+    //           top: "-5px",
+    //           right: "60px",
+    //           width: "23px",
+    //         }}
+    //         bg="danger"
+    //       >
+    //         {badge}
+    //       </Badge>
+    //       <span className="visually-hidden">unread messages</span>
+    //     </>
 
-      )}
+    //   )}
 
+    // </Link>
+    <Link to="/wishlist" >
+      <IconButton aria-label="favorite">
+        <StyledBadge badgeContent={badge} color="primary">
+        <FavoriteBorderOutlinedIcon sx={StyledIcon}/>
+        </StyledBadge>
+      </IconButton>
     </Link>
   )
 }

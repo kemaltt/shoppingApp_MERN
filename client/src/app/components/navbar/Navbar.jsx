@@ -4,12 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { MdLogout } from "react-icons/md";
 import { MdLogin } from "react-icons/md";
 import { useProductContext } from "../../contexts/ProductContext";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Compare from "./Compare";
 import Cart from "./Cart";
 import WishList from "./WishList";
-import UserInfo from "./UserInfo";
 import { useLogoutMutation } from "../../../redux/auth/auth-api";
+import AccountMenu from "./components/Account";
 
 
 
@@ -17,7 +17,6 @@ import { useLogoutMutation } from "../../../redux/auth/auth-api";
 
 export default function Navbar() {
   const {
-    selectedCartProducts,
     selectedCompareProducts,
   } = useProductContext();
   const [logout] = useLogoutMutation()
@@ -55,10 +54,11 @@ export default function Navbar() {
               <Compare badge={badge2} />
               <Cart badge={cartBadge} />
               <WishList badge={wishBadge} />
-              <UserInfo />
+              <AccountMenu/>
+              {/* <UserInfo /> */}
             </>
             : <Link to="/login" style={{ color: 'white' }}>
-              Login
+              {/* Login */}
               <MdLogin style={{ fontSize: "3rem" }} />
             </Link>
 

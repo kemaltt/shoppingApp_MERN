@@ -1,6 +1,6 @@
 import React from 'react'
-import { useDeleteFavoriteMutation, useGetFavoriteQuery } from '../../redux/favorite/favorite-api'
-import { useSelector } from 'react-redux';
+import { useDeleteFavoriteMutation } from '../../redux/favorite/favorite-api'
+import { shallowEqual, useSelector } from 'react-redux';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { Col, Row } from 'react-bootstrap';
 
@@ -11,7 +11,7 @@ export default function WishList() {
   const { token, favorite } = useSelector((state) => ({
     favorite: state.favorite.favorite,
     token: state.user.token
-  }));
+  }),shallowEqual);
   const delFav = (id) => {
     deleteFavorite({ token, id })
   }
@@ -19,7 +19,7 @@ export default function WishList() {
   // console.log(error);
   return (
     (favorite.length <= 0)
-      ? <h1 className="text-center text-danger mt-5">{<span> you have no favourite product</span>}</h1>
+      ? <h1 className="text-center text-danger mt-5">{<span> you have no favorite product</span>}</h1>
       : <>
         <div className="cart-title d-flex justify-content-start align-items-center gap-4 mb-4 p-4">
           <h1>Favorite</h1>
