@@ -1,11 +1,12 @@
 import React from "react";
 import { RiDeleteBin6Fill } from "react-icons/ri";
 import { shallowEqual, useSelector } from "react-redux";
-import { Button, Col, Form, Row } from "react-bootstrap";
+import {Col, Form, Row } from "react-bootstrap";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import { useDeleteFromCartMutation, useGetCartQuery, useUpdateCartByIdMutation } from "../../redux/cart/cart-api";
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
-import { useUpdateProductByIdMutation } from "../../redux/product/product-api";
+import Button from "../components/Button";
+// import { useUpdateProductByIdMutation } from "../../redux/product/product-api";
 
 
 
@@ -16,7 +17,7 @@ export default function CartList() {
   const [deleteFromCart] = useDeleteFromCartMutation()
   const [addFavorite] = useAddFavoriteMutation()
   const [deleteFavorite] = useDeleteFavoriteMutation()
-  const [updateProductById] = useUpdateProductByIdMutation()
+  // const [updateProductById] = useUpdateProductByIdMutation()
   const[updateCartById] = useUpdateCartByIdMutation()
 
   let total = 0;
@@ -155,7 +156,8 @@ export default function CartList() {
                     <p>Total: {totalPrice.toFixed(2)}€</p>
                   </div>
                   <div className="payment-btn">
-                    <Button type="button" variant="success" >Checkout</Button>
+                  <Button type="button" variant="success" title="Checkout" />
+                 {/* <Button type="button" variant="success" >Checkout</Button> */}
                   </div>
                 </div>
               </Col>

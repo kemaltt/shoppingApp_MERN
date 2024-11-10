@@ -59,7 +59,7 @@ export default function Search({ setMessage }) {
       </Form.Select>
       <form onSubmit={getProduct} action="">
         <input
-          className="rounded-5"
+          className="rounded-5 px-4"
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="Search a product..."
           type="search"
