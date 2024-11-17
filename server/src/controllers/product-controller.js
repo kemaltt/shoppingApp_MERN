@@ -85,8 +85,6 @@ export const updateProductById = async (req, res) => {
 // Delete product controller
 export const deleteProduct = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
-  
   try {
     const deletedProduct = await ProductModel.findByIdAndDelete(id);
     if (!deletedProduct) {
