@@ -1,21 +1,21 @@
 import { useState } from "react";
 import styled from "styled-components";
-// import { mobile } from "../responsive";
-// import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../redux/auth/auth-api";
 import Button from "../../components/Button";
 import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useForm } from "react-hook-form";
 
 
 
 
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -29,33 +29,48 @@ const Login = () => {
   const [login, { isError, isLoading, error }] = useLoginMutation()
 
   const navigate = useNavigate()
-  // const { loading, error } = useSelector((state) => state.user);
 
-  const handleClick = async (e) => {
-    e.preventDefault();
-    // login(dispatch, { email, password });
-    await login({ email, password });
+  const handleClick = async (value) => {
+    const { email, password } = value;
+
+    if (email && password) {
+      await login({ email, password });
+    }
   };
 
   return (
     <Container>
       <Wrapper>
         <Title>SIGN IN</Title>
-        <Form >
-          <TextField
-            id="outlined-email-input"
-            label="Email"
-            type="email"
-            required
-            autoComplete="current-email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <FormControl fullWidth variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+        <Form onSubmit={handleSubmit(handleClick)}>
+          <FormControl fullWidth >
+            <TextField
+              required
+              fullWidth
+              id="email"
+              label="EMAIL"
+              name="email"
+              autoComplete="email"
+              type="email"
+              autoFocus
+              color={errors.email ? 'error' : 'secondary'}
+              {...register("email", {
+                required: true,
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i,
+                  message: "invalid email address",
+                },
+              })}
+            />
+            {errors.email && errors.email.message}
+          </FormControl>
+
+          <FormControl fullWidth >
+            <InputLabel htmlFor="outlined-adornment-password" color={errors.password ? 'error' : 'secondary'} >PASSWORD</InputLabel>
             <OutlinedInput
-              onChange={(e) => setPassword(e.target.value)}
               id="outlined-adornment-password"
               type={showPassword ? 'text' : 'password'}
+              color={errors.password ? 'error' : 'secondary'}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -71,23 +86,20 @@ const Login = () => {
                   </IconButton>
                 </InputAdornment>
               }
-              label="Password"
+              label="PASSWORD"
+              {...register("password", {
+                required: true,
+                pattern: {
+                  value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
+                  message: "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
+                },
+              })}
+
             />
+            {errors.password && errors.password.message}
+
           </FormControl>
 
-          {/* <Input
-            placeholder="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Input
-            placeholder="password"
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-          /> */}
-          {/* <Button onClick={handleClick} >
-            LOGIN {isLoading && <Spinner animation="border" size="sm" />
-            }
-          </Button> */}
           <Button onClick={handleClick} isLoading={isLoading} title={'Login'} />
           {isError && <Error> {error?.data?.message}</Error>}
 

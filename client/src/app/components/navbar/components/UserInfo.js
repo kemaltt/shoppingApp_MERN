@@ -6,7 +6,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import { useLogoutMutation } from '../../../redux/auth/auth-api';
+import { useLogoutMutation } from '../../../../redux/auth/auth-api';
 
 
 export default function UserInfo() {

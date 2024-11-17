@@ -1,13 +1,140 @@
 import { useState } from "react";
-import styled from "styled-components";
-// import { mobile } from "../responsive";
-// import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { useRegisterMutation } from "../../../redux/auth/auth-api";
-import Button from "../../components/Button";
 import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
-import Visibility from '@mui/icons-material/Visibility';
+import { useRegisterMutation } from "../../../redux/auth/auth-api";
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import Visibility from '@mui/icons-material/Visibility';
+import { useNavigate } from "react-router-dom";
+import Button from "../../components/Button";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
+
+
+
+const Register = () => {
+  const { register: signUp, handleSubmit, formState: { errors } } = useForm();
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const handleMouseUpPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const [register, { isLoading, error, isError, isSuccess }] = useRegisterMutation()
+  const navigate = useNavigate()
+  const handleClick = async (value) => {
+    const { name, email, password } = value;
+    if (name && email && password) {
+      await register(value);
+    }
+  };
+  
+  if (isSuccess) {
+    navigate('/login')
+  }
+
+  return (
+    <Container>
+      <Wrapper>
+        <Title>REGISTER</Title>
+        <Form onSubmit={handleSubmit(handleClick)} >
+
+          <FormControl fullWidth >
+            <TextField
+              required
+              fullWidth
+              id="name"
+              label="NAME"
+              name="name"
+              autoComplete="current-name"
+              autoFocus
+              color={errors?.name ? 'error' : 'secondary'}
+              {...signUp("name", {
+                required: true,
+                pattern: {
+                  value: /^.{2,25}$/,
+                  message: "Name must be between 2 and 25 characters",
+                },
+              })}
+            />
+            {errors?.name && errors?.name.message}
+          </FormControl>
+
+          <FormControl fullWidth >
+            <TextField
+              required
+              fullWidth
+              id="email"
+              label="EMAIL"
+              name="email"
+              autoComplete="email"
+              autoFocus
+              color={errors?.email ? 'error' : 'secondary'}
+              {...signUp("email", {
+                required: true,
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i,
+                  message: "invalid email address",
+                },
+              })}
+            />
+            {errors?.email && errors?.email.message}
+          </FormControl>
+
+          <FormControl fullWidth >
+            <InputLabel htmlFor="outlined-adornment-password" color={errors?.password ? 'error' : 'secondary'} >PASSWORD</InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={showPassword ? 'text' : 'password'}
+              color={errors?.password ? 'error' : 'secondary'}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label={
+                      showPassword ? 'hide the password' : 'display the password'
+                    }
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    onMouseUp={handleMouseUpPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="PASSWORD"
+              {...signUp("password", {
+                required: true,
+                pattern: {
+                  value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
+                  message: "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
+                },
+              })}
+            />
+            {errors?.password && errors?.password.message}
+          </FormControl>
+          {/* <Button onClick={handleClick} >
+            Register {isLoading && <Spinner animation="border" size="sm" />
+            }
+          </Button> */}
+          <Button onClick={handleClick} isLoading={isLoading} title={'Register'} />
+          {isError && <Error> {error?.data?.message}</Error>}
+        </Form>
+        <LinkWrapper>
+          <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
+          <Link onClick={() => navigate('/login')}>YOU HAVE ALREADY AN ACCOUNT? LOGIN</Link>
+        </LinkWrapper>
+      </Wrapper>
+    </Container>
+  );
+};
+
+export default Register;
+
 
 const Container = styled.div`
   width: 100vw;
@@ -84,111 +211,3 @@ const Link = styled.a`
 const Error = styled.span`
   color: red;
 `;
-
-const Register = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  const handleMouseUpPassword = (event) => {
-    event.preventDefault();
-  };
-
-  const [register, { isLoading, error, isError, isSuccess }] = useRegisterMutation()
-  // const dispatch = useDispatch();
-  const navigate = useNavigate()
-  // const { loading, error, user } = useSelector((state) => state.user);
-  const handleClick = async (e) => {
-    e.preventDefault();
-    const user = { name, email, password };
-    // register(dispatch, user);
-    await register(user)
-  };
-  if (isSuccess) {
-    navigate('/login')
-  }
-
-
-  return (
-    <Container>
-      <Wrapper>
-        <Title>REGISTER</Title>
-        <Form>
-          {/* <Input
-            placeholder="name"
-            type="text"
-            onChange={(e) => setName(e.target.value)}
-          />
-          <Input
-            placeholder="email"
-            type="email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Input
-            placeholder="password"
-            type="password"
-            onChange={(e) => setPassword(e.target.value)}
-          /> */}
-          <TextField
-            id="outlined-name-input"
-            label="Name"
-            type="name"
-            required
-            autoComplete="current-name"
-            onChange={(e) => setName(e.target.value)}
-          />
-          <TextField
-            id="outlined-email-input"
-            label="Email"
-            type="email"
-            required
-            autoComplete="current-email"
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <FormControl fullWidth variant="outlined">
-            <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
-            <OutlinedInput
-              onChange={(e) => setPassword(e.target.value)}
-              id="outlined-adornment-password"
-              type={showPassword ? 'text' : 'password'}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label={
-                      showPassword ? 'hide the password' : 'display the password'
-                    }
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    onMouseUp={handleMouseUpPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-            />
-          </FormControl>
-          {/* <Button onClick={handleClick} >
-            Register {isLoading && <Spinner animation="border" size="sm" />
-            }
-          </Button> */}
-          <Button onClick={handleClick} isLoading={isLoading} title={'Register'} />
-          {isError && <Error> {error?.data?.message}</Error>}
-        </Form>
-        <LinkWrapper>
-          <Link>DO NOT YOU REMEMBER THE PASSWORD?</Link>
-          <Link onClick={() => navigate('/login')}>YOU HAVE ALREADY AN ACCOUNT? LOGIN</Link>
-        </LinkWrapper>
-      </Wrapper>
-    </Container>
-  );
-};
-
-export default Register;

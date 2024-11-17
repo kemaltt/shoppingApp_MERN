@@ -11,6 +11,7 @@ export const getAllProducts = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 export const getSingleProduct = async (req, res) => {
   const { id } = req.params;
   try {
@@ -23,12 +24,17 @@ export const getSingleProduct = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 export const createProduct = async (req, res) => {
   const product = req.body;
   const newProduct = new ProductModel(product);
   try {
     await newProduct.save();
-    res.status(201).json(newProduct);
+    const products = await ProductModel.find({});
+    if (!products) {
+      return res.status(404).json({ message: "No product found" });
+    }
+    res.status(201).json(products);
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
@@ -70,6 +76,23 @@ export const updateProductById = async (req, res) => {
       return res.status(404).json({ message: "Product not found" });
     }
     res.status(200).json(updatedProduct);
+  }
+  catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+// Delete product controller
+export const deleteProduct = async (req, res) => {
+  const { id } = req.params;
+  console.log(id);
+  
+  try {
+    const deletedProduct = await ProductModel.findByIdAndDelete(id);
+    if (!deletedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json(deletedProduct);
   }
   catch (error) {
     res.status(500).json({ message: error.message });

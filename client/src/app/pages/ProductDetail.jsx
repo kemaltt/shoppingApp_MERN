@@ -14,8 +14,6 @@ import { useAddToCartMutation, useDeleteFromCartMutation } from "../../redux/car
 
 export default function ProductDetail() {
   const navigate = useNavigate();
-
-
   const id = useParams().id
   const { product, loading } = useSelector((state) => state.products);
   const { isAuthenticated, token } = useSelector((state) => state.user);

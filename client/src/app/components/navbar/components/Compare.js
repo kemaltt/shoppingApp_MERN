@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom';
 import CompareArrowsIcon from '@mui/icons-material/CompareArrows';
 import { IconButton } from '@mui/material';
-import { StyledBadge, StyledIcon } from './helper/UIHelper';
+import { StyledBadge, StyledIcon } from '../helper/UIHelper';
 
 export default function Compare({ badge }) {
   return (

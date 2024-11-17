@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { IconButton, } from '@mui/material';
-import { StyledBadge, StyledIcon } from './helper/UIHelper';
+import { StyledBadge, StyledIcon } from '../helper/UIHelper';
 
 
 

@@ -5,20 +5,19 @@ import { MdLogout } from "react-icons/md";
 import { MdLogin } from "react-icons/md";
 import { useProductContext } from "../../contexts/ProductContext";
 import { useSelector } from "react-redux";
-import Compare from "./Compare";
-import Cart from "./Cart";
-import WishList from "./WishList";
+import Compare from "./components/Compare";
+import WishList from "./components/WishList";
 import { useLogoutMutation } from "../../../redux/auth/auth-api";
 import AccountMenu from "./components/Account";
+import Cart from "./components/Cart";
+import Product from "./components/Product";
 
 
 
 
 
 export default function Navbar() {
-  const {
-    selectedCompareProducts,
-  } = useProductContext();
+  const { selectedCompareProducts } = useProductContext();
   const [logout] = useLogoutMutation()
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const { favorite } = useSelector((state) => state.favorite);
@@ -26,7 +25,8 @@ export default function Navbar() {
 
   const cartBadge = cart?.products?.length;
   const wishBadge = favorite?.length;
-  const badge2 = selectedCompareProducts?.length;
+  const compareBadge = selectedCompareProducts?.length;
+  const productBadge = selectedCompareProducts?.length;
 
   const navigate = useNavigate();
   const [toggle, setToggle] = useState(false);
@@ -51,10 +51,11 @@ export default function Navbar() {
 
           {isAuthenticated
             ? <>
-              <Compare badge={badge2} />
+              {user.user.role === 'admin' && <Product badge={productBadge} />}
+              <Compare badge={compareBadge} />
               <Cart badge={cartBadge} />
               <WishList badge={wishBadge} />
-              <AccountMenu/>
+              <AccountMenu />
               {/* <UserInfo /> */}
             </>
             : <Link to="/login" style={{ color: 'white' }}>
@@ -79,7 +80,7 @@ export default function Navbar() {
             {isAuthenticated ? (
               <>
                 <li>
-                  <Compare badge={badge2} />
+                  <Compare badge={compareBadge} />
                 </li>
                 <li>
                   <Cart badge={cartBadge} />

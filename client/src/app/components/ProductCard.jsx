@@ -2,8 +2,10 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { CardActions, CardContent, CardMedia, Typography, Card, IconButton } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
 import { useSelector, shallowEqual } from "react-redux";
+import { useDeleteProductMutation } from "../../redux/product/product-api";
 
 
 
@@ -11,11 +13,13 @@ import { useSelector, shallowEqual } from "react-redux";
 export default function ProductCard({ product, i, id, cart }) {
   const [addFavorite] = useAddFavoriteMutation()
   const [deleteFavorite] = useDeleteFavoriteMutation()
+  const [deleteProduct] = useDeleteProductMutation()
   const navigate = useNavigate();
   const { token, favorite } = useSelector((state) => ({
     favorite: state.favorite.favorite,
     token: state.user.token,
   }), shallowEqual);
+  const { user } = useSelector((state) => state.user);
 
   const productDetail = () => {
     // fetchSingleProduct(dispatch, id, token);
@@ -29,6 +33,12 @@ export default function ProductCard({ product, i, id, cart }) {
   const addFav = async () => {
     if (token) {
       await addFavorite({ token, id });
+    }
+  }
+
+  const delProduct = async () => {
+    if (token) {
+      await deleteProduct({ id, token });
     }
   }
 
@@ -54,7 +64,7 @@ export default function ProductCard({ product, i, id, cart }) {
             {product.category}
           </Typography>
         </CardContent>
-        <CardActions >
+        <CardActions sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} >
           {favorite.some(el => el._id === id) ?
             <IconButton onClick={delFav} aria-label="add to favorites" >
               <FavoriteIcon color='warning' fontSize='large' />
@@ -65,6 +75,15 @@ export default function ProductCard({ product, i, id, cart }) {
             </IconButton>
           }
 
+          {user?.user?.role === 'admin' &&
+            <IconButton onClick={delProduct} aria-label="add to favorites" >
+              <DeleteIcon color='error' fontSize='large' />
+            </IconButton>
+          }
+
+          <Typography variant='h5' fontWeight='bold' color="text.secondary">
+            {product.price}€
+          </Typography>
         </CardActions>
       </Card>
       {/* <Card style={{ width: '24rem', height: '45rem' }}>

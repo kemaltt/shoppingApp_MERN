@@ -20,6 +20,12 @@ const productSlice = createSlice({
     builder.addMatcher(productApi.endpoints.updateProductById.matchFulfilled, (state, action) => {
       state.product = action.payload;
     });
+    builder.addMatcher(productApi.endpoints.addProduct.matchFulfilled, (state, action) => {
+      state.products = action.payload;
+    });
+    builder.addMatcher(productApi.endpoints.deleteProduct.matchFulfilled, (state, action) => {
+     state.products = state.products.filter((product) => product._id !== action.payload._id);
+    });
   },
 });
 

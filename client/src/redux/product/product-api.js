@@ -32,7 +32,26 @@ export const productApi = createApi({
         },
       }),
     }),
+    addProduct: builder.mutation({
+      query: (product) => ({
+        url: '/add-product',
+        method: 'POST',
+        body: product,
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
+      }),
+    }),
+    deleteProduct: builder.mutation({
+      query: ({ id, token }) => ({
+        url: `/delete-product/${id}`,
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 })
 
-export const { useGetProductsMutation, useGetProductByIdQuery, useUpdateProductByIdMutation } = productApi
+export const { useGetProductsMutation, useGetProductByIdQuery, useUpdateProductByIdMutation, useAddProductMutation, useDeleteProductMutation } = productApi

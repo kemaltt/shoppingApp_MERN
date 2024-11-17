@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useProductContext } from "../contexts/ProductContext";
 
 export default function CompareSide() {
-  const { selectedCompareProducts, isAuthenticated } = useProductContext();
+  const { selectedCompareProducts } = useProductContext();
   const navigate = useNavigate();
   const badge = selectedCompareProducts.length;
   return (
