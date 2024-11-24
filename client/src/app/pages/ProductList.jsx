@@ -64,7 +64,7 @@ export default function ProductList() {
             id="name"
             name="name"
             label="Product Title"
-            autoFocus
+            // autoFocus
             // color="secondary"
             {...register("name", {
               required: true,
@@ -145,7 +145,7 @@ export default function ProductList() {
             id="image"
             name="image"
             label="Product image URL"
-            autoFocus
+            // autoFocus
             // color="secondary"
             {...register("image", {
               required: true,

@@ -68,10 +68,10 @@ export const getCategory = async (req, res) => {
 export const updateProductById = async (req, res) => {
   const { id } = req.params;
   const { updatedCountInStock } = req.body;
-  
+
   try {
     const updatedProduct = await ProductModel.findByIdAndUpdate(id, { countInStock: updatedCountInStock }, { new: true });
-    
+
     if (!updatedProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
@@ -80,6 +80,26 @@ export const updateProductById = async (req, res) => {
   catch (error) {
     res.status(500).json({ message: error.message });
   }
+}
+
+// Edit product controller
+
+export const editProduct = async (req, res) => {
+  const { id } = req.params;
+  const data = req.body;
+
+  try {
+    const updatedProduct = await ProductModel.findByIdAndUpdate(id, data, { new: true });
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    
+    res.status(200).json(updatedProduct);
+  }
+  catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+
 }
 
 // Delete product controller

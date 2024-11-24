@@ -1,7 +1,6 @@
 import React from "react";
 import Loading from "../components/Loading";
 import { useSelector } from "react-redux";
-import { IoMdHeartEmpty } from "react-icons/io";
 import Button from "@mui/material/Button";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
@@ -9,6 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Col, Row } from "react-bootstrap";
 import { useGetProductByIdQuery } from "../../redux/product/product-api";
 import { useAddToCartMutation, useDeleteFromCartMutation } from "../../redux/cart/cart-api";
+import { Card, CardContent, CardHeader, Typography, CardMedia } from '@mui/material'
 
 
 
@@ -38,27 +38,11 @@ export default function ProductDetail() {
   return (
     loading
       ? <Loading />
-      : <Row>
-        <div className="row px-5">
-          <Col md='6' className="text-center p-5">
-            <img className="img-fluid" src={product?.image} alt={product?.name} />
-          </Col>
-          <Col md='6' className="p-5">
-            <div className=" d-flex justify-content-between  mb-4">
-              <h1 className="m-0">{product.name}</h1>
-              <span style={{ fontSize: "3rem" }}>
-                <IoMdHeartEmpty
-                // onClick={() => addToWish(product._id)}
-                />
-                {/* <IoMdHeart
-                className="text-danger"
-              // onClick={() => removeFromWish(product._id)}
-              /> */}
-              </span>
-            </div>
-            <span className=" fw-bold fs-1">{product?.price}€ </span>
-            <p>category:   {product?.category}</p>
-            <p>{product.description}</p>
+      :
+      <Card className="p-5" >
+        <CardHeader
+          title='Product Detail'
+          action={
             <div className="cart_buttons">
               {cart && cart?.products?.some((el) => el.product?._id === product._id) ? (
                 <Button
@@ -80,13 +64,40 @@ export default function ProductDetail() {
                 </Button>
               )}
             </div>
+          }
+        />
+
+        <Row className='mt-5' >
+          <Col lg='6'>
+            <CardMedia
+              component="img"
+              // sx={{ width: 600 }}
+              sx={{ objectFit: 'contain', width: '100%', height: '500px', cursor: 'pointer', '&:hover': { opacity: 0.7 } }}
+              image={product?.image}
+              alt={product?.name}
+            />
           </Col>
-        </div>
-      </Row>
 
+          <Col lg='6'>
+            <CardContent className='d-flex flex-column gap-3' sx={{ flex: '1 0 auto' }}>
+              <Typography component="div" variant="h4">
+                {product.name}
+              </Typography>
+              <Typography variant="subtitle1" component="div" sx={{ color: 'text.secondary', fontWeight: 'bold' }}>
+                {product?.price}€
+              </Typography>
+              <Typography component="div" variant="h5">
+                category:   {product?.category}
+              </Typography>
+              <Typography component="div" >
+                {product.description}
+              </Typography>
+            </CardContent>
 
+          </Col>
 
+        </Row>
 
-
+      </Card>
   )
 }

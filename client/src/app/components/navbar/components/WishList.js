@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import { StyledBadge, StyledIcon } from '../helper/UIHelper';
 
 
@@ -33,11 +33,13 @@ export default function WishList({ badge }) {
 
     // </Link>
     <Link to="/wishlist" >
+    <Tooltip placement="top-end" title="Favorite">
       <IconButton aria-label="favorite">
         <StyledBadge badgeContent={badge} color="primary">
         <FavoriteBorderOutlinedIcon sx={StyledIcon}/>
         </StyledBadge>
       </IconButton>
+    </Tooltip>
     </Link>
   )
 }

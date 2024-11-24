@@ -22,14 +22,7 @@ export default function UserInfo() {
 
         <OverlayTrigger placement="top" overlay={<Tooltip id="quick-actions-tooltip">Account Settings</Tooltip>}>
 
-          <Avatar
-            id="basic-button"
-            sx={{
-              m: 0.7,
-              bgcolor: "secondary.main",
-              // fontSize: '10px',
-            }}
-          >
+          <Avatar id="basic-button" sx={{ m: 0.7, bgcolor: "secondary.main", }}>
             {user.user.name.slice(0, 2).toUpperCase()}
           </Avatar>
         </OverlayTrigger>

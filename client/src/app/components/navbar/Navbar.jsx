@@ -48,7 +48,6 @@ export default function Navbar() {
           alt="logo"
         />
         <ul className="nav_item_desktop">
-
           {isAuthenticated
             ? <>
               {user.user.role === 'admin' && <Product badge={productBadge} />}
@@ -56,13 +55,11 @@ export default function Navbar() {
               <Cart badge={cartBadge} />
               <WishList badge={wishBadge} />
               <AccountMenu />
-              {/* <UserInfo /> */}
             </>
             : <Link to="/login" style={{ color: 'white' }}>
               {/* Login */}
-              <MdLogin style={{ fontSize: "3rem" }} />
+              <MdLogin style={{ fontSize: "2rem" }} />
             </Link>
-
           }
         </ul>
 

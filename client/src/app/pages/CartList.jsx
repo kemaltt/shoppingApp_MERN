@@ -1,14 +1,13 @@
 import React from "react";
-import { RiDeleteBin6Fill } from "react-icons/ri";
 import { shallowEqual, useSelector } from "react-redux";
-import {Col, Form, Row } from "react-bootstrap";
-import { FaRegHeart, FaHeart } from "react-icons/fa";
+import { Col, Form, Row } from "react-bootstrap";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useDeleteFromCartMutation, useGetCartQuery, useUpdateCartByIdMutation } from "../../redux/cart/cart-api";
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
 import Button from "../components/Button";
-// import { useUpdateProductByIdMutation } from "../../redux/product/product-api";
-
-
+import { Card, CardHeader, Tooltip } from "@mui/material";
 
 
 
@@ -18,7 +17,7 @@ export default function CartList() {
   const [addFavorite] = useAddFavoriteMutation()
   const [deleteFavorite] = useDeleteFavoriteMutation()
   // const [updateProductById] = useUpdateProductByIdMutation()
-  const[updateCartById] = useUpdateCartByIdMutation()
+  const [updateCartById] = useUpdateCartByIdMutation()
 
   let total = 0;
   const { cart, token, favorite } = useSelector((state) => ({
@@ -44,7 +43,7 @@ export default function CartList() {
     const foundProduct = cart?.products?.find((el) => el.product._id === id);
 
     let updatedCountInStock;
-  
+
     if (quantity > foundProduct.quantity) {
       // Yeni quantity büyükse stoğu azalt
       updatedCountInStock = foundProduct.product.countInStock - (quantity - foundProduct.quantity);
@@ -57,7 +56,7 @@ export default function CartList() {
       price: quantity * foundProduct.product.price,
       updatedCountInStock
     }
-    
+
     await updateCartById({ id, token, data });
   }
 
@@ -72,12 +71,12 @@ export default function CartList() {
   return (
     cart?.products?.length <= 0 || error
       ? <h1 className="text-center text-danger mt-5">{error?.data?.message ?? <span> There are no items in the cart</span>}</h1>
-      : <>
-        <div className="cart-title d-flex justify-content-start align-items-center gap-4 mb-4 p-4">
-          <h1>Warenkorb</h1>
-          <p className="m-0"> {cart?.products?.length} Products</p>
-        </div>
-        <Row className="p-5">
+      : <Card className="p-5">
+        <CardHeader
+          title='Warenkorb'
+          subheader={`${cart?.products?.length} Products`}
+        />
+        <Row className="">
           <>
             <Col md='9' className="cart-list">
               {cart?.products?.map((product, i) => (
@@ -116,25 +115,27 @@ export default function CartList() {
                         </Form.Select>
                       </div>
 
-                      <div className="cart-buttons d-flex justify-content-between align-items-center gap-5 mt-5 w-50">
-                        <div type="button" className="cart-delete d-flex justify-content-between align-items-center gap-3 " onClick={() => removeFromCart(product?.product._id)}>
-                          <RiDeleteBin6Fill style={{ color: "red", fontSize: "2rem" }} />
-                          <span className="fs-4 border-bottom border-dark">Delete</span>
-                        </div>
-                        <div type="button" className="cart-delete d-flex justify-content-between align-items-center gap-3 ">
-                          {favorite.some(el => el._id === product?.product._id) ?
-                            <FaHeart
-                              onClick={() => delFav(product?.product._id)}
-                              style={{ color: "orange", fontSize: "2rem" }}
-                            />
-                            :
-                            <FaRegHeart
-                              onClick={() => addFav(product?.product._id)}
-                              style={{ fontSize: "2rem" }}
-                            />
-                          }
-                          <span className="fs-4 border-bottom border-dark">Favourite</span>
-                        </div>
+                      <div className="cart-buttons d-flex justify-content-start align-items-center gap-3 mt-5 w-50">
+                        <Tooltip placement="top" title="Delete">
+                          <div type="button" className="cart-delete " onClick={() => removeFromCart(product?.product._id)}>
+                            <DeleteIcon style={{ color: "red", fontSize: "2rem" }} />
+                          </div>
+                        </Tooltip>
+                        <Tooltip placement="top" title="Favorite">
+                          <div type="button" className="cart-delete">
+                            {favorite.some(el => el._id === product?.product._id) ?
+                              <FavoriteOutlinedIcon
+                                onClick={() => delFav(product?.product._id)}
+                                style={{ color: "orange", fontSize: "2rem" }}
+                              />
+                              :
+                              <FavoriteBorderOutlinedIcon
+                                onClick={() => addFav(product?.product._id)}
+                                style={{ fontSize: "2rem" }}
+                              />
+                            }
+                          </div>
+                        </Tooltip>
 
                       </div>
                     </div>
@@ -156,14 +157,14 @@ export default function CartList() {
                     <p>Total: {totalPrice.toFixed(2)}€</p>
                   </div>
                   <div className="payment-btn">
-                  <Button type="button" variant="success" title="Checkout" />
-                 {/* <Button type="button" variant="success" >Checkout</Button> */}
+                    <Button type="button" variant="success" title="Checkout" />
+                    {/* <Button type="button" variant="success" >Checkout</Button> */}
                   </div>
                 </div>
               </Col>
             }
           </>
         </Row>
-      </>
+      </Card>
   )
 }

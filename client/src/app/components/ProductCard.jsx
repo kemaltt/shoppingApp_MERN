@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { CardActions, CardContent, CardMedia, Typography, Card, IconButton } from "@mui/material";
+import { CardActions, CardContent, CardMedia, Typography, Card, IconButton, Box } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
@@ -47,7 +47,7 @@ export default function ProductCard({ product, i, id, cart }) {
 
       <Card
         sx={{
-          maxWidth: 300,
+          maxWidth: 350,
         }}>
         <CardMedia
           onClick={productDetail}
@@ -57,7 +57,7 @@ export default function ProductCard({ product, i, id, cart }) {
           title={product.name}
         />
         <CardContent sx={{ height: '120px' }} >
-          <Typography gutterBottom variant="h4" component="div">
+          <Typography gutterBottom variant="h6" component="div">
             {product.name}
           </Typography>
           <Typography variant='h6' color="text.secondary">
@@ -65,23 +65,25 @@ export default function ProductCard({ product, i, id, cart }) {
           </Typography>
         </CardContent>
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} >
-          {favorite.some(el => el._id === id) ?
-            <IconButton onClick={delFav} aria-label="add to favorites" >
-              <FavoriteIcon color='warning' fontSize='large' />
-            </IconButton>
-            :
-            <IconButton onClick={addFav} aria-label="add to favorites" >
-              <FavoriteIcon fontSize='large' />
-            </IconButton>
-          }
+          <Box>
+            {favorite.some(el => el._id === id) ?
+              <IconButton onClick={delFav} aria-label="add to favorites" >
+                <FavoriteIcon color='warning'  />
+              </IconButton>
+              :
+              <IconButton onClick={addFav} aria-label="add to favorites" >
+                <FavoriteIcon  />
+              </IconButton>
+            }
 
-          {user?.user?.role === 'admin' &&
-            <IconButton onClick={delProduct} aria-label="add to favorites" >
-              <DeleteIcon color='error' fontSize='large' />
-            </IconButton>
-          }
+            {user?.user?.role === 'admin' &&
+              <IconButton onClick={delProduct} aria-label="add to favorites" >
+                <DeleteIcon color='error'  />
+              </IconButton>
+            }
+          </Box>
 
-          <Typography variant='h5' fontWeight='bold' color="text.secondary">
+          <Typography fontWeight='bold' color="text.secondary">
             {product.price}€
           </Typography>
         </CardActions>

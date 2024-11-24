@@ -10,8 +10,9 @@ import Login from '../pages/auth/Login';
 import Home from '../pages/Home';
 import CartList from '../pages/CartList';
 import WishList from '../pages/WishList';
-import ProductList from '../pages/ProductList';
 import { useSelector } from 'react-redux';
+import Product from '../modules/product/Product';
+
 
 
 export default function Router() {
@@ -31,7 +32,7 @@ export default function Router() {
           <Route path="/cart" element={<CartList />} />
           <Route path="/compare" element={<CompareList />} />
           <Route path="/wishlist" element={<WishList />} />
-          <Route path="/product-list" element={user?.user?.role === 'admin' ? <ProductList /> : <Home />} />
+          <Route path="/product-list" element={user?.user?.role === 'admin' ?<Product/> : <Home />} />
           <Route path="/product/:id" element={<ProductDetail />} />
         </Route>
       </Routes>

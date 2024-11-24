@@ -3,6 +3,7 @@ import { useDeleteFavoriteMutation } from '../../redux/favorite/favorite-api'
 import { shallowEqual, useSelector } from 'react-redux';
 import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { Col, Row } from 'react-bootstrap';
+import { Card, CardHeader } from '@mui/material';
 
 export default function WishList() {
 
@@ -11,7 +12,7 @@ export default function WishList() {
   const { token, favorite } = useSelector((state) => ({
     favorite: state.favorite.favorite,
     token: state.user.token
-  }),shallowEqual);
+  }), shallowEqual);
   const delFav = (id) => {
     deleteFavorite({ token, id })
   }
@@ -20,16 +21,16 @@ export default function WishList() {
   return (
     (favorite.length <= 0)
       ? <h1 className="text-center text-danger mt-5">{<span> you have no favorite product</span>}</h1>
-      : <>
-        <div className="cart-title d-flex justify-content-start align-items-center gap-4 mb-4 p-4">
-          <h1>Favorite</h1>
-          <p className="m-0"> {favorite.length} Products</p>
-        </div>
-        <Row className="p-5">
+      : <Card className="p-5">
+        <CardHeader
+          title='Favorite'
+          subheader={`${favorite?.length} Products`}
+        />
+        <Row>
           <>
             {favorite.map((product, i) => (
               <Col key={i} md='4' className="card">
-                <div className="cart? d-flex gap-5 mb-5">
+                <div className="cart? d-flex gap-5">
                   <div className="cart-image w-25">
                     <img
                       className="img-fluid "
@@ -70,6 +71,6 @@ export default function WishList() {
 
           </>
         </Row>
-      </>
+      </Card >
   )
 }

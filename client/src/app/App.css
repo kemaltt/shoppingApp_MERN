@@ -5,7 +5,7 @@
 }
 
 html {
-  font-size: 62.5%;
+  /* font-size: 62.5%; */
 }
 
 html,
@@ -14,7 +14,7 @@ body {
   font-family: 'Montserrat', sans-serif;
 }
 
-h1 {
+/* h1 {
   font-size: 3rem;
 }
 
@@ -37,12 +37,17 @@ th {
 
 td {
   font-size: 1.8rem;
-}
+} */
 
 /* .App {
   height: 100vh;
 } */
-
+.navbar_ {
+  position: sticky;
+  width: 100%;
+  top: 0;
+  z-index: 1;
+}
 .navbar_ nav {
   display: flex;
   justify-content: space-between;
@@ -116,8 +121,7 @@ td {
 
 .main {
   /* text-align: center; */
-  padding-bottom: 10vh;
-  padding: 0 5% 10vh 5%;
+  padding: 1vh 5% 1vh 5%;
   width: 90%;
   margin: 0 auto;
 }

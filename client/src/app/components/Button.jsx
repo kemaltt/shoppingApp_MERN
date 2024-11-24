@@ -5,15 +5,12 @@ import styled from 'styled-components';
 
 
 const StyledButton = styled.button`
-width: 40%;
 border: none;
-padding: 10px 0;
+padding: 7px 10px;
 background-image: linear-gradient(260deg, #2376ae 0%, #c16ecf 100%);
 color: white;
 cursor: pointer;
-font-size: 1.4rem;
 transition: background-image 0.5s ease-in-out;
-
 &:hover {
   background-image: linear-gradient(260deg, #c16ecf 0%, #2376ae 100%);
 }
