@@ -26,6 +26,7 @@ export default function ProductTable({ isLoading }) {
   const [rowModesModel, setRowModesModel] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState(true);
 
+console.log(setRowSelection);
 
 
   const handleRowEditStop = (params, event) => {
