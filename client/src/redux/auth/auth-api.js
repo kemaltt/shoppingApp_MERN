@@ -1,8 +1,9 @@
 // Need to use the React-specific entry point to import createApi
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { BASE_URL } from '../../constants/api/apiUrl'
 
 // Define a service using a base URL and expected endpoints
-const BASE_URL = 'http://localhost:9090/api'
+
 
 export const authApi = createApi({
   reducerPath: 'authApi',
