@@ -158,6 +158,10 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
+
+     @media (max-width: 600px) {
+    width: 80%; 
+  }
 `;
 
 const Title = styled.h1`

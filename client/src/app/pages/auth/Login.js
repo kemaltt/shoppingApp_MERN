@@ -130,6 +130,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+
 `;
 
 const Wrapper = styled.div`
@@ -139,6 +140,10 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 15px;
+
+   @media (max-width: 600px) {
+    width: 80%; 
+  }
 `;
 
 const Title = styled.h1`

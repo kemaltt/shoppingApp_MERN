@@ -1,20 +1,22 @@
 import React from "react";
-import { MdOutlineCompareArrows } from "react-icons/md";
-import Badge from "react-bootstrap/Badge";
-import { useNavigate } from "react-router-dom";
-import { useProductContext } from "../contexts/ProductContext";
+import { Link } from 'react-router-dom';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import { IconButton, Tooltip } from '@mui/material';
+import { StyledBadge, StyledIcon } from "./navbar/helper/UIHelper";
+import { useSelector } from "react-redux";
+
 
 export default function CompareSide() {
-  const { selectedCompareProducts } = useProductContext();
-  const navigate = useNavigate();
-  const badge = selectedCompareProducts.length;
+  const { favorite } = useSelector((state) => state.favorite);
   return (
-    <div
-      onClick={() => navigate("/compare")}
-      className="compare-side"
-    >
-      <MdOutlineCompareArrows />
-      <Badge bg="secondary">{badge}</Badge>
-    </div>
+       <Link to="/wishlist" className='compare-side' >
+       <Tooltip placement="top" title="Favorite">
+         <IconButton aria-label="favorite">
+           <StyledBadge badgeContent={favorite?.length} color="primary">
+           <FavoriteBorderOutlinedIcon sx={StyledIcon}/>
+           </StyledBadge>
+         </IconButton>
+       </Tooltip>
+       </Link>
   );
 }

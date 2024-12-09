@@ -76,22 +76,25 @@ export default function Navbar() {
           <ul className="nav_item_mobile">
             {isAuthenticated ? (
               <>
-                <li>
+                {/* <li>
                   <Compare badge={compareBadge} />
-                </li>
+                </li> */}
                 <li>
                   <Cart badge={cartBadge} />
                 </li>
                 <li>
-                  <div onClick={logOut} >
-                    <MdLogout style={{ fontSize: "2.5rem" }} /> {user.user.name}
+                  <WishList badge={wishBadge} />
+                </li>
+                <li>
+                  <div onClick={logOut} style={{ color: 'white' }} >
+                    <MdLogout style={{ fontSize: "2.5rem" }} />
                   </div>
                 </li>
               </>
             ) : (
               <li>
                 <Link to="/login" style={{ color: 'white' }}>
-                  Login
+                  <MdLogin style={{ fontSize:  "2.5rem" }} />
                 </Link>
               </li>
             )}
