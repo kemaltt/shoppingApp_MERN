@@ -2,12 +2,12 @@ import express from 'express';
 import dotenv from 'dotenv';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import { connect } from './src/config/MongoDb.js';
 import productRoute from './src/routers/product-route.js';
 import authRoute from './src/routers/auth-route.js';
 import cartRoute from './src/routers/cart-route.js';
 import favRoute from './src/routers/favorite-route.js';
-import cookieParser from 'cookie-parser';
 
 
 dotenv.config();
