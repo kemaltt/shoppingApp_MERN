@@ -72,7 +72,6 @@ export default function Search({ setMessage }) {
           label="Search"
           name="search"
           type="search"
-          autoFocus
           size="small"
         />
       </FormControl>
