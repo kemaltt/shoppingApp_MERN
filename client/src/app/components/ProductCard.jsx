@@ -50,7 +50,7 @@ export default function ProductCard({ product, id }) {
   return (
     <>
 
-      <Card sx={{ maxWidth: 250, }}>
+      <Card sx={{ maxWidth: 300 }}>
         <CardMedia
           onClick={productDetail}
           component="img"
@@ -58,7 +58,7 @@ export default function ProductCard({ product, id }) {
           image={product.image}
           title={product.name}
         />
-        <CardContent sx={{ height: '140px' }} >
+        <CardContent sx={{ height: '120px', marginBottom: '4px' }} >
           <Typography gutterBottom variant="h6" component="div">
             {product.name}
           </Typography>
@@ -86,9 +86,14 @@ export default function ProductCard({ product, id }) {
             }
           </Box>
 
-          <Typography fontWeight='bold' color="text.secondary">
-            {product.price}€
-          </Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'end', fontStyle: 'italic' }}>
+            <Typography color="text.secondary">
+              Stock  {product.countInStock}
+            </Typography>
+            <Typography fontWeight='bold' color="text.secondary">
+              {product.price}€
+            </Typography>
+          </Box>
         </CardActions>
       </Card>
     </>
