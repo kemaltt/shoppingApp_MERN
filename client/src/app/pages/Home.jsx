@@ -36,7 +36,6 @@ export default function Home() {
             product={product}
             cart={cart}
             id={product._id}
-            i={i}
           />
         ))}
       </div>

@@ -10,16 +10,17 @@ import { useDeleteProductMutation } from "../../redux/product/product-api";
 
 
 
-export default function ProductCard({ product, i, id, cart }) {
+export default function ProductCard({ product, id }) {
   const [addFavorite] = useAddFavoriteMutation()
   const [deleteFavorite] = useDeleteFavoriteMutation()
   const [deleteProduct] = useDeleteProductMutation()
   const navigate = useNavigate();
-  const { token, favorite } = useSelector((state) => ({
+  const { token, favorite, user, isAuthenticated } = useSelector((state) => ({
     favorite: state.favorite.favorite,
     token: state.user.token,
+    user: state.user.user,
+    isAuthenticated: state.user.isAuthenticated
   }), shallowEqual);
-  const { user } = useSelector((state) => state.user);
 
   const productDetail = () => {
     // fetchSingleProduct(dispatch, id, token);
@@ -42,10 +43,14 @@ export default function ProductCard({ product, i, id, cart }) {
     }
   }
 
+  const login = () => {
+    navigate('/login')
+  }
+
   return (
     <>
 
-      <Card sx={{ maxWidth: 350, }}>
+      <Card sx={{ maxWidth: 250, }}>
         <CardMedia
           onClick={productDetail}
           component="img"
@@ -53,7 +58,7 @@ export default function ProductCard({ product, i, id, cart }) {
           image={product.image}
           title={product.name}
         />
-        <CardContent sx={{ height: '120px' }} >
+        <CardContent sx={{ height: '140px' }} >
           <Typography gutterBottom variant="h6" component="div">
             {product.name}
           </Typography>
@@ -63,12 +68,13 @@ export default function ProductCard({ product, i, id, cart }) {
         </CardContent>
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} >
           <Box>
+
             {favorite.some(el => el._id === id) ?
-              <IconButton onClick={delFav} aria-label="add to favorites" >
+              <IconButton onClick={isAuthenticated ? delFav : login} aria-label="add to favorites" >
                 <FavoriteIcon color='warning' />
               </IconButton>
               :
-              <IconButton onClick={addFav} aria-label="add to favorites" >
+              <IconButton onClick={isAuthenticated ? addFav : login} aria-label="add to favorites" >
                 <FavoriteIcon />
               </IconButton>
             }
