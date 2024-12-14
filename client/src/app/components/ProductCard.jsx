@@ -45,10 +45,7 @@ export default function ProductCard({ product, i, id, cart }) {
   return (
     <>
 
-      <Card
-        sx={{
-          maxWidth: 350,
-        }}>
+      <Card sx={{ maxWidth: 350, }}>
         <CardMedia
           onClick={productDetail}
           component="img"
@@ -68,17 +65,17 @@ export default function ProductCard({ product, i, id, cart }) {
           <Box>
             {favorite.some(el => el._id === id) ?
               <IconButton onClick={delFav} aria-label="add to favorites" >
-                <FavoriteIcon color='warning'  />
+                <FavoriteIcon color='warning' />
               </IconButton>
               :
               <IconButton onClick={addFav} aria-label="add to favorites" >
-                <FavoriteIcon  />
+                <FavoriteIcon />
               </IconButton>
             }
 
             {user?.user?.role === 'admin' &&
               <IconButton onClick={delProduct} aria-label="add to favorites" >
-                <DeleteIcon color='error'  />
+                <DeleteIcon color='error' />
               </IconButton>
             }
           </Box>
@@ -88,72 +85,6 @@ export default function ProductCard({ product, i, id, cart }) {
           </Typography>
         </CardActions>
       </Card>
-      {/* <Card style={{ width: '24rem', height: '45rem' }}>
-        <Card.Img onClick={productDetail} className="img-fluid" style={{ width: '100%', height: '300px' }} variant="top" src={product.image} />
-        <Card.Body>
-          <Card.Title>{product.name}</Card.Title>
-          <Card.Text>
-            {product.category}
-          </Card.Text>
-        </Card.Body>
-      </Card> */}
-      {/* <div key={i} className="product_card">
-      <img onClick={productDetail} src={product.image} alt={product.name} />
-      <div className="product_body">
-        <h3>{product.name} </h3>
-        <p className="price">${product.price}</p>
-
-        <div className="card_buttons">
-          {selectedCompareProducts &&
-            selectedCompareProducts.includes(product) ? (
-            // <MdCompareArrows
-            //   onClick={() =>
-            //     !isAuthenticated
-            //       ? alert("please login")
-            //       : removeFromCompare(product)
-            //   }
-            //   style={{ color: "red" }}
-            // />
-            <Button
-              onClick={() => removeFromCompare(product)}
-              variant="outlined"
-              // style={{ color: "#fff", background: "red" }}
-              color="error"
-              startIcon={<CompareArrowsIcon />}
-            ></Button>
-          ) : (
-            <Button
-              onClick={() => !isAuthenticated ? navigate('/login') : addToCompare(product)}
-              variant="outlined"
-              color="success"
-              startIcon={<CompareArrowsIcon />}
-            ></Button>
-
-          )}
-          <div className="cart_buttons">
-            {selectedCartProducts && selectedCartProducts.includes(cart) ? (
-              <Button
-                onClick={() => removeFromCart(product)}
-                variant="outlined"
-                color="error"
-                startIcon={<RemoveShoppingCartIcon />}
-              >
-                Del
-              </Button>
-            ) : (
-              <Button
-                onClick={() => !isAuthenticated ? navigate('/login') : addToCart(product)}
-                variant="outlined"
-                color="success"
-                startIcon={<AddShoppingCartIcon />}
-              >
-                Add
-              </Button>
-            )}
-          </div>
-        </div>
-      </div>
-    </div> */}
     </>
 
   );

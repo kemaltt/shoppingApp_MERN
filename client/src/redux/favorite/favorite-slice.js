@@ -20,7 +20,6 @@ const authSlice = createSlice({
     });
     builder.addMatcher(favApi.endpoints.deleteFavorite.matchFulfilled, (state, action) => {
       state.favorite = action.payload;
-
     });
   },
 });

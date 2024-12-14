@@ -6,7 +6,7 @@ import { StyledBadge, StyledIcon } from "./navbar/helper/UIHelper";
 import { useSelector } from "react-redux";
 
 
-export default function CompareSide() {
+export default function FavoriteSide() {
   const { favorite } = useSelector((state) => state.favorite);
   return (
        <Link to="/wishlist" className='compare-side' >
