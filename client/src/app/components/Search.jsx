@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useProductContext } from "../contexts/ProductContext";
-import { Form } from "react-bootstrap";
-
 import { useGetProductsMutation } from "../../redux/product/product-api";
+import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 
 export default function Search({ setMessage }) {
-  const [selectInput, setSelectInput] = useState('All')
+  const [selectInput, setSelectInput] = useState('All');
+
   const { isAuthenticated, searchInput, setSearchInput, filterProducts } = useProductContext();
   const categories = ['All', 'men\'s clothing', 'jewelery', 'electronics', 'women\'s clothing'];
 
@@ -47,26 +47,35 @@ export default function Search({ setMessage }) {
     setSearchInput("");
   };
   return (
-    <div className="search_container w-75 d-flex justify-content-center align-items-center  gap-4 my-5 mx-auto">
-      <Form.Select
-        onChange={(e) => setSelectInput(e.target.value)}
-        style={{ height: '35px', width: '100px' }}
-        className="fs-5 border-black rounded-5 text-center"
-        aria-label="Default select example">
-        {categories.map((el, i) => (
-          <option key={i} value={el}>{el}</option>
-        ))}
-      </Form.Select>
-      <form onSubmit={getProduct} action="">
-        <input
-          className="rounded-5 px-4"
+    <div className="search_container d-flex justify-content-center align-items-center gap-lg-4 gap-2 my-4 mx-auto">
+      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+        <InputLabel id="demo-select-small-label">Category</InputLabel>
+        <Select
+          labelId="demo-select-small-label"
+          id="demo-select-small"
+          value={selectInput}
+          label="Category"
+          onChange={(e) => { setSelectInput(e.target.value) }}
+        >
+          {categories.map((el, i) => (
+            <MenuItem key={i} value={el}>{el}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+
+      <FormControl onSubmit={getProduct} sx={{ maxWidth: '400px' }} fullWidth>
+        <TextField
           onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="Search a product..."
-          type="search"
           value={searchInput}
+          id="search"
+          label="Search"
+          name="search"
+          type="search"
+          autoFocus
+          size="small"
         />
-        {/* <button type="submit">Search</button> */}
-      </form>
+      </FormControl>
 
     </div>
   );
