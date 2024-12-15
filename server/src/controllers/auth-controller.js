@@ -1,6 +1,7 @@
 import UserModel from "../models/UserModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { EmailService } from "../services/email.service.js";
 
 
 export const register = async (req, res) => {
@@ -81,6 +82,76 @@ export const login = async (req, res) => {
     });
   }
 };
+
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    if (!email) {
+      return res.status(400).json({ message: "Please provide email" });
+    }
+    const user = await UserModel.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "5m" });
+    const resetURL = `${process.env.API_PATH ==='production' ?  process.env.CLIENT_URL  :process.env.CLIENT_LOCAL_URL}/reset-password/${user._id}/${token}`;
+    const options = {
+      email: user.email,
+      subject: "Dein Shop [Reset your password]",
+      resetURL,
+    };
+
+    await EmailService.sendEmail(options);
+
+    res.status(200).json({
+      status: "success",
+      message: "Email sent"
+    });
+  }
+  catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message
+    });
+  }
+}
+
+export const resetPassword = async (req, res) => {
+
+  const { id, token } = req.params;
+  const { password } = req.body;
+  try {
+    if (!id || !token || !password) {
+      return res.status(400).json({ message: "Please provide all fields" });
+    }
+    const user = await UserModel.findById(id);
+    if
+      (!user) {
+      return res.status(400).json({ message: "Invalid user" });
+    }
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    if (user._id.toString() !== decoded.id) {
+      return res.status(400).json({ message: "Invalid token" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
+
+    await UserModel.findByIdAndUpdate(id, { password: hashedPassword });
+    res.status(200).json({
+      status: "success",
+      message: "Password reset successfully"
+    });
+  }
+  catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message
+    });
+  }
+}
 
 export const updateUser = async (req, res) => {
 
