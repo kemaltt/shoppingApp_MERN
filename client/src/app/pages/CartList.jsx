@@ -1,13 +1,13 @@
 import React from "react";
 import { shallowEqual, useSelector } from "react-redux";
-import { Col, Form, Row } from "react-bootstrap";
+import { Col, Row } from "react-bootstrap";
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useDeleteFromCartMutation, useGetCartQuery, useUpdateCartByIdMutation } from "../../redux/cart/cart-api";
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
 import Button from "../components/Button";
-import { Card, CardHeader, Tooltip } from "@mui/material";
+import { Card, CardHeader, FormControl, InputLabel, MenuItem, Select, Tooltip } from "@mui/material";
 
 
 
@@ -103,16 +103,29 @@ export default function CartList() {
                           className="las la-star"
                         ></i>
                       ))}</p>
-                      <p>Stock: {product?.product?.countInStock}</p>
-                      <div className="d-flex gap-4 ">
-                        <p className="m-0">Quantity: </p>
-                        <Form.Select className="w-50  border-black rounded-5" aria-label="Default select example"
+                      <div className="d-flex align-items-center gap-4 ">
+                        <p className="m-0">Stock: {product?.product?.countInStock}</p>
+                        {/* <Form.Select className="w-50  border-black rounded-5" aria-label="Default select example"
                           value={product?.quantity}
                           onChange={(e) => updateProduct(product?.product._id, e)}>
                           {optionValues.map((el, i) => (
                             <option key={i} value={el}>{el}</option>
                           ))}
-                        </Form.Select>
+                        </Form.Select> */}
+                        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                          <InputLabel id="demo-select-small-label">Quantity</InputLabel>
+                          <Select
+                            labelId="demo-select-small-label"
+                            id="demo-select-small"
+                            value={product?.quantity}
+                            label="Quantity"
+                            onChange={(e) => updateProduct(product?.product._id, e)}
+                          >
+                            {optionValues.map((el, i) => (
+                              <MenuItem key={i} value={el}>{el}</MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
                       </div>
 
                       <div className="cart-buttons d-flex justify-content-start align-items-center gap-3 mt-5 w-50">

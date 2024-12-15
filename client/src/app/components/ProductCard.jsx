@@ -59,7 +59,7 @@ export default function ProductCard({ product, id }) {
           title={product.name}
         />
         <CardContent sx={{ height: '120px', marginBottom: '4px' }} >
-          <Typography gutterBottom variant="h6" component="div">
+          <Typography onClick={productDetail} gutterBottom variant="h6" component="div" sx={{cursor:'pointer'}} >
             {product.name}
           </Typography>
           <Typography variant='h6' color="text.secondary">
