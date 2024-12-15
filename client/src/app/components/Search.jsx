@@ -48,7 +48,7 @@ export default function Search({ setMessage }) {
   };
   return (
     <div className="search_container d-flex justify-content-center align-items-center gap-lg-4 gap-2 my-4 mx-auto">
-      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+      <FormControl sx={{ m: 1, width:160 }} size="small">
         <InputLabel id="demo-select-small-label">Category</InputLabel>
         <Select
           labelId="demo-select-small-label"
