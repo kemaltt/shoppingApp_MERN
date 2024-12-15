@@ -303,7 +303,7 @@ td {
 
 .compare-side {
   position: fixed;
-  right: 4%;
+  right: 3%;
   top: 65%;
   z-index: 99999;
   cursor: pointer;
@@ -316,7 +316,7 @@ td {
 
 .cart_container {
   position: fixed;
-  right: 4%;
+  right: 3%;
   top: 80%;
   z-index: 99999;
   cursor: pointer;
