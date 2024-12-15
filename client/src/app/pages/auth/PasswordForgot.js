@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../../../redux/auth/auth-api";
+import { useForgotPasswordMutation } from "../../../redux/auth/auth-api";
 import Button from "../../components/Button";
-import { FormControl, TextField } from "@mui/material";
+import { Alert, FormControl, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 
 
@@ -14,54 +14,63 @@ export default function PasswordForgot() {
   const { register, handleSubmit, formState: { errors } } = useForm();
 
 
-  const [login, { isError, isLoading, error }] = useLoginMutation()
+  const [forgotPassword, { isError, isLoading, error, isSuccess }] = useForgotPasswordMutation()
 
   const navigate = useNavigate()
 
   const handleClick = async (value) => {
-    const { email, password } = value;
+    const { email } = value;
 
-    if (email && password) {
-      await login({ email, password });
+    if (email) {
+      await forgotPassword({ email });
     }
   };
 
   return (
     <Container>
       <Wrapper>
-        <Title>FORGOT PASSWORD?</Title>
-        <Form onSubmit={handleSubmit(handleClick)}>
-          <FormControl fullWidth >
-            <TextField
-              required
-              fullWidth
-              id="email"
-              label="EMAIL"
-              name="email"
-              autoComplete="email"
-              type="email"
-              size="small"
-              autoFocus
-              color={errors.email ? 'error' : 'secondary'}
-              {...register("email", {
-                required: true,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i,
-                  message: "invalid email address",
-                },
-              })}
-            />
-            {errors.email && errors.email.message}
-          </FormControl>
+        <Title> {isSuccess ? 'CHECK YOUR EMAIL' : 'FORGOT PASSWORD?'}   </Title>
+        {isSuccess
+          ? <Alert variant="outlined" severity="success">Check your email for a link to reset your password. If it doesn’t appear within a few minutes, check your spam folder..</Alert>
+          : <>
+            <Form onSubmit={handleSubmit(handleClick)}>
+              <FormControl fullWidth >
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="EMAIL"
+                  name="email"
+                  autoComplete="email"
+                  type="email"
+                  size="small"
+                  autoFocus
+                  color={errors.email ? 'error' : 'secondary'}
+                  {...register("email", {
+                    required: true,
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i,
+                      message: "invalid email address",
+                    },
+                  })}
+                />
+                {errors.email &&
+                  <Alert sx={{ marginTop: '10px' }} variant="outlined" severity="error">
+                    {errors.email.message}
+                  </Alert>
+                }
+              </FormControl>
 
-          <Button onClick={handleClick} isLoading={isLoading} title={'Send'} />
-          {isError && <Error> {error?.data?.message}</Error>}
+              <Button onClick={handleClick} isLoading={isLoading} title={'Send'} />
 
-        </Form>
+              {isError && <Alert variant="outlined" severity="error"> {error?.data?.message} </Alert>}
 
+            </Form>
+
+          </>
+        }
         <LinkWrapper>
-        <Link onClick={() => navigate('/login')}>YOU HAVE ALREADY AN ACCOUNT? LOGIN</Link>
-        <Link onClick={() => navigate('/reset-password')}>ResetPassword</Link>
+          <Link onClick={() => navigate('/login')}>YOU HAVE ALREADY AN ACCOUNT? LOGIN</Link>
         </LinkWrapper>
 
       </Wrapper>
@@ -147,9 +156,6 @@ const Link = styled.a`
   cursor: pointer;
 `;
 
-const Error = styled.span`
-  color: red;
-`;
 
 
 

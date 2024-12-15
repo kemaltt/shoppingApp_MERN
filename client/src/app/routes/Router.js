@@ -29,7 +29,7 @@ export default function Router() {
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<PasswordForgot />} />
-          <Route path="/reset-password/:id:token" element={<ResetPassword />} />
+          <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route path="/cart" element={<CartList />} />

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { useLoginMutation } from "../../../redux/auth/auth-api";
+import { useNavigate, useParams } from "react-router-dom";
+import { useResetPasswordMutation } from "../../../redux/auth/auth-api";
 import Button from "../../components/Button";
-import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
+import { Alert, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useForm } from "react-hook-form";
@@ -14,31 +14,47 @@ import { useForm } from "react-hook-form";
 
 export default function ResetPassword() {
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, setError, formState: { errors } } = useForm();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
+  const { token, id } = useParams()
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  console.log(token, id);
 
   const handleMouseUpPassword = (event) => {
     event.preventDefault();
   };
-  const [login, { isError, isLoading, error }] = useLoginMutation()
+  const [resetPassword, {isSuccess, isError, isLoading, error }] = useResetPasswordMutation()
 
   const navigate = useNavigate()
 
   const handleClick = async (value) => {
+
     const { conform_password, password } = value;
 
+    if (conform_password !== password) {
+      setError('conform_password', { type: 'manual', message: 'Password does not match' });
+      return;
+    }
+
     if (conform_password && password) {
-      await login({ password });
+      const data = {
+        password,
+        token,
+        id
+      }
+      await resetPassword(data);
+
     }
   };
+  if (isSuccess) {
+    navigate('/login')
+  }
 
   return (
     <Container>
@@ -77,7 +93,11 @@ export default function ResetPassword() {
               })}
 
             />
-            {errors.password && errors.password.message}
+            {errors.password &&
+              <Alert sx={{ marginTop: '10px' }} variant="outlined" severity="error">
+                {errors.password.message}
+              </Alert>
+            }
 
           </FormControl>
           <FormControl fullWidth >
@@ -112,17 +132,22 @@ export default function ResetPassword() {
               })}
 
             />
-            {errors.conform_password && errors.conform_password.message}
+            {errors.conform_password &&
+              <Alert sx={{ marginTop: '10px' }} variant="outlined" severity="error">
+                {errors.conform_password.message}
+              </Alert>
+            }
 
           </FormControl>
 
           <Button onClick={handleClick} isLoading={isLoading} title={'Update'} />
-          {isError && <Error> {error?.data?.message}</Error>}
+
+          {isError && <Alert variant="outlined" severity="error"> {error?.data?.message} </Alert>}
 
         </Form>
 
         <LinkWrapper>
-          <Link onClick={()=> navigate('/forgot-password')} >DO NOT YOU REMEMBER THE PASSWORD?</Link>
+          <Link onClick={() => navigate('/forgot-password')} >DO NOT YOU REMEMBER THE PASSWORD?</Link>
           <Link onClick={() => navigate('/register')}>CREATE A NEW ACCOUNT</Link>
         </LinkWrapper>
 
@@ -208,9 +233,4 @@ const Link = styled.a`
   text-decoration: underline;
   cursor: pointer;
 `;
-
-const Error = styled.span`
-  color: red;
-`;
-
 

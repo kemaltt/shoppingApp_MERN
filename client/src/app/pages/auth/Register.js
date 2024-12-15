@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { Alert, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import { useRegisterMutation } from "../../../redux/auth/auth-api";
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
@@ -32,7 +32,7 @@ const Register = () => {
       await register(value);
     }
   };
-  
+
   if (isSuccess) {
     navigate('/login')
   }
@@ -84,7 +84,11 @@ const Register = () => {
                 },
               })}
             />
-            {errors?.email && errors?.email.message}
+                 {errors.email &&
+                  <Alert sx={{ marginTop: '10px' }} variant="outlined" severity="error">
+                    {errors.email.message}
+                  </Alert>
+                }
           </FormControl>
 
           <FormControl fullWidth >
@@ -125,7 +129,7 @@ const Register = () => {
             }
           </Button> */}
           <Button onClick={handleClick} isLoading={isLoading} title={'Register'} />
-          {isError && <Error> {error?.data?.message}</Error>}
+          {isError && <Alert variant="outlined" severity="error"> {error?.data?.message} </Alert>}
         </Form>
         <LinkWrapper>
           <Link onClick={() => navigate('/login')}>YOU HAVE ALREADY AN ACCOUNT? LOGIN</Link>
@@ -213,8 +217,4 @@ const Link = styled.a`
   font-size: 12px;
   text-decoration: underline;
   cursor: pointer;
-`;
-
-const Error = styled.span`
-  color: red;
 `;

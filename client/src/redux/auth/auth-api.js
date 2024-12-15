@@ -30,6 +30,13 @@ export const authApi = createApi({
         body: email,
       })
     }),
+    resetPassword: builder.mutation({
+      query: (data) => ({
+        url: `/reset-password/${data.id}/${data.token}`,
+        method: 'PUT',
+        body: data,
+      })
+    }),
     logout: builder.mutation({
       query: (token) => ({
         url: '/logout',
@@ -44,4 +51,4 @@ export const authApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation, useForgotPasswordMutation } = authApi
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation, useForgotPasswordMutation, useResetPasswordMutation } = authApi

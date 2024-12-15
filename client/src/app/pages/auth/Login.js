@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../redux/auth/auth-api";
 import Button from "../../components/Button";
-import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
+import { Alert, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useForm } from "react-hook-form";
@@ -63,11 +63,15 @@ const Login = () => {
                 },
               })}
             />
-            {errors.email && errors.email.message}
+            {errors.email &&
+              <Alert sx={{ marginTop: '10px' }} variant="outlined" severity="error">
+                {errors.email.message}
+              </Alert>
+            }
           </FormControl>
 
           <FormControl fullWidth >
-            <InputLabel  htmlFor="outlined-adornment-password" color={errors.password ? 'error' : 'secondary'} >PASSWORD</InputLabel>
+            <InputLabel htmlFor="outlined-adornment-password" color={errors.password ? 'error' : 'secondary'} >PASSWORD</InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
               type={showPassword ? 'text' : 'password'}
@@ -98,17 +102,21 @@ const Login = () => {
               })}
 
             />
-            {errors.password && errors.password.message}
+            {errors.password &&
+              <Alert sx={{ marginTop: '10px' }} variant="outlined" severity="error">
+                {errors.password.message}
+              </Alert>
+            }
 
           </FormControl>
 
           <Button onClick={handleClick} isLoading={isLoading} title={'Login'} />
-          {isError && <Error> {error?.data?.message}</Error>}
+          {isError && <Alert variant="outlined" severity="error"> {error?.data?.message} </Alert>}
 
         </Form>
 
         <LinkWrapper>
-          <Link onClick={()=> navigate('/forgot-password')} >DO NOT YOU REMEMBER THE PASSWORD?</Link>
+          <Link onClick={() => navigate('/forgot-password')} >DO NOT YOU REMEMBER THE PASSWORD?</Link>
           <Link onClick={() => navigate('/register')}>CREATE A NEW ACCOUNT</Link>
         </LinkWrapper>
 
@@ -195,9 +203,6 @@ const Link = styled.a`
   cursor: pointer;
 `;
 
-const Error = styled.span`
-  color: red;
-`;
 export default Login;
 
 
