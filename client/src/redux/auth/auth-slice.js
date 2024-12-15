@@ -27,6 +27,9 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
       state.token = null;
     });
+    builder.addMatcher(authApi.endpoints.forgotPassword.matchFulfilled, (state, action) => {
+      state.user = action.payload;  
+    });
   },
 });
 

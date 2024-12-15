@@ -12,6 +12,8 @@ import CartList from '../pages/CartList';
 import WishList from '../pages/WishList';
 import { useSelector } from 'react-redux';
 import Product from '../modules/product/Product';
+import ResetPassword from '../pages/auth/ResetPassword';
+import PasswordForgot from '../pages/auth/PasswordForgot';
 
 
 
@@ -25,14 +27,15 @@ export default function Router() {
         <Route path="/" element={<Home />} />
         <Route element={<AuthRoute />} >
           <Route path="/register" element={<Register />} />
-          {/* <Route path="/register" element={<SignUp />} /> */}
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<PasswordForgot />} />
+          <Route path="/reset-password/:id:token" element={<ResetPassword />} />
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route path="/cart" element={<CartList />} />
           <Route path="/compare" element={<CompareList />} />
           <Route path="/wishlist" element={<WishList />} />
-          <Route path="/product-list" element={user?.user?.role === 'admin' ?<Product/> : <Home />} />
+          <Route path="/product-list" element={user?.user?.role === 'admin' ? <Product /> : <Home />} />
           <Route path="/product/:id" element={<ProductDetail />} />
         </Route>
       </Routes>

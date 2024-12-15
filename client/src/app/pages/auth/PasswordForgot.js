@@ -1,31 +1,19 @@
-import { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../redux/auth/auth-api";
 import Button from "../../components/Button";
-import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { FormControl, TextField } from "@mui/material";
 import { useForm } from "react-hook-form";
 
 
 
 
 
-const Login = () => {
+export default function PasswordForgot() {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  const [showPassword, setShowPassword] = useState(false);
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
-  const handleMouseUpPassword = (event) => {
-    event.preventDefault();
-  };
   const [login, { isError, isLoading, error }] = useLoginMutation()
 
   const navigate = useNavigate()
@@ -41,7 +29,7 @@ const Login = () => {
   return (
     <Container>
       <Wrapper>
-        <Title>SIGN IN</Title>
+        <Title>FORGOT PASSWORD?</Title>
         <Form onSubmit={handleSubmit(handleClick)}>
           <FormControl fullWidth >
             <TextField
@@ -66,50 +54,14 @@ const Login = () => {
             {errors.email && errors.email.message}
           </FormControl>
 
-          <FormControl fullWidth >
-            <InputLabel  htmlFor="outlined-adornment-password" color={errors.password ? 'error' : 'secondary'} >PASSWORD</InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={showPassword ? 'text' : 'password'}
-              color={errors.password ? 'error' : 'secondary'}
-              size="small"
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label={
-                      showPassword ? 'hide the password' : 'display the password'
-                    }
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    onMouseUp={handleMouseUpPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="PASSWORD"
-              {...register("password", {
-                required: true,
-                pattern: {
-                  value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
-                  message: "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
-                },
-              })}
-
-            />
-            {errors.password && errors.password.message}
-
-          </FormControl>
-
-          <Button onClick={handleClick} isLoading={isLoading} title={'Login'} />
+          <Button onClick={handleClick} isLoading={isLoading} title={'Send'} />
           {isError && <Error> {error?.data?.message}</Error>}
 
         </Form>
 
         <LinkWrapper>
-          <Link onClick={()=> navigate('/forgot-password')} >DO NOT YOU REMEMBER THE PASSWORD?</Link>
-          <Link onClick={() => navigate('/register')}>CREATE A NEW ACCOUNT</Link>
+        <Link onClick={() => navigate('/login')}>YOU HAVE ALREADY AN ACCOUNT? LOGIN</Link>
+        <Link onClick={() => navigate('/reset-password')}>ResetPassword</Link>
         </LinkWrapper>
 
       </Wrapper>
@@ -198,6 +150,6 @@ const Link = styled.a`
 const Error = styled.span`
   color: red;
 `;
-export default Login;
+
 
 

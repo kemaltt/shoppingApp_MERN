@@ -1,21 +1,26 @@
 import { useState } from "react";
-import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
-import { useRegisterMutation } from "../../../redux/auth/auth-api";
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Visibility from '@mui/icons-material/Visibility';
-import { useNavigate } from "react-router-dom";
-import Button from "../../components/Button";
-import { useForm } from "react-hook-form";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../../../redux/auth/auth-api";
+import Button from "../../components/Button";
+import { FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { useForm } from "react-hook-form";
 
 
 
-const Register = () => {
-  const { register: signUp, handleSubmit, formState: { errors } } = useForm();
+
+
+export default function ResetPassword() {
+
+  const { register, handleSubmit, formState: { errors } } = useForm();
 
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
@@ -23,77 +28,30 @@ const Register = () => {
   const handleMouseUpPassword = (event) => {
     event.preventDefault();
   };
+  const [login, { isError, isLoading, error }] = useLoginMutation()
 
-  const [register, { isLoading, error, isError, isSuccess }] = useRegisterMutation()
   const navigate = useNavigate()
+
   const handleClick = async (value) => {
-    const { name, email, password } = value;
-    if (name && email && password) {
-      await register(value);
+    const { conform_password, password } = value;
+
+    if (conform_password && password) {
+      await login({ password });
     }
   };
-  
-  if (isSuccess) {
-    navigate('/login')
-  }
 
   return (
     <Container>
       <Wrapper>
-        <Title>REGISTER</Title>
-        <Form onSubmit={handleSubmit(handleClick)} >
-
+        <Title>RESET PASSWORD</Title>
+        <Form onSubmit={handleSubmit(handleClick)}>
           <FormControl fullWidth >
-            <TextField
-              required
-              fullWidth
-              id="name"
-              label="NAME"
-              name="name"
-              size='small'
-              autoComplete="current-name"
-              autoFocus
-              color={errors?.name ? 'error' : 'secondary'}
-              {...signUp("name", {
-                required: true,
-                pattern: {
-                  value: /^.{2,25}$/,
-                  message: "Name must be between 2 and 25 characters",
-                },
-              })}
-            />
-            {errors?.name && errors?.name.message}
-          </FormControl>
-
-          <FormControl fullWidth >
-            <TextField
-              required
-              fullWidth
-              id="email"
-              label="EMAIL"
-              name="email"
-              size='small'
-              autoComplete="email"
-              autoFocus
-              color={errors?.email ? 'error' : 'secondary'}
-              {...signUp("email", {
-                required: true,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i,
-                  message: "invalid email address",
-                },
-              })}
-            />
-            {errors?.email && errors?.email.message}
-          </FormControl>
-
-          <FormControl fullWidth >
-            <InputLabel htmlFor="outlined-adornment-password" color={errors?.password ? 'error' : 'secondary'} >PASSWORD</InputLabel>
+            <InputLabel htmlFor="outlined-adornment-password" color={errors.password ? 'error' : 'secondary'} >PASSWORD</InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
               type={showPassword ? 'text' : 'password'}
-              color={errors?.password ? 'error' : 'secondary'}
-              size='small'
+              color={errors.password ? 'error' : 'secondary'}
+              size="small"
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -110,48 +68,86 @@ const Register = () => {
                 </InputAdornment>
               }
               label="PASSWORD"
-              {...signUp("password", {
+              {...register("password", {
                 required: true,
                 pattern: {
                   value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
                   message: "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
                 },
               })}
+
             />
-            {errors?.password && errors?.password.message}
+            {errors.password && errors.password.message}
+
           </FormControl>
-          {/* <Button onClick={handleClick} >
-            Register {isLoading && <Spinner animation="border" size="sm" />
-            }
-          </Button> */}
-          <Button onClick={handleClick} isLoading={isLoading} title={'Register'} />
+          <FormControl fullWidth >
+            <InputLabel htmlFor="outlined-adornment-password" color={errors.password ? 'error' : 'secondary'} >CONFIRM PASSWORD</InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={showConfirmPassword ? 'text' : 'password'}
+              color={errors.conform_password ? 'error' : 'secondary'}
+              size="small"
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label={
+                      showConfirmPassword ? 'hide the password' : 'display the password'
+                    }
+                    onClick={handleClickShowConfirmPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    onMouseUp={handleMouseUpPassword}
+                    edge="end"
+                  >
+                    {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="CONFIRM PASSWORD"
+              {...register("conform_password", {
+                required: true,
+                pattern: {
+                  value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
+                  message: "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
+                },
+              })}
+
+            />
+            {errors.conform_password && errors.conform_password.message}
+
+          </FormControl>
+
+          <Button onClick={handleClick} isLoading={isLoading} title={'Update'} />
           {isError && <Error> {error?.data?.message}</Error>}
+
         </Form>
+
         <LinkWrapper>
-          <Link onClick={() => navigate('/login')}>YOU HAVE ALREADY AN ACCOUNT? LOGIN</Link>
+          <Link onClick={()=> navigate('/forgot-password')} >DO NOT YOU REMEMBER THE PASSWORD?</Link>
+          <Link onClick={() => navigate('/register')}>CREATE A NEW ACCOUNT</Link>
         </LinkWrapper>
+
       </Wrapper>
     </Container>
   );
 };
 
-export default Register;
 
 
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(
+  background:
+   linear-gradient(
       rgba(255, 255, 255, 0.5),
       rgba(255, 255, 255, 0.5)
     ),
-    // url("https://images.pexels.com/photos/6984650/pexels-photo-6984650.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940")
     url("https://plus.unsplash.com/premium_photo-1683141052679-942eb9e77760?q=80&w=2970&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")
       center;
   background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
+
 `;
 
 const Wrapper = styled.div`
@@ -162,7 +158,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   gap: 15px;
 
-     @media (max-width: 600px) {
+   @media (max-width: 600px) {
     width: 80%; 
   }
 `;
@@ -202,14 +198,12 @@ const Form = styled.form`
 //     cursor: not-allowed;
 //   }
 // `;
-
 const LinkWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
 `;
 const Link = styled.a`
-  margin: 5px 0px;
   font-size: 12px;
   text-decoration: underline;
   cursor: pointer;
@@ -218,3 +212,5 @@ const Link = styled.a`
 const Error = styled.span`
   color: red;
 `;
+
+
