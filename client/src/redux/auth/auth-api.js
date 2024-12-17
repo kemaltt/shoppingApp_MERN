@@ -32,7 +32,7 @@ export const authApi = createApi({
     }),
     resetPassword: builder.mutation({
       query: (data) => ({
-        url: `/reset-password/${data.id}/${data.token}`,
+        url: `/reset-password/${data.reset_password_key}`,
         method: 'PUT',
         body: data,
       })
