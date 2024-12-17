@@ -94,8 +94,9 @@ export const forgotPassword = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "User not found" });
     }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "5m" });
-    const resetURL = `${process.env.API_PATH ==='production' ?  process.env.CLIENT_URL  :process.env.CLIENT_LOCAL_URL}/reset-password/${user._id}/${token}`;
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "10m" });
+    await UserModel.findByIdAndUpdate(user._id, { reset_password_key: token });
+    const resetURL = `${process.env.API_PATH === 'production' ? process.env.CLIENT_URL : process.env.CLIENT_LOCAL_URL}/reset-password?reset_password_key=${token}`;
     const options = {
       email: user.email,
       subject: "Dein Shop [Reset your password]",
@@ -119,19 +120,20 @@ export const forgotPassword = async (req, res) => {
 
 export const resetPassword = async (req, res) => {
 
-  const { id, token } = req.params;
+  const { reset_password_key } = req.params;
   const { password } = req.body;
+  
   try {
-    if (!id || !token || !password) {
+    if (!reset_password_key || !password) {
       return res.status(400).json({ message: "Please provide all fields" });
     }
-    const user = await UserModel.findById(id);
+    const user = await UserModel.findOne({ reset_password_key: reset_password_key });
     if
       (!user) {
       return res.status(400).json({ message: "Invalid user" });
     }
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    
+    const decoded = jwt.verify(reset_password_key, process.env.JWT_SECRET);
+
     if (user._id.toString() !== decoded.id) {
       return res.status(400).json({ message: "Invalid token" });
     }
@@ -139,7 +141,8 @@ export const resetPassword = async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    await UserModel.findByIdAndUpdate(id, { password: hashedPassword });
+    await UserModel.findOneAndUpdate({ reset_password_key: reset_password_key }, { password: hashedPassword, reset_password_key: null });
+
     res.status(200).json({
       status: "success",
       message: "Password reset successfully"
