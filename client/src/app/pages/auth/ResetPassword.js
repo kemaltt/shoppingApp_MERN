@@ -1,12 +1,13 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useResetPasswordMutation } from "../../../redux/auth/auth-api";
 import Button from "../../components/Button";
 import { Alert, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput } from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useForm } from "react-hook-form";
+import { useQuery } from "../../hooks/routerHelpers";
 
 
 
@@ -15,21 +16,23 @@ import { useForm } from "react-hook-form";
 export default function ResetPassword() {
 
   const { register, handleSubmit, setError, formState: { errors } } = useForm();
+  const query = useQuery()
 
+  console.log(query.get('reset_password_key'),'query.get("reset_password_key")');
+  
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { token, id } = useParams()
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleClickShowConfirmPassword = () => setShowConfirmPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  console.log(token, id);
+
 
   const handleMouseUpPassword = (event) => {
     event.preventDefault();
   };
-  const [resetPassword, {isSuccess, isError, isLoading, error }] = useResetPasswordMutation()
+  const [resetPassword, { isSuccess, isError, isLoading, error }] = useResetPasswordMutation()
 
   const navigate = useNavigate()
 
@@ -45,8 +48,7 @@ export default function ResetPassword() {
     if (conform_password && password) {
       const data = {
         password,
-        token,
-        id
+        reset_password_key: query.get('reset_password_key'),
       }
       await resetPassword(data);
 
