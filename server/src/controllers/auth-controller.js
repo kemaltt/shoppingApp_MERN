@@ -98,6 +98,7 @@ export const forgotPassword = async (req, res) => {
     await UserModel.findByIdAndUpdate(user._id, { reset_password_key: token });
     const resetURL = `${process.env.API_PATH === 'production' ? process.env.CLIENT_URL : process.env.CLIENT_LOCAL_URL}/reset-password?reset_password_key=${token}`;
     const options = {
+      name: user.name,
       email: user.email,
       subject: "Dein Shop [Reset your password]",
       resetURL,
@@ -122,7 +123,7 @@ export const resetPassword = async (req, res) => {
 
   const { reset_password_key } = req.params;
   const { password } = req.body;
-  
+
   try {
     if (!reset_password_key || !password) {
       return res.status(400).json({ message: "Please provide all fields" });

@@ -76,7 +76,7 @@ export class EmailService {
             <img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1740&q=80" alt="Logo">
         </div>
         <div class="content">
-            <p>Hello,</p>
+            <p>Hello ${options?.name},</p>
             <p>We received a request to reset your password. Click the button below to reset it:</p>
             <a href="${options?.resetURL}" class="button">Reset Password</a>
             <p>If you didn’t request a password reset, please ignore this email.</p>
