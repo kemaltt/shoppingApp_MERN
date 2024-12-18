@@ -7,13 +7,13 @@ import { StyledBadge, StyledIcon } from '../helper/UIHelper';
 
 
 
-export default function Cart({ badge }) {
+export default function Cart({ badge, color }) {
   return (
     <Link to="/cart" >
       <Tooltip placement="top" title="Cart">
         <IconButton aria-label="cart">
           <StyledBadge badgeContent={badge} color="secondary">
-            <ShoppingCartOutlinedIcon sx={StyledIcon} />
+            <ShoppingCartOutlinedIcon sx={color ? color : StyledIcon} />
           </StyledBadge>
         </IconButton>
       </Tooltip>

@@ -6,7 +6,7 @@ import { StyledBadge, StyledIcon } from '../helper/UIHelper';
 
 
 
-export default function WishList({ badge }) {
+export default function WishList({ badge, color }) {
 
   return (
     // <Link to="/wishlist" style={{ color: 'white' }}>
@@ -33,13 +33,13 @@ export default function WishList({ badge }) {
 
     // </Link>
     <Link to="/wishlist" >
-    <Tooltip placement="top-end" title="Favorite">
-      <IconButton aria-label="favorite">
-        <StyledBadge badgeContent={badge} color="primary">
-        <FavoriteBorderOutlinedIcon sx={StyledIcon}/>
-        </StyledBadge>
-      </IconButton>
-    </Tooltip>
+      <Tooltip placement="top-end" title="Favorite">
+        <IconButton aria-label="favorite">
+          <StyledBadge badgeContent={badge} color="primary">
+            <FavoriteBorderOutlinedIcon sx={color ? color : StyledIcon} />
+          </StyledBadge>
+        </IconButton>
+      </Tooltip>
     </Link>
   )
 }

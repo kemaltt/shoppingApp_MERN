@@ -1,16 +1,14 @@
 import React from "react";
-import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { MdLogout } from "react-icons/md";
 import { MdLogin } from "react-icons/md";
 import { useProductContext } from "../../contexts/ProductContext";
 import { useSelector } from "react-redux";
 import Compare from "./components/Compare";
 import WishList from "./components/WishList";
-import { useLogoutMutation } from "../../../redux/auth/auth-api";
 import AccountMenu from "./components/Account";
 import Cart from "./components/Cart";
 import Product from "./components/Product";
+import AccountMobile from "./components/AccountMobile";
 
 
 
@@ -18,7 +16,7 @@ import Product from "./components/Product";
 
 export default function Navbar() {
   const { selectedCompareProducts } = useProductContext();
-  const [logout] = useLogoutMutation()
+  // const [logout] = useLogoutMutation()
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const { favorite } = useSelector((state) => state.favorite);
   const { cart } = useSelector((state) => state.cart);
@@ -29,15 +27,15 @@ export default function Navbar() {
   const productBadge = selectedCompareProducts?.length;
 
   const navigate = useNavigate();
-  const [toggle, setToggle] = useState(false);
-  const handleNavList = () => {
-    setToggle(!toggle);
-  };
+  // const [toggle, setToggle] = useState(false);
+  // const handleNavList = () => {
+  //   setToggle(!toggle);
+  // };
 
-  const logOut = async () => {
-    await logout()
-    navigate('/')
-  }
+  // const logOut = async () => {
+  //   await logout()
+  //   navigate('/')
+  // }
 
   return (
     <div className="navbar_">
@@ -63,44 +61,21 @@ export default function Navbar() {
           }
         </ul>
 
-        <div onClick={handleNavList} className="burger_menü">
+        {/* <div onClick={handleNavList} className="burger_menü">
           {!toggle ? (
             <i className="las la-bars"></i>
           ) : (
             <i className="las la-times"></i>
           )}
+        </div> */}
+        <div className="burger_menü">
+        <AccountMobile isAuthenticated={isAuthenticated} cartBadge={cartBadge} wishBadge={wishBadge} productBadge={productBadge} user={user}/>
         </div>
       </nav>
-      <div className="mobile_navlist">
-        {toggle ? (
-          <ul className="nav_item_mobile">
-            {isAuthenticated ? (
-              <>
-                {/* <li>
-                  <Compare badge={compareBadge} />
-                </li> */}
-                <li>
-                  <Cart badge={cartBadge} />
-                </li>
-                <li>
-                  <WishList badge={wishBadge} />
-                </li>
-                <li>
-                  <div onClick={logOut} style={{ color: 'white' }} >
-                    <MdLogout style={{ fontSize: "2.5rem" }} />
-                  </div>
-                </li>
-              </>
-            ) : (
-              <li>
-                <Link to="/login" style={{ color: 'white' }}>
-                  <MdLogin style={{ fontSize:  "2.5rem" }} />
-                </Link>
-              </li>
-            )}
-          </ul>
-        ) : null}
-      </div>
+      
+    
+
+      
     </div>
   );
 }
