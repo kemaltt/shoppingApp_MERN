@@ -48,7 +48,7 @@ const Register = () => {
               required
               fullWidth
               id="name"
-              label="NAME"
+              label="Name"
               name="name"
               size='small'
               autoComplete="current-name"
@@ -70,7 +70,7 @@ const Register = () => {
               required
               fullWidth
               id="email"
-              label="EMAIL"
+              label="Email"
               name="email"
               size='small'
               autoComplete="email"
@@ -92,7 +92,7 @@ const Register = () => {
           </FormControl>
 
           <FormControl fullWidth >
-            <InputLabel htmlFor="outlined-adornment-password" color={errors?.password ? 'error' : 'secondary'} >PASSWORD</InputLabel>
+            <InputLabel htmlFor="outlined-adornment-password" color={errors?.password ? 'error' : 'secondary'} >Password *</InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
               type={showPassword ? 'text' : 'password'}
@@ -113,7 +113,7 @@ const Register = () => {
                   </IconButton>
                 </InputAdornment>
               }
-              label="PASSWORD"
+              label="Password"
               {...signUp("password", {
                 required: true,
                 pattern: {

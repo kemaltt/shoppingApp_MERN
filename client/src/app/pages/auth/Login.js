@@ -48,7 +48,7 @@ const Login = () => {
               required
               fullWidth
               id="email"
-              label="EMAIL"
+              label="Email"
               name="email"
               autoComplete="email"
               type="email"
@@ -71,12 +71,13 @@ const Login = () => {
           </FormControl>
 
           <FormControl fullWidth >
-            <InputLabel htmlFor="outlined-adornment-password" color={errors.password ? 'error' : 'secondary'} >PASSWORD</InputLabel>
+            <InputLabel htmlFor="outlined-adornment-password" color={errors.password ? 'error' : 'secondary'} >Password *</InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
               type={showPassword ? 'text' : 'password'}
               color={errors.password ? 'error' : 'secondary'}
               size="small"
+              required
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
@@ -92,7 +93,7 @@ const Login = () => {
                   </IconButton>
                 </InputAdornment>
               }
-              label="PASSWORD"
+              label="Password"
               {...register("password", {
                 required: true,
                 pattern: {
@@ -116,7 +117,7 @@ const Login = () => {
         </Form>
 
         <LinkWrapper>
-          <Link onClick={() => navigate('/forgot-password')} >DO NOT YOU REMEMBER THE PASSWORD?</Link>
+          <Link onClick={() => navigate('/forgot-password')} >FORGOT PASSWORD?</Link>
           <Link onClick={() => navigate('/register')}>CREATE A NEW ACCOUNT</Link>
         </LinkWrapper>
 

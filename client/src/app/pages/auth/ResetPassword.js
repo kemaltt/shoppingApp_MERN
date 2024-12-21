@@ -18,8 +18,8 @@ export default function ResetPassword() {
   const { register, handleSubmit, setError, formState: { errors } } = useForm();
   const query = useQuery()
 
-  console.log(query.get('reset_password_key'),'query.get("reset_password_key")');
-  
+  console.log(query.get('reset_password_key'), 'query.get("reset_password_key")');
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -149,8 +149,9 @@ export default function ResetPassword() {
         </Form>
 
         <LinkWrapper>
-          <Link onClick={() => navigate('/forgot-password')} >DO NOT YOU REMEMBER THE PASSWORD?</Link>
-          <Link onClick={() => navigate('/register')}>CREATE A NEW ACCOUNT</Link>
+          <Link onClick={() => navigate('/')}>
+            BACK TO HOME PAGE
+          </Link>
         </LinkWrapper>
 
       </Wrapper>
