@@ -76,92 +76,93 @@ export default function CartList() {
           title='Warenkorb'
           subheader={`${cart?.products?.length} Products`}
         />
-        <Row className="">
+        <Row >
           <>
-            <Col md='9' className="cart-list">
+            <Col lg='8' className="cart-list mb-5 ">
+
               {cart?.products?.map((product, i) => (
-                <div key={i}>
+                <Row key={i} >
                   <hr className="solid"></hr>
-                  <div className="cart? d-flex gap-5 mb-5">
-                    <div className="cart-image w-25">
-                      <img
-                        className="img-fluid "
-                        src={product?.product?.image}
-                        alt={product?.product?.name}
-                      />
-                    </div>
-                    <div className="cart-detail w-50">
-                      <h3 className="fw-bold mb-4">{product?.product?.name}</h3>
-                      <p>category:   {product?.product?.category}</p>
-                      <p>rating:   {[...Array(5)].map((star, i) => (
-                        <i
-                          key={i}
-                          style={{
-                            fontSize: "1.5rem",
-                            color: product?.product?.rating >= i + 1 ? "orange" : "grey",
-                          }}
-                          className="las la-star"
-                        ></i>
-                      ))}</p>
-                      <div className="d-flex align-items-center gap-4 ">
-                        <p className="m-0">Stock: {product?.product?.countInStock}</p>
-                        {/* <Form.Select className="w-50  border-black rounded-5" aria-label="Default select example"
+
+                  <Col md='4' className="cart-image">
+                    <img
+                      className="img-fluid p-2"
+                      src={product?.product?.image}
+                      alt={product?.product?.name}
+                    />
+                  </Col>
+                  <Col md='5' className="">
+                    <h3 className="fw-bold mb-4">{product?.product?.name}</h3>
+                    <p>category:   {product?.product?.category}</p>
+                    <p>rating:   {[...Array(5)].map((star, i) => (
+                      <i
+                        key={i}
+                        style={{
+                          fontSize: "1.5rem",
+                          color: product?.product?.rating >= i + 1 ? "orange" : "grey",
+                        }}
+                        className="las la-star"
+                      ></i>
+                    ))}</p>
+                    <div className="d-flex align-items-center gap-4 ">
+                      <p className="m-0">Stock: {product?.product?.countInStock}</p>
+                      {/* <Form.Select className="w-50  border-black rounded-5" aria-label="Default select example"
                           value={product?.quantity}
                           onChange={(e) => updateProduct(product?.product._id, e)}>
                           {optionValues.map((el, i) => (
                             <option key={i} value={el}>{el}</option>
                           ))}
                         </Form.Select> */}
-                        <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
-                          <InputLabel id="demo-select-small-label">Quantity</InputLabel>
-                          <Select
-                            labelId="demo-select-small-label"
-                            id="demo-select-small"
-                            value={product?.quantity}
-                            label="Quantity"
-                            onChange={(e) => updateProduct(product?.product._id, e)}
-                          >
-                            {optionValues.map((el, i) => (
-                              <MenuItem key={i} value={el}>{el}</MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                      </div>
-
-                      <div className="cart-buttons d-flex justify-content-start align-items-center gap-3 mt-5 w-50">
-                        <Tooltip placement="top" title="Delete">
-                          <div type="button" className="cart-delete " onClick={() => removeFromCart(product?.product._id)}>
-                            <DeleteIcon style={{ color: "red", fontSize: "2rem" }} />
-                          </div>
-                        </Tooltip>
-                        <Tooltip placement="top" title="Favorite">
-                          <div type="button" className="cart-delete">
-                            {favorite.some(el => el._id === product?.product._id) ?
-                              <FavoriteOutlinedIcon
-                                onClick={() => delFav(product?.product._id)}
-                                style={{ color: "orange", fontSize: "2rem" }}
-                              />
-                              :
-                              <FavoriteBorderOutlinedIcon
-                                onClick={() => addFav(product?.product._id)}
-                                style={{ fontSize: "2rem" }}
-                              />
-                            }
-                          </div>
-                        </Tooltip>
-
-                      </div>
+                      <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                        <InputLabel id="demo-select-small-label">Quantity</InputLabel>
+                        <Select
+                          labelId="demo-select-small-label"
+                          id="demo-select-small"
+                          value={product?.quantity}
+                          label="Quantity"
+                          onChange={(e) => updateProduct(product?.product._id, e)}
+                        >
+                          {optionValues.map((el, i) => (
+                            <MenuItem key={i} value={el}>{el}</MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
                     </div>
-                    <div className="price w-25 text-end">
-                      <span className="fs-3 fw-bold"> {product?.price} €</span>
+
+                    <div className="cart-buttons d-flex justify-content-start align-items-center gap-3 mt-5 w-50">
+                      <Tooltip placement="top" title="Delete">
+                        <div type="button" className="cart-delete " onClick={() => removeFromCart(product?.product._id)}>
+                          <DeleteIcon style={{ color: "red", fontSize: "2rem" }} />
+                        </div>
+                      </Tooltip>
+                      <Tooltip placement="top" title="Favorite">
+                        <div type="button" className="cart-delete">
+                          {favorite.some(el => el._id === product?.product._id) ?
+                            <FavoriteOutlinedIcon
+                              onClick={() => delFav(product?.product._id)}
+                              style={{ color: "orange", fontSize: "2rem" }}
+                            />
+                            :
+                            <FavoriteBorderOutlinedIcon
+                              onClick={() => addFav(product?.product._id)}
+                              style={{ fontSize: "2rem" }}
+                            />
+                          }
+                        </div>
+                      </Tooltip>
+
                     </div>
-                  </div>
-                </div>
+                  </Col>
+                  <Col md='3' className="price  text-end">
+                    <span className="fs-3 fw-bold"> {product?.price} €</span>
+                  </Col>
+                </Row>
               ))}
             </Col>
-            {cart?.products?.length > 0 &&
-              <Col md='3' className="payment px-5 ">
-                <div className="border border-primary p-4">
+            <Col lg='3' className="payment">
+
+              {cart?.products?.length > 0 &&
+                <div className="border border-primary p-4 ml-4">
 
                   <div className="payment-detail">
                     <h3>Summary</h3>
@@ -174,8 +175,8 @@ export default function CartList() {
                     {/* <Button type="button" variant="success" >Checkout</Button> */}
                   </div>
                 </div>
-              </Col>
-            }
+              }
+            </Col>
           </>
         </Row>
       </Card>

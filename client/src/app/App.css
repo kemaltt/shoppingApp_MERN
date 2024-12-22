@@ -520,6 +520,7 @@ td {
   }
 
   .compare-side {
+    display: none;
     right: 3%;
     top: 45%;
     z-index: 99999;
@@ -533,6 +534,7 @@ td {
 
 
   .cart_container {
+    display: none;
     right: 3%;
     top: 55%;
   }
