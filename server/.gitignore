@@ -12,6 +12,10 @@
 # production
 /build
 
+# storage for uploaded files
+storage
+.vscode
+
 # misc
 .DS_Store
 .env.local
