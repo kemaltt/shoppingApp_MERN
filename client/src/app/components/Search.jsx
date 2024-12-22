@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useProductContext } from "../contexts/ProductContext";
 import { useGetProductsMutation } from "../../redux/product/product-api";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import { categories } from "./navbar/helper/UIHelper";
 
 export default function Search({ setMessage }) {
   const [selectInput, setSelectInput] = useState('All');
 
   const { isAuthenticated, searchInput, setSearchInput, filterProducts } = useProductContext();
-  const categories = ['All', 'men\'s clothing', 'jewelery', 'electronics', 'women\'s clothing'];
-
   // useGetProductsQuery(selectInput)
   const [getProducts] = useGetProductsMutation()
 

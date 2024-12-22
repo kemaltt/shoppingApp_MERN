@@ -7,6 +7,7 @@ import CancelIcon from '@mui/icons-material/Close';
 import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons } from '@mui/x-data-grid';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useDeleteProductMutation, useEditProductMutation } from '../../../redux/product/product-api';
+import { categories } from '../../components/navbar/helper/UIHelper';
 
 
 
@@ -26,7 +27,7 @@ export default function ProductTable({ isLoading }) {
   const [rowModesModel, setRowModesModel] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState(true);
 
-console.log(setRowSelection);
+  console.log(setRowSelection);
 
 
   const handleRowEditStop = (params, event) => {
@@ -142,7 +143,7 @@ console.log(setRowSelection);
       width: 220,
       editable: true,
       type: 'singleSelect',
-      valueOptions: ['Market', 'Finance', 'Development'],
+      valueOptions: categories.filter(category => category !== 'All'),
     },
     {
       field: 'actions',

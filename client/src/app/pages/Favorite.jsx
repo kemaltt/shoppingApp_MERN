@@ -5,7 +5,7 @@ import { RiDeleteBin6Fill } from 'react-icons/ri';
 import { Col, Row } from 'react-bootstrap';
 import { Card, CardHeader } from '@mui/material';
 
-export default function WishList() {
+export default function Favorite() {
 
   const [deleteFavorite] = useDeleteFavoriteMutation()
 

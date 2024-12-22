@@ -12,7 +12,10 @@ export const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-export const StyledIcon={
-  color:'white',
-  fontSize:30
+export const StyledIcon = {
+  color: 'white',
+  fontSize: 30
 }
+
+
+export const categories = ['All', 'men\'s clothing', 'jewelery', 'electronics', 'women\'s clothing'];
