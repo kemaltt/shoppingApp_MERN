@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Link } from 'react-router-dom'
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { IconButton, Tooltip, } from '@mui/material';
-import { StyledBadge, StyledIcon } from "./navbar/helper/UIHelper";
+import { StyledBadge, StyledIcon } from "../helpers/UIHelper";
 
 export default function Cart() {
   const { cart } = useSelector((state) => state.cart);

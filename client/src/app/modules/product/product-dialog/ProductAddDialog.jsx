@@ -9,6 +9,7 @@ import { DialogActions, DialogContent, DialogTitle, FormControl, IconButton, Inp
 import { Col, Row } from 'react-bootstrap';
 import { useAddProductMutation } from '../../../../redux/product/product-api';
 import Button from '../../../components/Button';
+import { CATEGORIES_OPTION } from '../../../helpers/UIHelper';
 
 
 
@@ -24,12 +25,7 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
 
   const [addProduct, {  isLoading, status }] = useAddProductMutation()
 
-  const categories = [
-    { value: 'electronics', label: 'Electronics' },
-    { value: 'jewelery', label: 'Jewelery' },
-    { value: 'men\'s clothing', label: 'Men\'s Clothing' },
-    { value: 'women\'s clothing', label: 'Women\'s Clothing' }
-  ];
+
 
   const saveProduct = async (value) => {
     const { countInStock, price, ...rest } = value;
@@ -188,7 +184,7 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
                     required: true,
                   })}
                 >
-                  {categories.map((el, i) => (
+                  {CATEGORIES_OPTION.map((el, i) => (
                     <MenuItem key={i} value={el.value}>{el.label}</MenuItem>
                   ))}
                 </Select>

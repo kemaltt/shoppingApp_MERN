@@ -3,16 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { CardActions, CardContent, CardMedia, Typography, Card, IconButton, Box } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../../redux/favorite/favorite-api";
 import { useSelector, shallowEqual } from "react-redux";
 import ProductDeleteDialog from "./product-dialog/ProductDeleteDialog";
+import ProductEditDialog from "./product-dialog/ProductEditDialog";
 
 
 
 
 export default function ProductCard({ product, id }) {
 
-    const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [addFavorite] = useAddFavoriteMutation()
   const [deleteFavorite] = useDeleteFavoriteMutation()
   // const [deleteProduct] = useDeleteProductMutation()
@@ -94,9 +97,14 @@ export default function ProductCard({ product, id }) {
             }
 
             {user?.user?.role === 'admin' &&
-              <IconButton onClick={()=> setOpen(true)} aria-label="add to favorites" >
-                <DeleteIcon color='error' />
-              </IconButton>
+              <>
+                <IconButton onClick={() => setOpenDelete(true)} aria-label="delete from card" >
+                  <DeleteIcon color='error' />
+                </IconButton>
+                <IconButton onClick={() => setOpenEdit(true)} aria-label="delete from card" >
+                  <EditIcon color='primary' />
+                </IconButton>
+              </>
             }
           </Box>
 
@@ -111,7 +119,8 @@ export default function ProductCard({ product, id }) {
         </CardActions>
       </Card>
 
-      <ProductDeleteDialog open={open} setOpen={setOpen}  productId={id} token={token} />
+      {openDelete && <ProductDeleteDialog open={openDelete} setOpen={setOpenDelete} productId={id} token={token} />}
+      {openEdit && <ProductEditDialog open={openEdit} setOpen={setOpenEdit} productId={id} token={token} />}
     </>
 
   );

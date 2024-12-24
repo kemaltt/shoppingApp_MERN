@@ -7,7 +7,7 @@ import CancelIcon from '@mui/icons-material/Close';
 import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons } from '@mui/x-data-grid';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useEditProductMutation } from '../../../../redux/product/product-api';
-import { categories } from '../../../components/navbar/helper/UIHelper';
+import { categories } from '../../../helpers/UIHelper';
 import ProductDeleteDialog from '../product-dialog/ProductDeleteDialog';
 
 

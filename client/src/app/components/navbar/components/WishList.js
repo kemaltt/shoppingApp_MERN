@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import { IconButton, Tooltip } from '@mui/material';
-import { StyledBadge, StyledIcon } from '../helper/UIHelper';
+import { StyledBadge, StyledIcon } from '../../../helpers/UIHelper';
 
 
 

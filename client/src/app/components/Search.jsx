@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useProductContext } from "../contexts/ProductContext";
 import { useGetProductsMutation } from "../../redux/product/product-api";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
-import { categories } from "./navbar/helper/UIHelper";
+import { categories } from "../helpers/UIHelper";
 
 export default function Search({ setMessage }) {
   const [selectInput, setSelectInput] = useState('All');

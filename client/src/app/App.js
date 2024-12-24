@@ -7,8 +7,8 @@ import { ToastContainer } from 'react-toastify';
 import { useGetFavoriteQuery } from "../redux/favorite/favorite-api";
 import { useGetCartQuery } from "../redux/cart/cart-api";
 import { useLogoutMutation } from "../redux/auth/auth-api";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 
@@ -31,7 +31,17 @@ function App() {
 
   return (
     <div className="App">
-      <ToastContainer />
+      <ToastContainer
+      position="bottom-right" 
+      autoClose={5000} 
+      hideProgressBar={false} 
+      newestOnTop={false} 
+      closeOnClick 
+      rtl={false} 
+      pauseOnFocusLoss 
+      draggable 
+      pauseOnHover 
+      />
       <BrowserRouter>
         <Routes>
           <Route path="*" element={<Router />} />
