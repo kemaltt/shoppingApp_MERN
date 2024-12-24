@@ -1,19 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CardActions, CardContent, CardMedia, Typography, Card, IconButton, Box } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
+import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../../redux/favorite/favorite-api";
 import { useSelector, shallowEqual } from "react-redux";
-import { useDeleteProductMutation } from "../../redux/product/product-api";
+import ProductDeleteDialog from "./product-dialog/ProductDeleteDialog";
 
 
 
 
 export default function ProductCard({ product, id }) {
+
+    const [open, setOpen] = useState(false);
   const [addFavorite] = useAddFavoriteMutation()
   const [deleteFavorite] = useDeleteFavoriteMutation()
-  const [deleteProduct] = useDeleteProductMutation()
+  // const [deleteProduct] = useDeleteProductMutation()
   const navigate = useNavigate();
   const { token, favorite, user, isAuthenticated } = useSelector((state) => ({
     favorite: state.favorite.favorite,
@@ -37,11 +39,11 @@ export default function ProductCard({ product, id }) {
     }
   }
 
-  const delProduct = async () => {
-    if (token) {
-      await deleteProduct({ id, token });
-    }
-  }
+  // const delProduct = async () => {
+  //   if (token) {
+  //     await deleteProduct({ id, token });
+  //   }
+  // }
 
   const login = () => {
     navigate('/login')
@@ -92,7 +94,7 @@ export default function ProductCard({ product, id }) {
             }
 
             {user?.user?.role === 'admin' &&
-              <IconButton onClick={delProduct} aria-label="add to favorites" >
+              <IconButton onClick={()=> setOpen(true)} aria-label="add to favorites" >
                 <DeleteIcon color='error' />
               </IconButton>
             }
@@ -108,6 +110,8 @@ export default function ProductCard({ product, id }) {
           </Box>
         </CardActions>
       </Card>
+
+      <ProductDeleteDialog open={open} setOpen={setOpen}  productId={id} token={token} />
     </>
 
   );

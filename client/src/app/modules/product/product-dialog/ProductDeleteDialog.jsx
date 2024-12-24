@@ -4,10 +4,19 @@ import Dialog from '@mui/material/Dialog';
 import CloseIcon from '@mui/icons-material/Close';
 import { Alert, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { useDeleteProductMutation } from '../../../../redux/product/product-api';
 
 
-export default function ProductDeleteDialog({ open, setOpen, delProduct, isLoading, productId }) {
+export default function ProductDeleteDialog({ open, setOpen, setRows, rows, productId, token }) {
+  const [deleteProduct, { isLoading }] = useDeleteProductMutation()
 
+  const delProduct = async () => {
+    // setRows(rows.filter((row) => row.id !== productId));
+    if (token && productId) {
+      await deleteProduct({ id: productId, token });
+    }
+    setOpen(false);
+  };
 
   return (
     <Dialog
@@ -42,7 +51,7 @@ export default function ProductDeleteDialog({ open, setOpen, delProduct, isLoadi
       <DialogActions>
         {/* <Button variant={'error'} onClick={delProduct} disabled={isLoading} isLoading={isLoading} title={'Delete Product'} /> */}
 
-       {/* <Button variant="outlined" color='error' startIcon={<DeleteIcon />} onClick={delProduct} disabled={isLoading} >
+        {/* <Button variant="outlined" color='error' startIcon={<DeleteIcon />} onClick={delProduct} disabled={isLoading} >
           Delete
         </Button> */}
 

@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import CartSide from "../components/CartSide";
 import Loading from "../components/Loading";
-import ProductCard from "../components/ProductCard";
+import ProductCard from "../modules/product/ProductCard";
 import Search from "../components/Search";
 import { useProductContext } from "../contexts/ProductContext";
 import { useSelector } from "react-redux";

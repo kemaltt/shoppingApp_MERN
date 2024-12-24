@@ -6,7 +6,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons } from '@mui/x-data-grid';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useDeleteProductMutation, useEditProductMutation } from '../../../../redux/product/product-api';
+import { useEditProductMutation } from '../../../../redux/product/product-api';
 import { categories } from '../../../components/navbar/helper/UIHelper';
 import ProductDeleteDialog from '../product-dialog/ProductDeleteDialog';
 
@@ -20,7 +20,6 @@ export default function ProductTable({ isLoading }) {
   const [productId, setProductId] = useState(null);
 
   const [editProduct] = useEditProductMutation()
-  const [deleteProduct, { isLoading: deleteLoading }] = useDeleteProductMutation()
 
   const { token, products } = useSelector((state) => ({
     products: state.products.products,
@@ -53,13 +52,13 @@ export default function ProductTable({ isLoading }) {
   };
 
 
-  const delProduct = async () => {
-    setRows(rows.filter((row) => row.id !== productId));
-    if (token && productId) {
-      await deleteProduct({ id: productId, token });
-    }
-    setOpen(false);
-  };
+  // const delProduct = async () => {
+  //   setRows(rows.filter((row) => row.id !== productId));
+  //   if (token && productId) {
+  //     await deleteProduct({ id: productId, token });
+  //   }
+  //   setOpen(false);
+  // };
 
   const handleCancelClick = (id) => () => {
     setRowModesModel({
@@ -230,7 +229,7 @@ export default function ProductTable({ isLoading }) {
         />
 
       </Box>
-      <ProductDeleteDialog open={open} setOpen={setOpen} delProduct={delProduct} isLoading={deleteLoading} productId={productId} />
+      <ProductDeleteDialog open={open} setOpen={setOpen} setRows={setRows} rows={rows} productId={productId} token={token} />
 
     </>
   );
