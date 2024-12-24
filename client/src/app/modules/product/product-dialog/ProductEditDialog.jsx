@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import SaveIcon from '@mui/icons-material/Save';
 import Dialog from '@mui/material/Dialog';
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Box, Button, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useEditProductMutation, useGetProductByIdQuery } from '../../../../redux/product/product-api';
 import { useSelector } from 'react-redux';
@@ -13,7 +13,7 @@ import { useForm } from 'react-hook-form';
 
 
 export default function ProductEditDialog({ open, setOpen, productId, token }) {
-  const [editProduct, { isLoading}] = useEditProductMutation()
+  const [editProduct, { isLoading }] = useEditProductMutation()
   useGetProductByIdQuery({ id: productId, token }, { skip: !token });
   const { product } = useSelector((state) => state.products);
   const { register, handleSubmit, reset } = useForm({
@@ -43,7 +43,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
       ...product,
       ...value
     }
-    
+
     if (token && value) {
       await editProduct({ id: productId, token, data });
     }
@@ -58,7 +58,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
   //     toast.error('Product update failed. Please try again.');
   //   }
   // }, [status, isError]);
-  
+
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"
@@ -201,6 +201,10 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
           </Box>
         </DialogContent>
         <DialogActions>
+          <Button variant='outlined' size='small' onClick={handleClose} color="primary">
+            Close
+          </Button>
+
           <LoadingButton
             size="small"
             onSubmit={saveProduct}
@@ -210,7 +214,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
             disabled={isLoading}
             loadingPosition="end"
             variant="outlined"
-            color='primary'
+            color='success'
           >
             Save
           </LoadingButton>
