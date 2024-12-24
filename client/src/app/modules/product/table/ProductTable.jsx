@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, styled } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -6,8 +6,9 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import { GridRowModes, DataGrid, GridActionsCellItem, GridRowEditStopReasons } from '@mui/x-data-grid';
 import { shallowEqual, useSelector } from 'react-redux';
-import { useDeleteProductMutation, useEditProductMutation } from '../../../redux/product/product-api';
-import { categories } from '../../components/navbar/helper/UIHelper';
+import { useDeleteProductMutation, useEditProductMutation } from '../../../../redux/product/product-api';
+import { categories } from '../../../components/navbar/helper/UIHelper';
+import ProductDeleteDialog from '../product-dialog/ProductDeleteDialog';
 
 
 
@@ -15,20 +16,22 @@ import { categories } from '../../components/navbar/helper/UIHelper';
 
 export default function ProductTable({ isLoading }) {
 
-  const [deleteProduct] = useDeleteProductMutation()
+  const [open, setOpen] = useState(false);
+  const [productId, setProductId] = useState(null);
+
   const [editProduct] = useEditProductMutation()
+  const [deleteProduct, { isLoading: deleteLoading }] = useDeleteProductMutation()
 
   const { token, products } = useSelector((state) => ({
     products: state.products.products,
     token: state.user.token,
   }), shallowEqual);
 
-  const [rows, setRows] = React.useState(products);
-  const [rowModesModel, setRowModesModel] = React.useState({});
-  const [rowSelection, setRowSelection] = React.useState(true);
+  const [rows, setRows] = useState(products);
+  const [rowModesModel, setRowModesModel] = useState({});
+  const [rowSelection, setRowSelection] = useState(true);
 
   console.log(setRowSelection);
-
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -44,11 +47,18 @@ export default function ProductTable({ isLoading }) {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
   };
 
-  const handleDeleteClick = (id) => async () => {
-    setRows(rows.filter((row) => row.id !== id));
-    if (token) {
-      await deleteProduct({ id, token });
+  const handleDeleteClick = (id) => () => {
+    setOpen(true);
+    setProductId(id);
+  };
+
+
+  const delProduct = async () => {
+    setRows(rows.filter((row) => row.id !== productId));
+    if (token && productId) {
+      await deleteProduct({ id: productId, token });
     }
+    setOpen(false);
   };
 
   const handleCancelClick = (id) => () => {
@@ -195,29 +205,34 @@ export default function ProductTable({ isLoading }) {
   ];
 
   return (
-    <Box sx={{ height: 400, width: '100%' }}>
-      <DataGrid
-        getRowId={(row) => row._id} // Benzersiz id'yi burada belirtiyoruz
-        rows={products}
-        columns={columns}
-        editMode="row"
-        rowModesModel={rowModesModel}
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        // slots={{ toolbar: EditToolbar }}
-        // slotProps={{
-        //   toolbar: { rows, setRows, setRowModesModel, setRowSelection, rowSelection },
-        // }}
-        slots={{ noRowsOverlay: CustomNoRowsOverlay }}
-        sx={{ '--DataGrid-overlayHeight': '300px' }}
-        loading={isLoading}
-        rowSelection={rowSelection}
-        checkboxSelection={rowSelection}
-        disableRowSelectionOnClick
+    <>
+      <Box sx={{ height: 600, width: '100%' }}>
+        <DataGrid
+          getRowId={(row) => row._id} // Benzersiz id'yi burada belirtiyoruz
+          rows={products}
+          columns={columns}
+          editMode="row"
+          rowModesModel={rowModesModel}
+          onRowModesModelChange={handleRowModesModelChange}
+          onRowEditStop={handleRowEditStop}
+          processRowUpdate={processRowUpdate}
+          // slots={{ toolbar: EditToolbar }}
+          // slotProps={{
+          //   toolbar: { rows, setRows, setRowModesModel, setRowSelection, rowSelection },
+          // }}
+          slots={{ noRowsOverlay: CustomNoRowsOverlay }}
+          sx={{ '--DataGrid-overlayHeight': '300px' }}
+          loading={isLoading}
+          rowSelection={rowSelection}
+          checkboxSelection={rowSelection}
+          disableRowSelectionOnClick
 
-      />
-    </Box>
+        />
+
+      </Box>
+      <ProductDeleteDialog open={open} setOpen={setOpen} delProduct={delProduct} isLoading={deleteLoading} productId={productId} />
+
+    </>
   );
 }
 

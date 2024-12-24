@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 const StyledButton = styled.button`
 border: none;
+border-radius: 5px;
 padding: 7px 10px;
 background-image: linear-gradient(260deg, #2376ae 0%, #c16ecf 100%);
 color: white;
@@ -42,6 +43,7 @@ export default function Button({ variant, type, title, onClick, disabled, isLoad
       variant={variant}
       onClick={onClick}
       disabled={disabled || isLoading}
+
     >
       {title} {isLoading && <Spinner animation="border" size="sm" />}
     </StyledButton>

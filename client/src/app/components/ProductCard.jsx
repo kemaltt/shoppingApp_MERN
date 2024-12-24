@@ -58,12 +58,24 @@ export default function ProductCard({ product, id }) {
           image={product.image}
           title={product.name}
         />
-        <CardContent sx={{ height: '120px', marginBottom: '4px' }} >
-          <Typography onClick={productDetail} gutterBottom variant="h6" component="div" sx={{cursor:'pointer'}} >
+        <CardContent sx={{ height: '160px', marginBottom: '4px' }} >
+          <Typography onClick={productDetail} gutterBottom variant="h6" component="div" sx={{ cursor: 'pointer' }} >
             {product.name}
           </Typography>
           <Typography variant='h6' color="text.secondary">
             {product.category}
+          </Typography>
+          <Typography variant='p' color="text.secondary">
+            Rating {[...Array(5)].map((star, i) => (
+              <i
+                key={i}
+                style={{
+                  fontSize: "1.5rem",
+                  color: product?.rating >= i + 1 ? "orange" : "grey",
+                }}
+                className="las la-star"
+              ></i>
+            ))}
           </Typography>
         </CardContent>
         <CardActions sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} >

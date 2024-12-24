@@ -31,7 +31,7 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
     { value: 'women\'s clothing', label: 'Women\'s Clothing' }
   ];
 
-  const handleClick = async (value) => {
+  const saveProduct = async (value) => {
     const { countInStock, price, ...rest } = value;
     if (countInStock && price) {
       const data = {
@@ -88,7 +88,7 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
           // sx={{ '& .MuiTextField-root': { m: 1, width: '25ch' } }}
           noValidate
           autoComplete="off"
-          onSubmit={handleSubmit(handleClick)}
+          onSubmit={handleSubmit(saveProduct)}
         >
           <DialogContent dividers>
             <Box sx={{ display: "flex", flexDirection: "column", padding: "1rem", gap: '15px', width: '100%', marginTop: '2vh' }} >
@@ -198,7 +198,7 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button onSubmit={handleClick} disabled={isLoading} isLoading={isLoading} title={'Add Product'} />
+            <Button onSubmit={saveProduct} disabled={isLoading} isLoading={isLoading} title={'Add Product'} />
 
           </DialogActions>
         </form>

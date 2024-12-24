@@ -78,7 +78,7 @@ export default function CartList() {
         />
         <Row >
           <>
-            <Col lg='8' className="cart-list mb-5 ">
+            <Col md='8' className="cart-list mb-5 ">
 
               {cart?.products?.map((product, i) => (
                 <Row key={i} >
@@ -159,7 +159,7 @@ export default function CartList() {
                 </Row>
               ))}
             </Col>
-            <Col lg='3' className="payment">
+            <Col md='3' className="payment">
 
               {cart?.products?.length > 0 &&
                 <div className="border border-primary p-4 ml-4">
