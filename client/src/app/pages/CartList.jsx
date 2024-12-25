@@ -137,7 +137,7 @@ export default function CartList() {
                       </Tooltip>
                       <Tooltip placement="top" title="Favorite">
                         <div type="button" className="cart-delete">
-                          {favorite.some(el => el._id === product?.product._id) ?
+                          {favorite.some(el => el._id === product?.product?._id) ?
                             <FavoriteOutlinedIcon
                               onClick={() => delFav(product?.product._id)}
                               style={{ color: "orange", fontSize: "2rem" }}
