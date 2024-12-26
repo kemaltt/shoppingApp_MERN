@@ -9,6 +9,7 @@ import { Col, Row } from "react-bootstrap";
 import { useGetProductByIdQuery } from "../../redux/product/product-api";
 import { useAddToCartMutation, useDeleteFromCartMutation } from "../../redux/cart/cart-api";
 import { Card, CardContent, CardHeader, Typography, CardMedia } from '@mui/material'
+import { BASE_URL } from "../../constants/api/apiUrl";
 
 
 
@@ -16,6 +17,9 @@ export default function ProductDetail() {
   const navigate = useNavigate();
   const id = useParams().id
   const { product, loading } = useSelector((state) => state.products);
+
+  console.log(product.images?.map((image) => `${BASE_URL}/${image.url}`)[0])
+
   const { isAuthenticated, token } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
   useGetProductByIdQuery({ id, token }, { skip: !token });
@@ -77,6 +81,20 @@ export default function ProductDetail() {
               alt={product?.name}
             />
           </Col>
+
+          {product.images?.map((image, index) =>
+
+            <img
+              key={index}
+              src={`${image.file ? image.url : `${BASE_URL}/${image.url}`}`}
+              alt={`product ${index}`}
+              width="100%"
+              height="auto"
+              className="h-100 thumbnail-200"
+              style={{ pointerEvents: 'none' }}
+            />
+
+          )}
 
           <Col lg='6'>
             <CardContent className='d-flex flex-column gap-3' sx={{ flex: '1 0 auto' }}>

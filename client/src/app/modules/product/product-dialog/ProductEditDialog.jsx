@@ -1,20 +1,26 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import SaveIcon from '@mui/icons-material/Save';
 import Dialog from '@mui/material/Dialog';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Button, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useEditProductMutation, useGetProductByIdQuery } from '../../../../redux/product/product-api';
+import { useEditProductMutation, useGetProductByIdQuery, useUploadImagesMutation } from '../../../../redux/product/product-api';
 import { useSelector } from 'react-redux';
 import { Col, Row } from 'react-bootstrap';
 import Textarea from '@mui/joy/Textarea';
+import UploadIcon from '@mui/icons-material/Upload';
 import { CATEGORIES_OPTION } from '../../../helpers/UIHelper';
 import { useForm } from 'react-hook-form';
 
 
 export default function ProductEditDialog({ open, setOpen, productId, token }) {
+
+  const [selectedImages, setSelectedImages] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [editProduct, { isLoading }] = useEditProductMutation()
+  const [uploadImages] = useUploadImagesMutation()
   useGetProductByIdQuery({ id: productId, token }, { skip: !token });
+
   const { product } = useSelector((state) => state.products);
   const { register, handleSubmit, reset } = useForm({
     defaultValues: product
@@ -38,27 +44,64 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
     reset();
   };
 
-  const saveProduct = async (value) => {
-    const data = {
-      ...product,
-      ...value
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+
+    // Yeni dosyaları filtrele (Daha önce seçilmiş olanları çıkar)
+    const newFiles = files.filter(
+      (file) => !selectedImages.some((selected) => selected.name === file.name)
+    );
+
+    if (newFiles.length + selectedImages.length > 10) {
+      alert('You can upload a maximum of 10 images.');
+      return;
     }
 
-    if (token && value) {
-      await editProduct({ id: productId, token, data });
+    if (newFiles.length < files.length) {
+      alert('Some images were already added and skipped.');
     }
-    setOpen(false);
+
+    // Yeni dosyaları state'e ekle
+    setSelectedImages((prev) => [...prev, ...newFiles]);
+    const previews = newFiles.map((file) => URL.createObjectURL(file));
+    setImagePreviews((prev) => [...prev, ...previews]);
   };
 
-  // useEffect(() => {
-  //   if (status === 'fulfilled') {
-  //     toast.success('Product updated successfully');
-  //   }
-  //   if (isError) {
-  //     toast.error('Product update failed. Please try again.');
-  //   }
-  // }, [status, isError]);
+  const saveProduct = async (value) => {
 
+    const formData = new FormData();
+    selectedImages.forEach((image) => {
+      formData.append('productImages', image);
+    });
+
+    const uploadData = {
+      formData,
+      id: productId
+    }
+
+    const uploadedData = await uploadImages(uploadData).unwrap();
+
+    const data = {
+      ...product,
+      ...value,
+      images: uploadedData,
+    }
+
+    await editProduct({ id: productId, token, data });
+    setOpen(false);
+
+
+  };
+
+
+  const removeImage = (index) => {
+    const updatedImages = [...selectedImages];
+    const updatedPreviews = [...imagePreviews];
+    updatedImages.splice(index, 1);
+    updatedPreviews.splice(index, 1);
+    setSelectedImages(updatedImages);
+    setImagePreviews(updatedPreviews);
+  };
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"
@@ -196,7 +239,36 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
                 ))}
               </Select>
             </FormControl>
+            {/* Image Upload Section */}
+            <Button
+              variant="outlined"
+              component="label"
+              startIcon={<UploadIcon />}
+            >
+              Upload Images
+              <input
+                type="file"
+                hidden
+                accept="image/*"
+                multiple
+                onChange={handleImageChange}
+              />
+            </Button>
 
+            {/* Display Image Previews */}
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+              {imagePreviews.map((preview, index) => (
+                <Box key={index} sx={{ position: 'relative' }}>
+                  <img src={preview} alt={`preview-${index}`} style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }} />
+                  <IconButton
+                    onClick={() => removeImage(index)}
+                    sx={{ position: 'absolute', top: '-10px', right: '-10px', backgroundColor: 'white', color: 'red' }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </Box>
+              ))}
+            </Box>
 
           </Box>
         </DialogContent>
