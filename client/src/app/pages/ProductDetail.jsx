@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import { useNavigate, useParams } from "react-router-dom";
-import { Col, Row } from "react-bootstrap";
+import { Carousel, Col, Row } from "react-bootstrap";
 import { useGetProductByIdQuery } from "../../redux/product/product-api";
 import { useAddToCartMutation, useDeleteFromCartMutation } from "../../redux/cart/cart-api";
 import { Card, CardContent, CardHeader, Typography, CardMedia } from '@mui/material'
@@ -78,21 +78,34 @@ export default function ProductDetail() {
               image={product?.image}
               alt={product?.name}
             />
+
+            {product.images?.length > 1 &&
+              <Carousel fade className="w-50 " >
+                {product.images?.map((image, index) => (
+                  <Carousel.Item key={index} className='rounded-lg overflow-hidden'>
+                    <img
+                      className="d-block w-100 "
+                      style={{ width: '100%', height: '500px', objectFit: 'contain' }}
+                      src={`${image.file ? image.url : `${BASE_URL}/${image.url}`}`}
+                      alt={`product ${index}`}
+                    />
+                  </Carousel.Item>
+                ))}
+              </Carousel>
+              // <img
+              //   key={index}
+              //   src={`${image.file ? image.url : `${BASE_URL}/${image.url}`}`}
+              //   alt={`product ${index}`}
+              //   width="100%"
+              //   height="auto"
+              //   className="h-100 thumbnail-200"
+              //   style={{ pointerEvents: 'none' }}
+              // />
+
+            }
           </Col>
 
-          {product.images?.map((image, index) =>
 
-            <img
-              key={index}
-              src={`${image.file ? image.url : `${BASE_URL}/${image.url}`}`}
-              alt={`product ${index}`}
-              width="100%"
-              height="auto"
-              className="h-100 thumbnail-200"
-              style={{ pointerEvents: 'none' }}
-            />
-
-          )}
 
           <Col lg='6'>
             <CardContent className='d-flex flex-column gap-3' sx={{ flex: '1 0 auto' }}>
