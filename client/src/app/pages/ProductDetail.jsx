@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Loading from "../components/Loading";
 import { useSelector } from "react-redux";
 import Button from "@mui/material/Button";
@@ -8,14 +8,18 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Carousel, Col, Row } from "react-bootstrap";
 import { useGetProductByIdQuery } from "../../redux/product/product-api";
 import { useAddToCartMutation, useDeleteFromCartMutation } from "../../redux/cart/cart-api";
-import { Card, CardContent, CardHeader, Typography, CardMedia } from '@mui/material'
+import { Card, CardContent, CardHeader, Typography } from '@mui/material'
 import { BASE_URL } from "../../constants/api/apiUrl";
 
 
 
 export default function ProductDetail() {
+
+  const [activeIndex, setActiveIndex] = useState(0);
   const navigate = useNavigate();
   const id = useParams().id
+
+
   const { product, loading } = useSelector((state) => state.products);
 
   const { isAuthenticated, token } = useSelector((state) => state.user);
@@ -71,38 +75,72 @@ export default function ProductDetail() {
 
         <Row className='mt-5' >
           <Col lg='6'>
-            <CardMedia
-              component="img"
-              // sx={{ width: 600 }}
-              sx={{ objectFit: 'contain', width: '100%', height: '500px', cursor: 'pointer', '&:hover': { opacity: 0.7 } }}
-              image={product?.image}
-              alt={product?.name}
-            />
-
-            {product.images?.length > 1 &&
-              <Carousel fade className="w-50 " >
-                {product.images?.map((image, index) => (
-                  <Carousel.Item key={index} className='rounded-lg overflow-hidden'>
+            <>
+              <Carousel touch
+                activeIndex={activeIndex}
+                onSelect={(selectedIndex) => setActiveIndex(selectedIndex)}
+                nextIcon={
+                  <span className="carousel-control-next-icon" style={{ filter: "invert(1)" }} />
+                }
+                prevIcon={
+                  <span className="carousel-control-prev-icon" style={{ filter: "invert(1)" }} />
+                }
+              >
+                {product.images?.length ?
+                  product.images?.map((image, index) => (
+                    <Carousel.Item key={index}>
+                      <img
+                        src={`${image.file ? image.url : `${BASE_URL}/${image.url}` ? `${BASE_URL}/${image.url}` : product?.image}`}
+                        alt={`Slide ${index}`}
+                        className="d-block w-100"
+                        style={{
+                          height: "500px",
+                          objectFit: "contain",
+                          borderRadius: "10px",
+                        }}
+                        loading="lazy"
+                      />
+                    </Carousel.Item>
+                  ))
+                  :
+                  <Carousel.Item>
                     <img
-                      className="d-block w-100 "
-                      style={{ width: '100%', height: '500px', objectFit: 'contain' }}
-                      src={`${image.file ? image.url : `${BASE_URL}/${image.url}`}`}
-                      alt={`product ${index}`}
+                      src={product?.image}
+                      alt={`Slide 0`}
+                      className="d-block w-100"
+                      style={{
+                        height: "500px",
+                        objectFit: "contain",
+                        borderRadius: "10px",
+                      }}
+                      loading="lazy"
                     />
                   </Carousel.Item>
-                ))}
+                }
               </Carousel>
-              // <img
-              //   key={index}
-              //   src={`${image.file ? image.url : `${BASE_URL}/${image.url}`}`}
-              //   alt={`product ${index}`}
-              //   width="100%"
-              //   height="auto"
-              //   className="h-100 thumbnail-200"
-              //   style={{ pointerEvents: 'none' }}
-              // />
 
-            }
+              <div className="d-flex justify-content-center mt-3">
+                {product.images?.map((image, index) => (
+                  <img
+                    key={index}
+                    src={`${image.file ? image.url : `${BASE_URL}/${image.url}`}`}
+                    alt={`Thumbnail ${index}`}
+                    className="mx-2"
+                    style={{
+                      width: "60px",
+                      height: "60px",
+                      objectFit: "cover",
+                      border: "2px solid gray",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+
+                    onClick={() => setActiveIndex(index)}
+                  />
+                ))}
+              </div>
+            </>
+
           </Col>
 
 
