@@ -45,7 +45,7 @@ export class FileUploadService {
       const mimetype = "." + file.mimetype.split('/')[1];
 
       // Dosya kontrolü
-      if (fileType === 'product_images' || fileType === "profile_image" || fileType === "company_logo") {
+      if (fileType === 'productImages' || fileType === "profile_image" || fileType === "company_logo") {
         const allowedFileTypes = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
         if (ext !== mimetype && !allowedFileTypes.includes(ext)) {
           const error = new Error('Invalid file type. Only JPG, JPEG, PNG, GIF, and WEBP files are allowed.');
@@ -64,7 +64,7 @@ export class FileUploadService {
 
       // istekten gelen max img count kontrolü
       let maxFile = 0;
-      if (fileType === "product_images") {
+      if (fileType === "productImages") {
         maxFile = 10;
       } else if (fileType === "ticket_images") {
         maxFile = 4;
@@ -79,6 +79,7 @@ export class FileUploadService {
         const error = new Error(`Maximum ${maxFile} img can be loaded.`);
         return cb(error, false);
       };
+      cb(null, true);
     }
 
     const upload = multer({
@@ -111,5 +112,80 @@ export class FileUploadService {
     });
 
 
+  }
+
+  static upload = async (req, res) => {
+
+    const createFolder = (basePath) => {
+      if (!fs.existsSync(basePath)) {
+        fs.mkdirSync(basePath, { recursive: true });
+      }
+    };
+    const storage = multer.diskStorage({
+      destination: function (req, file, cb) {
+        const userId = req.body.userId; // Kullanıcı ID
+        const productId = req.body.productId; // Ürün ID (sadece ürün resimleri için)
+  
+        if (!userId) {
+          return cb(new Error('User id mu '), null);
+        }
+  
+        let folderPath;
+        if (file.fieldname === 'profileImage') {
+          // Profil resmi için klasör
+          folderPath = path.join(__dirname, 'storage', userId, 'profile');
+        } else if (file.fieldname === 'productImages') {
+          if (!productId) {
+            return cb(new Error('Product ID gerekli!'), null);
+          }
+          // Ürün resimleri için klasör
+          folderPath = path.join(__dirname, 'storage', userId, 'products', productId);
+        }
+  
+        // Klasörü oluştur
+        createFolder(folderPath);
+        cb(null, folderPath);
+      },
+      filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname)); // Dosya adı
+      },
+    });
+
+    const upload = multer({ storage: storage })
+
+    upload.array('files', 10)(req, res, (err) => {
+      if (err) {
+        res.status(400).send({ message: err.message });
+      } else {
+        const files = req.files?.map((file) => {
+          return {
+            url: file.path,
+            filename: file.filename,
+            originalname: file.originalname,
+            mimetype: file.mimetype,
+            size: file.size
+          };
+        });
+        if (files === undefined) {
+          res.status(400).send({ message: "No file uploaded" });
+        }
+        res.status(200).send(files);
+      }
+
+    });
+
+    
+  }
+
+
+
+  static delete = async (req, res) => {
+    const { id } = req.params;
+    const pathUrl = `storage/${id}`;
+    if (fs.existsSync
+      (pathUrl)) {
+      fs.rmdirSync(pathUrl, { recursive: true });
+    }
+    res.status(200).send({ message: "Files deleted" });
   }
 }

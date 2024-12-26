@@ -62,7 +62,15 @@ export const productApi = createApi({
         },
       }),
     }),
+
+    uploadImages: builder.mutation({
+      query: ({ formData, id }) => ({
+        url: `upload-images/${id}`,
+        method: 'POST',
+        body: formData,
+      }),
+    }),
   }),
 })
 
-export const { useGetProductsMutation, useGetProductByIdQuery, useUpdateProductByIdMutation, useAddProductMutation, useDeleteProductMutation, useEditProductMutation } = productApi
+export const { useGetProductsMutation, useGetProductByIdQuery, useUpdateProductByIdMutation, useAddProductMutation, useDeleteProductMutation, useEditProductMutation, useUploadImagesMutation } = productApi
