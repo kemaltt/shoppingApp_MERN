@@ -18,8 +18,6 @@ export default function ResetPassword() {
   const { register, handleSubmit, setError, formState: { errors } } = useForm();
   const query = useQuery()
 
-  console.log(query.get('reset_password_key'), 'query.get("reset_password_key")');
-
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);

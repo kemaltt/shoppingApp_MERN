@@ -16,8 +16,7 @@ export default function ProductList() {
   const { register, handleSubmit } = useForm();
   // const { token } = useSelector((state) => state.user);
 
-  const [addProduct, { isError, isLoading, status }] = useAddProductMutation()
-  console.log(isError, isLoading, status);
+  const [addProduct, { isLoading, status }] = useAddProductMutation()
   const navigate = useNavigate()
 
   const categories = [

@@ -16,8 +16,7 @@ export default function Favorite() {
   const delFav = (id) => {
     deleteFavorite({ token, id })
   }
-  // const { error } = useGetFavoriteQuery()
-  // console.log(error);
+
   return (
     (favorite.length <= 0)
       ? <h1 className="text-center text-danger mt-5">{<span> you have no favorite product</span>}</h1>

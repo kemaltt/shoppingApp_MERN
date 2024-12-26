@@ -18,8 +18,6 @@ export default function ProductDetail() {
   const id = useParams().id
   const { product, loading } = useSelector((state) => state.products);
 
-  console.log(product.images?.map((image) => `${BASE_URL}/${image.url}`)[0])
-
   const { isAuthenticated, token } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
   useGetProductByIdQuery({ id, token }, { skip: !token });

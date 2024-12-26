@@ -27,12 +27,7 @@ const productSlice = createSlice({
      state.products = state.products.filter((product) => product._id !== action.payload._id);
     });
     builder.addMatcher(productApi.endpoints.editProduct.matchFulfilled, (state, action) => {
-      state.products = state.products.map((product) => {
-        if (product._id === action.payload._id) {
-          return action.payload;
-        }
-        return product;
-      });
+      state.product = action.payload
     });
   },
 });

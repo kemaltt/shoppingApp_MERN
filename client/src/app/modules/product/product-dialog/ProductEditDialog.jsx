@@ -11,6 +11,7 @@ import Textarea from '@mui/joy/Textarea';
 import UploadIcon from '@mui/icons-material/Upload';
 import { CATEGORIES_OPTION } from '../../../helpers/UIHelper';
 import { useForm } from 'react-hook-form';
+import { BASE_URL } from '../../../../constants/api/apiUrl';
 
 
 export default function ProductEditDialog({ open, setOpen, productId, token }) {
@@ -25,6 +26,22 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
   const { register, handleSubmit, reset } = useForm({
     defaultValues: product
   });
+  const [existingImages, setExistingImages] = useState([]); // Daha önce yüklü resimler
+
+  // Product değiştiğinde, mevcut resimleri state'e yükle
+  useEffect(() => {
+    if (product?.images) {
+      setExistingImages(product.images);
+    }
+  }, [product]);
+
+  // Daha önce yüklenmiş bir resmi kaldır
+  const removeExistingImage = (index) => {
+    const updatedImages = [...existingImages];
+    updatedImages.splice(index, 1);
+    setExistingImages(updatedImages);
+  };
+
 
   useEffect(() => {
     if (product) {
@@ -80,19 +97,19 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
     }
 
     const uploadedData = await uploadImages(uploadData).unwrap();
+    // Mevcut ve yeni yüklenen resimleri birleştir
+    const finalImages = [...existingImages, ...uploadedData];
 
     const data = {
       ...product,
       ...value,
-      images: uploadedData,
+      images: finalImages,
     }
 
-    await editProduct({ id: productId, token, data });
+    await editProduct({ id: productId, token, data }).unwrap();
+    // await getProducts()
     setOpen(false);
-
-
   };
-
 
   const removeImage = (index) => {
     const updatedImages = [...selectedImages];
@@ -102,6 +119,8 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
     setSelectedImages(updatedImages);
     setImagePreviews(updatedPreviews);
   };
+
+
   return (
     <Dialog
       aria-labelledby="customized-dialog-title"
@@ -239,6 +258,25 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
                 ))}
               </Select>
             </FormControl>
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '20px' }}>
+              {existingImages.map((image, index) => (
+                <Box key={index} sx={{ position: 'relative' }}>
+                  <img
+                    src={`${BASE_URL}/${image.url}`}
+                    alt={`existing-${index}`}
+                    style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }}
+                  />
+                  <IconButton
+                    onClick={() => removeExistingImage(index)}
+                    sx={{ position: 'absolute', top: '-10px', right: '-10px', backgroundColor: 'white', color: 'red' }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </Box>
+              ))}
+            </Box>
+
+
             {/* Image Upload Section */}
             <Button
               variant="outlined"
