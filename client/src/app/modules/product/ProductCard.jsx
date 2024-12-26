@@ -8,6 +8,7 @@ import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../../redu
 import { useSelector, shallowEqual } from "react-redux";
 import ProductDeleteDialog from "./product-dialog/ProductDeleteDialog";
 import ProductEditDialog from "./product-dialog/ProductEditDialog";
+import { BASE_URL } from "../../../constants/api/apiUrl";
 
 
 
@@ -60,7 +61,7 @@ export default function ProductCard({ product, id }) {
           onClick={productDetail}
           component="img"
           sx={{ objectFit: 'contain', width: '100%', height: '400px', cursor: 'pointer', '&:hover': { opacity: 0.7 } }}
-          image={product.image}
+          image={product.images.length ? `${BASE_URL}/${product.images[0].url}` : product.image }
           title={product.name}
         />
         <CardContent sx={{ height: '160px', marginBottom: '4px' }} >

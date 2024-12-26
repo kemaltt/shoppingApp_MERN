@@ -90,7 +90,7 @@ export default function ProductDetail() {
                   product.images?.map((image, index) => (
                     <Carousel.Item key={index}>
                       <img
-                        src={`${image.file ? image.url : `${BASE_URL}/${image.url}` ? `${BASE_URL}/${image.url}` : product?.image}`}
+                        src={`${image.file ? image.url : `${BASE_URL}/${image.url}`}`}
                         alt={`Slide ${index}`}
                         className="d-block w-100"
                         style={{
@@ -118,27 +118,28 @@ export default function ProductDetail() {
                   </Carousel.Item>
                 }
               </Carousel>
+              {product.images?.length > 1 &&
+                <div className="d-flex justify-content-center mt-3">
+                  {product.images?.map((image, index) => (
+                    <img
+                      key={index}
+                      src={`${image.file ? image.url : `${BASE_URL}/${image.url}`}`}
+                      alt={`Thumbnail ${index}`}
+                      className="mx-2"
+                      style={{
+                        width: "60px",
+                        height: "60px",
+                        objectFit: "cover",
+                        border: "2px solid gray",
+                        borderRadius: "5px",
+                        cursor: "pointer",
+                      }}
 
-              <div className="d-flex justify-content-center mt-3">
-                {product.images?.map((image, index) => (
-                  <img
-                    key={index}
-                    src={`${image.file ? image.url : `${BASE_URL}/${image.url}`}`}
-                    alt={`Thumbnail ${index}`}
-                    className="mx-2"
-                    style={{
-                      width: "60px",
-                      height: "60px",
-                      objectFit: "cover",
-                      border: "2px solid gray",
-                      borderRadius: "5px",
-                      cursor: "pointer",
-                    }}
-
-                    onClick={() => setActiveIndex(index)}
-                  />
-                ))}
-              </div>
+                      onClick={() => setActiveIndex(index)}
+                    />
+                  ))}
+                </div>
+              }
             </>
 
           </Col>
