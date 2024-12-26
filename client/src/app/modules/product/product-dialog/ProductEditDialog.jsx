@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import CloseIcon from '@mui/icons-material/Close';
 import { Box, Button, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useEditProductMutation, useGetProductByIdQuery, useUploadImagesMutation } from '../../../../redux/product/product-api';
+import { useEditProductMutation, useGetProductByIdQuery, useGetProductsMutation, useUploadImagesMutation } from '../../../../redux/product/product-api';
 import { useSelector } from 'react-redux';
 import { Col, Row } from 'react-bootstrap';
 import Textarea from '@mui/joy/Textarea';
@@ -19,7 +19,8 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
   const [selectedImages, setSelectedImages] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
   const [editProduct, { isLoading }] = useEditProductMutation()
-  const [uploadImages] = useUploadImagesMutation()
+  const [uploadImages, { isLoading: uploadLoading }] = useUploadImagesMutation()
+  const [getProducts] = useGetProductsMutation()
   useGetProductByIdQuery({ id: productId, token }, { skip: !token });
 
   const { product } = useSelector((state) => state.products);
@@ -107,7 +108,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
     }
 
     await editProduct({ id: productId, token, data }).unwrap();
-    // await getProducts()
+    await getProducts()
     setOpen(false);
   };
 
@@ -320,8 +321,8 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
             onSubmit={saveProduct}
             type='submit'
             endIcon={<SaveIcon />}
-            loading={isLoading}
-            disabled={isLoading}
+            loading={isLoading || uploadLoading}
+            disabled={isLoading || uploadLoading}
             loadingPosition="end"
             variant="outlined"
             color='success'
