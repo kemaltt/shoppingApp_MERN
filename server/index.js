@@ -169,7 +169,7 @@ const upload = multer({
 });
 
 
-app.post('/api/upload-images/:id', upload.array('productImages', 10), (req, res) => {
+app.post('/upload-images/:id', upload.array('productImages', 10), (req, res) => {
   const files = req.files?.map((file) => {
     return {
       url: file.path,
