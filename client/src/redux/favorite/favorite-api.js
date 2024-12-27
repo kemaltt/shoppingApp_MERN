@@ -34,7 +34,7 @@ export const favApi = createApi({
       }),
     }),
     deleteFavorite: builder.mutation({
-      query: ({ token, id }) => ({
+      query: ({ id, token }) => ({
         url: `/delete-favorite/${id}`,
         method: 'DELETE',
         headers: {

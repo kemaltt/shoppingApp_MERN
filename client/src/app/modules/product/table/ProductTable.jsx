@@ -229,7 +229,7 @@ export default function ProductTable({ isLoading }) {
         />
 
       </Box>
-      <ProductDeleteDialog open={open} setOpen={setOpen} setRows={setRows} rows={rows} productId={productId} token={token} />
+      <ProductDeleteDialog type={'product'} open={open} setOpen={setOpen} setRows={setRows} rows={rows} productId={productId} token={token} />
 
     </>
   );

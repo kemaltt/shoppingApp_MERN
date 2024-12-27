@@ -1,35 +1,38 @@
-import React from 'react'
-import { useDeleteFavoriteMutation } from '../../redux/favorite/favorite-api'
+import React, { useState } from 'react'
 import { shallowEqual, useSelector } from 'react-redux';
 import DeleteIcon from '@mui/icons-material/Delete';
-
 import { Box, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from '@mui/material';
+import ProductDeleteDialog from '../modules/product/product-dialog/ProductDeleteDialog';
 
 export default function Favorite() {
+  const [open, setOpen] = useState(false);
+  const [productId, setProductId] = useState(null);
 
-  const [deleteFavorite] = useDeleteFavoriteMutation()
 
   const { token, favorite } = useSelector((state) => ({
     favorite: state.favorite.favorite,
     token: state.user.token
   }), shallowEqual);
   const delFav = (id) => {
-    deleteFavorite({ token, id })
+    // deleteFavorite({ token, id })
+    setOpen(true)
+    setProductId(id)
   }
 
   return (
     (favorite.length <= 0)
       ? <h1 className="text-center text-danger mt-5">{<span> you have no favorite product</span>}</h1>
-      : <Card className="p-5">
-        <CardHeader
-          title='Favorite'
-          subheader={`${favorite?.length} Products`}
-        />
+      : <>
+        <Card className="p-5">
+          <CardHeader
+            title='Favorite'
+            subheader={`${favorite?.length} Products`}
+          />
 
           <div className=' d-flex justify-content-center gap-3 flex-wrap'>
             {favorite.map((product, i) => (
               < >
-                <Card sx={{ maxWidth: 300 ,minWidth:300}}>
+                <Card sx={{ maxWidth: 300, minWidth: 300 }}>
                   <CardMedia
                     // onClick={productDetail}
                     component="img"
@@ -120,12 +123,12 @@ export default function Favorite() {
 
               </>
 
-
-
-
             ))}
 
           </div>
-      </Card >
+
+        </Card >
+        {open && <ProductDeleteDialog type={'favorite'} open={open} setOpen={setOpen} productId={productId} token={token} />}
+      </>
   )
 }

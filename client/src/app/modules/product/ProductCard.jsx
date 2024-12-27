@@ -120,7 +120,7 @@ export default function ProductCard({ product, id }) {
         </CardActions>
       </Card>
 
-      {openDelete && <ProductDeleteDialog open={openDelete} setOpen={setOpenDelete} productId={id} token={token} />}
+      {openDelete && <ProductDeleteDialog type={'product'} open={openDelete} setOpen={setOpenDelete} productId={id} token={token} />}
       {openEdit && <ProductEditDialog open={openEdit} setOpen={setOpenEdit} productId={id} token={token} />}
     </>
 

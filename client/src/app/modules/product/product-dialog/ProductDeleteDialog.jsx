@@ -5,15 +5,31 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Alert, DialogActions, DialogContent, DialogTitle, IconButton } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useDeleteProductMutation } from '../../../../redux/product/product-api';
+import { useDeleteFavoriteMutation } from '../../../../redux/favorite/favorite-api';
+import { useDeleteFromCartMutation } from '../../../../redux/cart/cart-api';
 
 
-export default function ProductDeleteDialog({ open, setOpen, setRows, rows, productId, token }) {
+export default function ProductDeleteDialog({ open, setOpen, productId, token, type }) {
   const [deleteProduct, { isLoading }] = useDeleteProductMutation()
-
+  const [deleteFavorite] = useDeleteFavoriteMutation()
+  const [deleteFromCart] = useDeleteFromCartMutation()
   const delProduct = async () => {
     // setRows(rows.filter((row) => row.id !== productId));
     if (token && productId) {
-      await deleteProduct({ id: productId, token });
+      switch (type) {
+        case 'favorite':
+          await deleteFavorite({ id: productId, token });
+          break;
+        case 'product':
+          await deleteProduct({ id: productId, token });
+          break;
+        case 'cart':
+          await deleteFromCart({ id: productId, token })
+          break;
+        default:
+          break;
+      }
+      // type === 'favorite' ? await deleteFavorite({ token, id: productId }) : await deleteProduct({ id: productId, token });
     }
     setOpen(false);
   };
@@ -30,7 +46,7 @@ export default function ProductDeleteDialog({ open, setOpen, setRows, rows, prod
       }}
     >
       <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-        Delete Product
+        {type === 'favorite' ? 'Delete from Favorite' : type === 'product' ? 'Delete from Product' : 'Delete from Cart'}
       </DialogTitle>
       <IconButton
         aria-label="close"
