@@ -64,26 +64,36 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-
+  
+    // Dosya boyutu kontrolü (3 MB = 3 * 1024 * 1024 bytes)
+    const maxSize = 10 * 1024 * 1024;
+    const validFiles = files.filter((file) => file.size <= maxSize);
+  
+    // Boyutu büyük olan dosyaları filtrele
+    if (validFiles.length < files.length) {
+      alert('Some files are larger than 3 MB and were skipped.');
+    }
+  
     // Yeni dosyaları filtrele (Daha önce seçilmiş olanları çıkar)
-    const newFiles = files.filter(
+    const newFiles = validFiles.filter(
       (file) => !selectedImages.some((selected) => selected.name === file.name)
     );
-
+  
     if (newFiles.length + selectedImages.length > 10) {
       alert('You can upload a maximum of 10 images.');
       return;
     }
-
-    if (newFiles.length < files.length) {
+  
+    if (newFiles.length < validFiles.length) {
       alert('Some images were already added and skipped.');
     }
-
+  
     // Yeni dosyaları state'e ekle
     setSelectedImages((prev) => [...prev, ...newFiles]);
     const previews = newFiles.map((file) => URL.createObjectURL(file));
     setImagePreviews((prev) => [...prev, ...previews]);
   };
+  
 
   const saveProduct = async (value) => {
 
@@ -278,7 +288,6 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
               ))}
             </Box>
 
-
             {/* Image Upload Section */}
             <Button
               variant="outlined"
@@ -332,10 +341,6 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
           </LoadingButton>
         </DialogActions>
       </form>
-
-
-
-
     </Dialog>
   )
 }
