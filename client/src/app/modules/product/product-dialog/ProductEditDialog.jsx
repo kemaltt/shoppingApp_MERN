@@ -94,7 +94,8 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
 
     const uploadData = {
       formData,
-      id: productId
+      id: productId,
+      token,
     }
 
     const uploadedData = await uploadImages(uploadData).unwrap();

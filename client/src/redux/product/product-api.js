@@ -64,10 +64,13 @@ export const productApi = createApi({
     }),
 
     uploadImages: builder.mutation({
-      query: ({ formData, id }) => ({
+      query: ({ formData, id, token }) => ({
         url: `upload-images/${id}`,
         method: 'POST',
         body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }),
     }),
   }),
