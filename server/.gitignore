@@ -14,6 +14,7 @@
 
 # storage for uploaded files
 .vscode
+/storage
 
 # misc
 .DS_Store
