@@ -18,7 +18,6 @@ export const StyledIcon = {
 }
 
 
-export const categories = ['All', 'men\'s clothing', 'jewelery', 'electronics', 'women\'s clothing'];
 
 export const CATEGORIES_OPTION = [
   { value: 'electronics', label: 'Electronics' },
@@ -30,3 +29,5 @@ export const CATEGORIES_OPTION = [
   { value: 'fragrances', label: 'Fragrances' },
 
 ];
+
+export const categories = CATEGORIES_OPTION.map((el) => el.label);
