@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import SaveIcon from '@mui/icons-material/Save';
 import Dialog from '@mui/material/Dialog';
 import CloseIcon from '@mui/icons-material/Close';
-import { Box, Button, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
+import { Alert, Box, Button, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { useEditProductMutation, useGetProductByIdQuery, useGetProductsMutation, useUploadImagesMutation } from '../../../../redux/product/product-api';
 import { useSelector } from 'react-redux';
@@ -24,9 +24,12 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
   useGetProductByIdQuery({ id: productId, token }, { skip: !token });
 
   const { product } = useSelector((state) => state.products);
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: product
   });
+
+  console.log(errors);
+  
   const [existingImages, setExistingImages] = useState([]); // Daha önce yüklü resimler
 
   // Product değiştiğinde, mevcut resimleri state'e yükle
@@ -64,36 +67,36 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
-  
+
     // Dosya boyutu kontrolü (3 MB = 3 * 1024 * 1024 bytes)
     const maxSize = 10 * 1024 * 1024;
     const validFiles = files.filter((file) => file.size <= maxSize);
-  
+
     // Boyutu büyük olan dosyaları filtrele
     if (validFiles.length < files.length) {
       alert('Some files are larger than 3 MB and were skipped.');
     }
-  
+
     // Yeni dosyaları filtrele (Daha önce seçilmiş olanları çıkar)
     const newFiles = validFiles.filter(
       (file) => !selectedImages.some((selected) => selected.name === file.name)
     );
-  
+
     if (newFiles.length + selectedImages.length > 10) {
       alert('You can upload a maximum of 10 images.');
       return;
     }
-  
+
     if (newFiles.length < validFiles.length) {
       alert('Some images were already added and skipped.');
     }
-  
+
     // Yeni dosyaları state'e ekle
     setSelectedImages((prev) => [...prev, ...newFiles]);
     const previews = newFiles.map((file) => URL.createObjectURL(file));
     setImagePreviews((prev) => [...prev, ...previews]);
   };
-  
+
 
   const saveProduct = async (value) => {
 
@@ -180,11 +183,16 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
               {...register("name", {
                 required: true,
                 pattern: {
-                  value: /^.{2,25}$/,
-                  message: "Name must be between 2 and 25 characters",
+                  value: /^.{2,100}$/,
+                  message: "Name must be between 2 and 100 characters",
                 },
               })}
             />
+            {errors.name &&
+              <Alert sx={{ marginTop: '10px' }} variant="outlined" severity="error">
+                {errors.name.message}
+              </Alert>
+            }
             <Row >
               <Col lg='6' >
                 <TextField
