@@ -13,7 +13,6 @@
 /build
 
 # storage for uploaded files
-storage
 .vscode
 
 # misc
