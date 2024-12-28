@@ -190,40 +190,108 @@ export const removeFromCart = async (req, res) => {
 };
 
 
+// export const updateCartById = async (req, res) => {
+//   const user_id = req.user.id;
+//   const { id } = req.params;
+//   const { quantity, price, updatedCountInStock } = req.body;
+//   try {
+//     const cart = await CartModel.findOne({ user_id });
+//     if (!cart) {
+//       return res.status(404).json({
+//         status: "error",
+//         message: "Cart not found"
+//       });
+//     }
+
+//     const product = cart.products.find(p => p.product.toString() === id);
+//     if (!product) {
+//       return res.status(404).json({
+//         status: "error",
+//         message: "Product not found"
+//       });
+//     }
+//     if (quantity) product.quantity = quantity;
+//     if (price) product.price = price;
+//     await cart.save();
+
+//     const updatedProduct = await ProductModel.findByIdAndUpdate(id, { countInStock: updatedCountInStock }, { new: true });
+//     if (!updatedProduct) {
+//       return res.status(404).json({ message: "Product not found" });
+//     }
+
+//     const newCart = await CartModel.findOne({ user_id: user_id }).populate('products.product');
+
+//     res.status(200).json(newCart);
+
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// }
+
 export const updateCartById = async (req, res) => {
   const user_id = req.user.id;
-  const { id } = req.params;
-  const { quantity, price, updatedCountInStock } = req.body;
+  const { id } = req.params; // Sepetteki ürün ID'si
+  const { quantity, price } = req.body; // Güncellenmek istenen değerler
+
   try {
+    // Kullanıcının sepetini bul
     const cart = await CartModel.findOne({ user_id });
     if (!cart) {
       return res.status(404).json({
         status: "error",
-        message: "Cart not found"
+        message: "Cart not found",
       });
     }
 
-    const product = cart.products.find(p => p.product.toString() === id);
+    // Sepette ürün var mı kontrol et
+    const productInCart = cart.products.find((p) => p.product.toString() === id);
+    if (!productInCart) {
+      return res.status(404).json({
+        status: "error",
+        message: "Product not found in cart",
+      });
+    }
+
+    // Ürünün stok bilgisini kontrol et
+    const product = await ProductModel.findById(id);
     if (!product) {
       return res.status(404).json({
         status: "error",
-        message: "Product not found"
+        message: "Product not found",
       });
     }
-    if (quantity) product.quantity = quantity;
-    if (price) product.price = price;
-    await cart.save();
 
-    const updatedProduct = await ProductModel.findByIdAndUpdate(id, { countInStock: updatedCountInStock }, { new: true });
-    if (!updatedProduct) {
-      return res.status(404).json({ message: "Product not found" });
+    // Sepetteki miktar azaltılıyorsa stok miktarını artır
+    if (quantity < productInCart.quantity) {
+      const difference = productInCart.quantity - quantity;
+      product.countInStock += difference;
+      await product.save();
     }
 
-    const newCart = await CartModel.findOne({ user_id: user_id }).populate('products.product');
+    // Eğer miktar artırılıyorsa stok kontrolü yap
+    if (quantity > productInCart.quantity) {
+      const difference = quantity - productInCart.quantity;
+      if (difference > product.countInStock) {
+        return res.status(400).json({
+          status: "error",
+          message: `Cannot update cart. Only ${product.countInStock} items are available in stock.`,
+        });
+      }
+      product.countInStock -= difference;
+      await product.save();
+    }
 
-    res.status(200).json(newCart);
+    // Sepetteki ürün bilgilerini güncelle
+    if (quantity) productInCart.quantity = quantity;
+    if (price) productInCart.price = price;
+    await cart.save();
+
+    // Güncellenmiş sepeti döndür
+    const updatedCart = await CartModel.findOne({ user_id }).populate("products.product");
+    res.status(200).json(updatedCart);
 
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
-}
+};
+
