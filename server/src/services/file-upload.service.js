@@ -8,12 +8,12 @@ import jwt from "jsonwebtoken";
 const storage = multer.diskStorage({
 
   destination: function (req, file, cb) {
-    const authHeader = req.headers["authorization"];
-    const token = authHeader && authHeader.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded?.id ?? 123456;
+    // const authHeader = req.headers["authorization"];
+    // const token = authHeader && authHeader.split(" ")[1];
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // const userId = decoded?.id ?? 12345;
     const fileType = file.fieldname;
-    let pathUrl = `storage/${userId ?? 123456}`
+    let pathUrl = `storage/${12345}`
     const id = req.originalUrl.split('/').pop()?.split('?')[0];
 
     if (fileType === "productImages") {
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
     } else if (fileType === "profile_image") {
       // Ticket editlerde endpoint yapısı support/ticketId/sessionId şeklinde yani diğerlerinden farklı
       // O yüzden ticketId yi farklı aldırmak durumundayız.
-      pathUrl = pathUrl + `/profile/${userId}`;
+      pathUrl = pathUrl + `/profile/${6789}`;
     } else {
       const error = new Error('Invalid file type.');
       return cb(error, "error");
