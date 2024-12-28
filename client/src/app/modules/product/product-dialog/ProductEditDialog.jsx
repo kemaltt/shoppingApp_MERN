@@ -201,6 +201,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
                   label="Quantity"
                   type="number"
                   name='countInStock'
+                  sx={{marginBottom: '10px'}}
                   fullWidth
                   inputProps={{
                     min: 0, // Minimum değer
