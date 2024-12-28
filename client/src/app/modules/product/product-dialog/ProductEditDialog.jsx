@@ -27,8 +27,6 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: product
   });
-
-  console.log(errors);
   
   const [existingImages, setExistingImages] = useState([]); // Daha önce yüklü resimler
 
