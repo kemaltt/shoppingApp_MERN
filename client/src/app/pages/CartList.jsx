@@ -22,7 +22,7 @@ export default function CartList() {
   // const [updateProductById] = useUpdateProductByIdMutation()
   const [updateCartById] = useUpdateCartByIdMutation()
 
-  let total = 0;
+
   const { cart, token, favorite } = useSelector((state) => ({
     favorite: state.favorite.favorite,
     token: state.user.token,
@@ -66,12 +66,19 @@ export default function CartList() {
   }
 
   const shipping_cost = 4.99
-  const totalAmount = cart?.products?.map((product) => {
-    return product?.product?.price;
-  });
-
-  totalAmount?.map((el) => (total += el));
-  const totalPrice = total + shipping_cost
+  const calculateTotalCartValue = (cart) => {
+    if (!cart.products || cart.products.length === 0) {
+      return 0; // Eğer ürün yoksa toplam 0 döner
+    }
+  
+    const total = cart.products.reduce((acc, item) => {
+      const productTotal = item.price * item.quantity;
+      return acc + productTotal;
+    }, 0);
+  
+    return total;
+  };
+  const totalPrice = calculateTotalCartValue(cart) + shipping_cost
 
   return (
     cart?.products?.length <= 0 || error
@@ -172,7 +179,7 @@ export default function CartList() {
 
                     <div className="payment-detail">
                       <h3>Summary</h3>
-                      <p>Subtotal: {total.toFixed(2)}€</p>
+                      <p>Subtotal: {calculateTotalCartValue(cart).toFixed(2)}€</p>
                       <p>Shipping: {shipping_cost}€</p>
                       <p>Total: {totalPrice.toFixed(2)}€</p>
                     </div>
