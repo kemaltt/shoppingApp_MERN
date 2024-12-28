@@ -24,5 +24,9 @@ export const CATEGORIES_OPTION = [
   { value: 'electronics', label: 'Electronics' },
   { value: 'jewelery', label: 'Jewelery' },
   { value: 'men\'s clothing', label: 'Men\'s Clothing' },
-  { value: 'women\'s clothing', label: 'Women\'s Clothing' }
+  { value: 'women\'s clothing', label: 'Women\'s Clothing' },
+  { value: 'others', label: 'Others' },
+  { value: 'beauty', label: 'Beauty' },
+  { value: 'fragrances', label: 'Fragrances' },
+
 ];
