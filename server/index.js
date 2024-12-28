@@ -24,7 +24,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use('/storage', express.static('storage'));
+app.use('/storage/uploads', express.static('storage/uploads'));
 
 
 app.get('/', (req, res) => {
