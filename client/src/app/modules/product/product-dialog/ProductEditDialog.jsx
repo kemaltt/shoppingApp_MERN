@@ -189,7 +189,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
               })}
             />
             {errors.name &&
-              <Alert sx={{ marginTop: '10px' }} variant="outlined" severity="error">
+              <Alert  variant="outlined" severity="error">
                 {errors.name.message}
               </Alert>
             }
