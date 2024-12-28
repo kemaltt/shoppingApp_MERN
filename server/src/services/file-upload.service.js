@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
     // const decoded = jwt.verify(token, process.env.JWT_SECRET);
     // const userId = decoded?.id ?? 12345;
     const fileType = file.fieldname;
-    let pathUrl = `storage/${12345}`
+    let pathUrl = `storage/uploads`;
     const id = req.originalUrl.split('/').pop()?.split('?')[0];
 
     if (fileType === "productImages") {
@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
     } else if (fileType === "profile_image") {
       // Ticket editlerde endpoint yapısı support/ticketId/sessionId şeklinde yani diğerlerinden farklı
       // O yüzden ticketId yi farklı aldırmak durumundayız.
-      pathUrl = pathUrl + `/profile/${6789}`;
+      pathUrl = pathUrl + `/profile`;
     } else {
       const error = new Error('Invalid file type.');
       return cb(error, "error");
