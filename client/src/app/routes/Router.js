@@ -33,9 +33,9 @@ export default function Router() {
           <Route path="/reset-password" element={<ResetPassword />} />
         </Route>
         <Route element={<ProtectedRoute />}>
-          <Route path="/cart" element={<CartList />} />
+          <Route path="/cart-list" element={<CartList />} />
           <Route path="/compare" element={<CompareList />} />
-          <Route path="/wishlist" element={<Favorite />} />
+          <Route path="/favorite-list" element={<Favorite />} />
           <Route path="/product-list" element={user?.user?.role === 'admin' ? <Product /> : <Home />} />
           <Route path="/product/:id" element={<ProductDetail />} />
         </Route>

@@ -88,12 +88,12 @@ export default function AccountMobile({ isAuthenticated, cartBadge, wishBadge, p
         {isAuthenticated ? (
           <div>
 
-            <MenuItem onClick={() => { handleClose(); navigate('/wishlist') }}>
+            <MenuItem onClick={() => { handleClose(); navigate('/favorite-list') }}>
               <WishList badge={wishBadge} color={{ color: 'green', fontSize: 30 }} />
               <Typography >Favorite</Typography>
             </MenuItem>
 
-            <MenuItem className='d-flex gap-1' onClick={() => { handleClose(); navigate('/cart') }}>
+            <MenuItem className='d-flex gap-1' onClick={() => { handleClose(); navigate('/cart-list') }}>
               <Cart badge={cartBadge} color={{ color: 'orange', fontSize: 30 }} />
               <Typography >Cart</Typography>
             </MenuItem>

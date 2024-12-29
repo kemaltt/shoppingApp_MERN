@@ -32,7 +32,7 @@ export default function WishList({ badge, color }) {
     //   )}
 
     // </Link>
-    <Link to="/wishlist" >
+    <Link to="/favorite-list" >
       <Tooltip placement="top-end" title="Favorite">
         <IconButton aria-label="favorite">
           <StyledBadge badgeContent={badge} color="primary">

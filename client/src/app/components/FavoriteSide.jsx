@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 export default function FavoriteSide() {
   const { favorite } = useSelector((state) => state.favorite);
   return (
-       <Link to="/wishlist" className='compare-side' >
+       <Link to="/favorite-list" className='compare-side' >
        <Tooltip placement="top" title="Favorite">
          <IconButton aria-label="favorite">
            <StyledBadge badgeContent={favorite?.length} color="primary">

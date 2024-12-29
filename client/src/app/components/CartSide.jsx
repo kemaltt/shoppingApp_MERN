@@ -10,7 +10,7 @@ export default function Cart() {
 
   const badge = cart?.products?.length;
   return (
-    <Link to="/cart" className="cart_container">
+    <Link to="/cart-list" className="cart_container">
       <Tooltip placement="top" title="Cart">
         <IconButton aria-label="cart">
           <StyledBadge badgeContent={badge} color="secondary">
