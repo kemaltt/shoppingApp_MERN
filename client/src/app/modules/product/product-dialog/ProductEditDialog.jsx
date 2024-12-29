@@ -11,7 +11,6 @@ import Textarea from '@mui/joy/Textarea';
 import UploadIcon from '@mui/icons-material/Upload';
 import { CATEGORIES_OPTION } from '../../../helpers/UIHelper';
 import { useForm } from 'react-hook-form';
-import { BASE_URL } from '../../../../constants/api/apiUrl';
 
 
 export default function ProductEditDialog({ open, setOpen, productId, token }) {
@@ -281,7 +280,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
               {existingImages.map((image, index) => (
                 <Box key={index} sx={{ position: 'relative' }}>
                   <img
-                    src={`${BASE_URL}/${image.url}`}
+                    src={image.url}
                     alt={`existing-${index}`}
                     style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }}
                   />

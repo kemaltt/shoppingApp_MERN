@@ -9,7 +9,6 @@ import { Carousel, Col, Row } from "react-bootstrap";
 import { useGetProductByIdQuery } from "../../redux/product/product-api";
 import { useAddToCartMutation, useDeleteFromCartMutation } from "../../redux/cart/cart-api";
 import { Card, CardContent, CardHeader, Typography } from '@mui/material'
-import { BASE_URL } from "../../constants/api/apiUrl";
 
 
 
@@ -90,7 +89,7 @@ export default function ProductDetail() {
                   product.images?.map((image, index) => (
                     <Carousel.Item key={index}>
                       <img
-                        src={`${image.file ? image.url : `${BASE_URL}/${image.url}`}`}
+                        src={image.file ? image.url : image.url}
                         alt={`Slide ${index}`}
                         className="d-block w-100"
                         style={{
@@ -123,7 +122,7 @@ export default function ProductDetail() {
                   {product.images?.map((image, index) => (
                     <img
                       key={index}
-                      src={`${image.file ? image.url : `${BASE_URL}/${image.url}`}`}
+                      src={image.file ? image.url : image.url}
                       alt={`Thumbnail ${index}`}
                       className="mx-2"
                       style={{
