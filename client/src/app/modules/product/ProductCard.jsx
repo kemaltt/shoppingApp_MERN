@@ -60,7 +60,7 @@ export default function ProductCard({ product, id }) {
           onClick={productDetail}
           component="img"
           sx={{ objectFit: 'contain', width: '100%', height: '400px', cursor: 'pointer', '&:hover': { opacity: 0.7 } }}
-          image={product.images.length ? product.images[0].url : product.image}
+          image={product.images.length ? product?.images[0]?.url : product?.image}
           title={product.name}
         />
         <CardContent sx={{ height: '160px', marginBottom: '4px' }} >
