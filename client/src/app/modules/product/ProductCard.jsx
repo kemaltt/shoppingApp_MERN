@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CardActions, CardContent, CardMedia, Typography, Card, IconButton, Box } from "@mui/material";
+import { CardActions, CardContent, CardMedia, Typography, Card, IconButton, Box, Tooltip } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -87,23 +87,31 @@ export default function ProductCard({ product, id }) {
           <Box>
 
             {favorite.some(el => el._id === id) ?
-              <IconButton onClick={isAuthenticated ? delFav : login} aria-label="add to favorites" >
-                <FavoriteIcon color='warning' />
-              </IconButton>
+              <Tooltip placement="top" title="Delete from favorite">
+                <IconButton onClick={isAuthenticated ? delFav : login} aria-label="add to favorites" >
+                  <FavoriteIcon color='warning' />
+                </IconButton>
+              </Tooltip>
               :
-              <IconButton onClick={isAuthenticated ? addFav : login} aria-label="add to favorites" >
-                <FavoriteIcon />
-              </IconButton>
+              <Tooltip placement="top" title="Add to favorite">
+                <IconButton onClick={isAuthenticated ? addFav : login} aria-label="add to favorites" >
+                  <FavoriteIcon />
+                </IconButton>
+              </Tooltip>
             }
 
             {user?.user?.role === 'admin' &&
               <>
-                <IconButton onClick={() => setOpenDelete(true)} aria-label="delete from card" >
-                  <DeleteIcon color='error' />
-                </IconButton>
-                <IconButton onClick={() => setOpenEdit(true)} aria-label="delete from card" >
-                  <EditIcon color='primary' />
-                </IconButton>
+                <Tooltip placement="top" title="Delete">
+                  <IconButton onClick={() => setOpenDelete(true)} aria-label="delete from card" >
+                    <DeleteIcon color='error' />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip placement="top" title="Edit">
+                  <IconButton onClick={() => setOpenEdit(true)} aria-label="edit" >
+                    <EditIcon color='primary' />
+                  </IconButton>
+                </Tooltip>
               </>
             }
           </Box>
