@@ -26,7 +26,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: product
   });
-  
+
   const [existingImages, setExistingImages] = useState([]); // Daha önce yüklü resimler
 
   // Product değiştiğinde, mevcut resimleri state'e yükle
@@ -175,6 +175,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
               id="name"
               name="name"
               label="Product Title"
+              size='small'
               // autoFocus
               // color="secondary"
               {...register("name", {
@@ -186,7 +187,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
               })}
             />
             {errors.name &&
-              <Alert  variant="outlined" severity="error">
+              <Alert variant="outlined" severity="error">
                 {errors.name.message}
               </Alert>
             }
@@ -198,7 +199,8 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
                   label="Quantity"
                   type="number"
                   name='countInStock'
-                  sx={{marginBottom: '10px'}}
+                  size='small'
+                  sx={{ marginBottom: '10px' }}
                   fullWidth
                   inputProps={{
                     min: 0, // Minimum değer
@@ -216,6 +218,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
                   type="number"
                   name='price'
                   fullWidth
+                  size='small'
                   inputProps={{
                     min: 0, // Minimum değer
                   }}
@@ -232,6 +235,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
               type="text"
               name="description"
               placeholder="Product Description"
+              size='small'
               id="description"
               {...register("description", {
                 required: true,
@@ -244,11 +248,12 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
 
 
             <TextField
-              required
+              // required
               type='text'
               id="image"
               name="image"
               label="Product image URL"
+              size='small'
               // autoFocus
               // color="secondary"
               {...register("image", {
@@ -266,6 +271,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
                 id="demo-simple-select"
                 label="Category"
                 name='category'
+                size='small'
                 defaultValue={product?.category || ''}
                 {...register("category", {
                   required: true,
@@ -282,7 +288,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
                   <img
                     src={image.url}
                     alt={`existing-${index}`}
-                    style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '5px' }}
+                    style={{ width: '100px', height: '100px', objectFit: 'contain', borderRadius: '5px' }}
                   />
                   <IconButton
                     onClick={() => removeExistingImage(index)}

@@ -7,7 +7,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useGetCartQuery, useUpdateCartByIdMutation } from "../../redux/cart/cart-api";
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
 import Button from "../components/Button";
-import { Card, CardHeader, FormControl, InputLabel, MenuItem, Select, Tooltip } from "@mui/material";
+import { Card, CardHeader, FormControl, InputLabel, MenuItem, Select, Tooltip, Typography } from "@mui/material";
 import ProductDeleteDialog from "../modules/product/product-dialog/ProductDeleteDialog";
 
 
@@ -70,12 +70,12 @@ export default function CartList() {
     if (!cart.products || cart.products.length === 0) {
       return 0; // Eğer ürün yoksa toplam 0 döner
     }
-  
+
     const total = cart.products.reduce((acc, item) => {
       const productTotal = item.price * item.quantity;
       return acc + productTotal;
     }, 0);
-  
+
     return total;
   };
   const totalPrice = calculateTotalCartValue(cart) + shipping_cost
@@ -88,11 +88,15 @@ export default function CartList() {
           <CardHeader
             title='Warenkorb'
             subheader={`${cart?.products?.length} Products`}
+            action={
+              <Typography fontWeight='bold' fontStyle='italic' color="text.secondary">
+                {totalPrice.toFixed(2)}€
+              </Typography>
+            }
           />
           <Row >
             <>
               <Col md='8' className="cart-list mb-5 ">
-
                 {cart?.products?.map((product, i) => (
                   <Row key={i} >
                     <hr className="solid"></hr>
@@ -100,7 +104,7 @@ export default function CartList() {
                     <Col md='4' className="cart-image">
                       <img
                         className="img-fluid p-2"
-                        src={product?.product?.image}
+                        src={product?.product?.images[0]?.url}
                         alt={product?.product?.name}
                       />
                     </Col>
