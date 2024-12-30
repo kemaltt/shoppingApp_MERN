@@ -23,18 +23,42 @@ export const register = async (req, res) => {
       name,
       email,
       password: hashedPassword,
+      isVerified: false, // Kullanıcı doğrulanmamış olarak kaydediliyor.
     });
+
+    // Doğrulama için JWT token oluştur
+    const verificationToken = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
+    // Doğrulama linki oluştur
+    const verificationURL = `${process.env.API_PATH === 'production' ? process.env.CLIENT_URL : process.env.CLIENT_LOCAL_URL}/verify-account?token=${verificationToken}`;
+
+    // E-posta gönderimi
+    const options = {
+      name: user.name,
+      email: user.email,
+      subject: "Dein Shop [Welcome to Our App! Verify Your Account]",
+      verificationURL,
+    };
+
+    await EmailService.sendVerificationEmail(options);
 
     res.status(201).json({
       status: "success",
-      message: "User created successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role
-      }
+      message: "Check your email for a link to verify your account. If it doesn’t appear within a few minutes, check your spam folder..",
     });
+    // res.status(201).json({
+    //   status: "success",
+    //   message: "User created successfully",
+    //   user: {
+    //     id: user._id,
+    //     name: user.name,
+    //     email: user.email,
+    //     role: user.role
+    //   }
+    // });
   } catch (error) {
     res.status(500).json({
       status: "error",
@@ -43,24 +67,66 @@ export const register = async (req, res) => {
   }
 };
 
-export const login = async (req, res) => {
+export const verifyAccount = async (req, res) => {
+  const { token } = req.query;
 
+  try {
+    if (!token) {
+      return res.status(400).json({ message: "Token is required" });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await UserModel.findById(decoded.id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (user.isVerified) {
+      return res.status(400).json({ message: "User is already verified" });
+    }
+
+    user.isVerified = true;
+    await user.save();
+
+    res.status(200).json({
+      status: "success",
+      message: "Account verified successfully. You can now log in.",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+};
+
+export const login = async (req, res) => {
   const { email, password } = req.body;
+
   try {
     if (!email || !password) {
       return res.status(400).json({ message: "Please provide all fields" });
     }
+
     const user = await UserModel.findOne({ email });
+
     if (!user) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
+    if (!user.isVerified) {
+      return res.status(400).json({ message: "Please verify your account before logging in" });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    const access_token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
+    const access_token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
 
     res.status(200).cookie("access_token", access_token, {
       httpOnly: true,
@@ -72,16 +138,57 @@ export const login = async (req, res) => {
         name: user.name,
         email: user.email,
         role: user.role,
-        image: user.image
-      }
+        image: user.image,
+      },
     });
   } catch (error) {
     res.status(500).json({
       status: "error",
-      message: error.message
+      message: error.message,
     });
   }
 };
+
+
+// export const login = async (req, res) => {
+
+//   const { email, password } = req.body;
+//   try {
+//     if (!email || !password) {
+//       return res.status(400).json({ message: "Please provide all fields" });
+//     }
+//     const user = await UserModel.findOne({ email });
+//     if (!user) {
+//       return res.status(400).json({ message: "Invalid credentials" });
+//     }
+
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) {
+//       return res.status(400).json({ message: "Invalid credentials" });
+//     }
+//     const access_token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+
+
+//     res.status(200).cookie("access_token", access_token, {
+//       httpOnly: true,
+//     }).json({
+//       status: "success",
+//       access_token,
+//       user: {
+//         id: user._id,
+//         name: user.name,
+//         email: user.email,
+//         role: user.role,
+//         image: user.image
+//       }
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       status: "error",
+//       message: error.message
+//     });
+//   }
+// };
 
 export const forgotPassword = async (req, res) => {
   const { email } = req.body;
@@ -104,7 +211,7 @@ export const forgotPassword = async (req, res) => {
       resetURL,
     };
 
-    await EmailService.sendEmail(options);
+    await EmailService.sendForgotPasswordEmail(options);
 
     res.status(200).json({
       status: "success",

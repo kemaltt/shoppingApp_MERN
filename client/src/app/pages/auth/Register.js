@@ -24,7 +24,7 @@ const Register = () => {
     event.preventDefault();
   };
 
-  const [register, { isLoading, error, isError, isSuccess }] = useRegisterMutation()
+  const [register, { data, isLoading, error, isError, isSuccess }] = useRegisterMutation()
   const navigate = useNavigate()
   const handleClick = async (value) => {
     const { name, email, password } = value;
@@ -33,104 +33,105 @@ const Register = () => {
     }
   };
 
-  if (isSuccess) {
-    navigate('/login')
-  }
-
   return (
     <Container>
       <Wrapper>
-        <Title>REGISTER</Title>
-        <Form onSubmit={handleSubmit(handleClick)} >
+        <Title> {isSuccess ? 'CHECK YOUR EMAIL' : 'REGISTER'}   </Title>
+        {isSuccess ? <Alert variant="outlined" severity="success">{data?.message}</Alert>
+          : <>
+            <Form onSubmit={handleSubmit(handleClick)} >
 
-          <FormControl fullWidth >
-            <TextField
-              required
-              fullWidth
-              id="name"
-              label="Name"
-              name="name"
-              size='small'
-              autoComplete="current-name"
-              autoFocus
-              color={errors?.name ? 'error' : 'secondary'}
-              {...signUp("name", {
-                required: true,
-                pattern: {
-                  value: /^.{2,25}$/,
-                  message: "Name must be between 2 and 25 characters",
-                },
-              })}
-            />
-            {errors?.name && errors?.name.message}
-          </FormControl>
+              <FormControl fullWidth >
+                <TextField
+                  required
+                  fullWidth
+                  id="name"
+                  label="Name"
+                  name="name"
+                  size='small'
+                  autoComplete="current-name"
+                  autoFocus
+                  color={errors?.name ? 'error' : 'secondary'}
+                  {...signUp("name", {
+                    required: true,
+                    pattern: {
+                      value: /^.{2,25}$/,
+                      message: "Name must be between 2 and 25 characters",
+                    },
+                  })}
+                />
+                {errors?.name && errors?.name.message}
+              </FormControl>
 
-          <FormControl fullWidth >
-            <TextField
-              required
-              fullWidth
-              id="email"
-              label="Email"
-              name="email"
-              size='small'
-              autoComplete="email"
-              autoFocus
-              color={errors?.email ? 'error' : 'secondary'}
-              {...signUp("email", {
-                required: true,
-                pattern: {
-                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i,
-                  message: "invalid email address",
-                },
-              })}
-            />
-                 {errors.email &&
+              <FormControl fullWidth >
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email"
+                  name="email"
+                  size='small'
+                  autoComplete="email"
+                  autoFocus
+                  color={errors?.email ? 'error' : 'secondary'}
+                  {...signUp("email", {
+                    required: true,
+                    pattern: {
+                      value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i,
+                      message: "invalid email address",
+                    },
+                  })}
+                />
+                {errors.email &&
                   <Alert sx={{ marginTop: '10px' }} variant="outlined" severity="error">
                     {errors.email.message}
                   </Alert>
                 }
-          </FormControl>
+              </FormControl>
 
-          <FormControl fullWidth >
-            <InputLabel htmlFor="outlined-adornment-password" color={errors?.password ? 'error' : 'secondary'} >Password *</InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={showPassword ? 'text' : 'password'}
-              color={errors?.password ? 'error' : 'secondary'}
-              size='small'
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label={
-                      showPassword ? 'hide the password' : 'display the password'
-                    }
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    onMouseUp={handleMouseUpPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-              {...signUp("password", {
-                required: true,
-                pattern: {
-                  value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
-                  message: "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
-                },
-              })}
-            />
-            {errors?.password && errors?.password.message}
-          </FormControl>
-          {/* <Button onClick={handleClick} >
-            Register {isLoading && <Spinner animation="border" size="sm" />
-            }
-          </Button> */}
-          <Button onClick={handleClick} isLoading={isLoading} title={'Register'} />
-          {isError && <Alert variant="outlined" severity="error"> {error?.data?.message} </Alert>}
-        </Form>
+              <FormControl fullWidth >
+                <InputLabel htmlFor="outlined-adornment-password" color={errors?.password ? 'error' : 'secondary'} >Password *</InputLabel>
+                <OutlinedInput
+                  id="outlined-adornment-password"
+                  type={showPassword ? 'text' : 'password'}
+                  color={errors?.password ? 'error' : 'secondary'}
+                  size='small'
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label={
+                          showPassword ? 'hide the password' : 'display the password'
+                        }
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        onMouseUp={handleMouseUpPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  label="Password"
+                  {...signUp("password", {
+                    required: true,
+                    pattern: {
+                      value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
+                      message: "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
+                    },
+                  })}
+                />
+                {errors?.password && errors?.password.message}
+              </FormControl>
+              {/* <Button onClick={handleClick} >
+  Register {isLoading && <Spinner animation="border" size="sm" />
+  }
+</Button> */}
+              <Button onClick={handleClick} isLoading={isLoading} title={'Register'} />
+              {isError && <Alert variant="outlined" severity="error"> {error?.data?.message} </Alert>}
+            </Form>
+          </>
+        }
+
         <LinkWrapper>
           <Link onClick={() => navigate('/login')}>YOU HAVE ALREADY AN ACCOUNT? LOGIN</Link>
         </LinkWrapper>
@@ -174,6 +175,7 @@ const Wrapper = styled.div`
 const Title = styled.h1`
   font-size: 24px;
   font-weight: 300;
+  text-align: center;
 `;
 
 const Form = styled.form`

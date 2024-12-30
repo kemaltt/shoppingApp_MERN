@@ -21,6 +21,12 @@ export const authApi = createApi({
         body: credentials,
       })
     }),
+    verifyAccount: builder.mutation({
+      query: (token) => ({
+        url: `/verify-account?token=${token}`,
+        method: 'GET',
+      })
+    }),
     forgotPassword: builder.mutation({
       query: (email) => ({
         url: '/forgot-password',
@@ -69,4 +75,4 @@ export const authApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation, useForgotPasswordMutation, useResetPasswordMutation, useUploadProfileImageMutation, useUpdateUserMutation } = authApi
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation, useForgotPasswordMutation, useResetPasswordMutation, useUploadProfileImageMutation, useUpdateUserMutation, useVerifyAccountMutation } = authApi

@@ -15,6 +15,7 @@ import Favorite from '../pages/Favorite';
 import Home from '../pages/Home';
 import CartList from '../pages/CartList';
 import Profile from '../pages/auth/Profile';
+import VerifyAccount from '../pages/auth/VerifyAccount';
 
 
 
@@ -32,6 +33,7 @@ export default function Router() {
           <Route path="/login" element={<Login />} />
           <Route path="/forgot-password" element={<PasswordForgot />} />
           <Route path="/reset-password" element={<ResetPassword />} />
+          <Route path="/verify-account" element={<VerifyAccount />} />
         </Route>
         <Route element={<ProtectedRoute />}>
           <Route path="/profile" element={<Profile />} />

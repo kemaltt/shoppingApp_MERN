@@ -19,6 +19,10 @@ const User = new mongoose.Schema({
   reset_password_key: {
     type: String
   },
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
   role: {
     type: String,
     enum: ['user', 'admin'],
