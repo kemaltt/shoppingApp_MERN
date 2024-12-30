@@ -41,9 +41,10 @@ export default function AccountMobile({ isAuthenticated, cartBadge, wishBadge, p
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{ bgcolor: 'secondary.main' }}>
-              {user ?  user.user.name.slice(0, 2).toUpperCase() : '' }
-            </Avatar>
+            <Avatar
+              src={user?.user?.image || "https://via.placeholder.com/150?text=Profile"}
+              sx={{ width: 50, height: 50 }}
+            />
           </IconButton>
         </Tooltip>
       </Box>
@@ -107,7 +108,11 @@ export default function AccountMobile({ isAuthenticated, cartBadge, wishBadge, p
               : null
             }
 
-
+            <MenuItem className='d-flex gap-1' onClick={() => navigate('/profile')}>
+              <Avatar sx={{ width: 32, height: 32, marginRight: 1 }} />
+              <Typography >Profile</Typography>
+            </MenuItem>
+            
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
                 <Settings fontSize="small" />
