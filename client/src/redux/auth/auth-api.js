@@ -2,8 +2,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { BASE_URL } from '../../constants/api/apiUrl'
 
-// Define a service using a base URL and expected endpoints
-
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -46,9 +44,29 @@ export const authApi = createApi({
         },
       })
     }),
+    uploadProfileImage: builder.mutation({
+      query: ({ token, formData }) => ({
+        url: '/upload-profile-image',
+        method: 'POST',
+        body: formData,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    }),
+    updateUser: builder.mutation({
+      query: ({ token, data }) => ({
+        url: '/update-user',
+        method: 'PUT',
+        body: data,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useLoginMutation, useRegisterMutation, useLogoutMutation, useForgotPasswordMutation, useResetPasswordMutation } = authApi
+export const { useLoginMutation, useRegisterMutation, useLogoutMutation, useForgotPasswordMutation, useResetPasswordMutation, useUploadProfileImageMutation, useUpdateUserMutation } = authApi

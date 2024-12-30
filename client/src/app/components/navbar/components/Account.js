@@ -38,9 +38,10 @@ export default function AccountMenu() {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
           >
-            <Avatar sx={{bgcolor:'secondary.main'}}>
-            {user.user.name.slice(0, 2).toUpperCase()}
-            </Avatar>
+            <Avatar
+              src={user?.user?.image || "https://via.placeholder.com/150?text=Profile"}
+              sx={{ width: 50, height: 50 }}
+            />
           </IconButton>
         </Tooltip>
       </Box>
@@ -81,12 +82,12 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
-          <Avatar sx={{width:32,height:32, marginRight:1}}/> Profile
+        <MenuItem onClick={() => navigate('/profile')}>
+          <Avatar sx={{ width: 32, height: 32, marginRight: 1 }} /> Profile
         </MenuItem>
 
         <MenuItem onClick={handleClose}>
-          <Avatar sx={{width:32,height:32,marginRight:1}} /> My account
+          <Avatar sx={{ width: 32, height: 32, marginRight: 1 }} /> My account
         </MenuItem>
 
         <Divider />

@@ -47,7 +47,7 @@ router.post('/upload-images/:id', upload.array('productImages', 10), async (req,
   // res.status(200).json(files);
 });
 
-router.post('/upload-profile-image', upload.array('profile_image', 10), async (req, res) => {
+router.post('/upload-profile-image', upload.single('profile_image'), async (req, res) => {
   try {
     // Token'dan kullanıcı ID'sini al
     const authHeader = req.headers["authorization"];
@@ -58,15 +58,12 @@ router.post('/upload-profile-image', upload.array('profile_image', 10), async (r
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized" });
     }
-
     const file = req.file;
-
+    
     if (!file) {
       return res.status(200).json([]);
     }
-
     const uploadedFile = await uploadToFirebase(file, "profile_image", null, userId);
-
     res.status(200).json(uploadedFile);
   } catch (error) {
     console.error("Error uploading file:", error);

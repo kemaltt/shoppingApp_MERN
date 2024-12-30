@@ -30,6 +30,12 @@ const authSlice = createSlice({
     builder.addMatcher(authApi.endpoints.forgotPassword.matchFulfilled, (state, action) => {
       // state.user = action.payload;  
     });
+    builder.addMatcher(authApi.endpoints.resetPassword.matchFulfilled, (state, action) => {
+      // state.user = action.payload;  
+    });
+    builder.addMatcher(authApi.endpoints.updateUser.matchFulfilled, (state, action) => {
+      state.user = action.payload;
+    });
   },
 });
 

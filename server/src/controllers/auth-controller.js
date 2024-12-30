@@ -72,7 +72,8 @@ export const login = async (req, res) => {
           id: user._id,
           name: user.name,
           email: user.email,
-          role: user.role
+          role: user.role,
+          image: user.image
         }
       });
   } catch (error) {
@@ -160,10 +161,21 @@ export const resetPassword = async (req, res) => {
 export const updateUser = async (req, res) => {
 
   const userId = req.user.id;
+  const { name, image } = req.body;
   try {
-    if (userId === req.params.id) {
-      const updatedUser = await UserModel.findByIdAndUpdate(userId, req.body, { new: true });
-      res.status(200).json(updatedUser);
+    if (userId) {
+      const user = await UserModel.findByIdAndUpdate(userId, { name, image }, { new: true });
+      res.status(200).json({
+        status: "success",
+        message: "User updated  successfully",
+        user: {
+          id: user._id,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          image: user.image
+        }
+      });
     }
     else {
       return res.status(401).json({ message: "Unauthorized" });

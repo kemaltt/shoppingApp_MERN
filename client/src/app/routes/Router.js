@@ -14,6 +14,7 @@ import PasswordForgot from '../pages/auth/PasswordForgot';
 import Favorite from '../pages/Favorite';
 import Home from '../pages/Home';
 import CartList from '../pages/CartList';
+import Profile from '../pages/auth/Profile';
 
 
 
@@ -33,6 +34,7 @@ export default function Router() {
           <Route path="/reset-password" element={<ResetPassword />} />
         </Route>
         <Route element={<ProtectedRoute />}>
+          <Route path="/profile" element={<Profile />} />
           <Route path="/cart-list" element={<CartList />} />
           <Route path="/compare" element={<CompareList />} />
           <Route path="/favorite-list" element={<Favorite />} />

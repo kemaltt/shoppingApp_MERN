@@ -23,6 +23,10 @@ export const uploadToFirebase = async (file, fileType, id, userId) => {
 
     const downloadURL = await getDownloadURL(storageRef);
 
+    if(fileType === "profile_image") {
+      return downloadURL;
+    }
+
     return {
       url: downloadURL,
       filename: file.originalname,
