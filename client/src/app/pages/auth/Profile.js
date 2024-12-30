@@ -122,7 +122,7 @@ export default function Profile() {
                   variant="outlined"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  disabled={!isEditing}
+                  disabled={true}
                 />
               </Box>
             </Box>

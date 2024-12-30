@@ -64,18 +64,17 @@ export const login = async (req, res) => {
 
     res.status(200).cookie("access_token", access_token, {
       httpOnly: true,
-    })
-      .json({
-        status: "success",
-        access_token,
-        user: {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-          role: user.role,
-          image: user.image
-        }
-      });
+    }).json({
+      status: "success",
+      access_token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        image: user.image
+      }
+    });
   } catch (error) {
     res.status(500).json({
       status: "error",
@@ -165,9 +164,14 @@ export const updateUser = async (req, res) => {
   try {
     if (userId) {
       const user = await UserModel.findByIdAndUpdate(userId, { name, image }, { new: true });
-      res.status(200).json({
+
+      const access_token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+
+      res.status(200).cookie("access_token", access_token, {
+        httpOnly: true,
+      }).json({
         status: "success",
-        message: "User updated  successfully",
+        access_token,
         user: {
           id: user._id,
           name: user.name,
