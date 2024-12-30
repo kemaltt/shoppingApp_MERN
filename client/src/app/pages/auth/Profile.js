@@ -13,6 +13,7 @@ import {
 import EditIcon from '@mui/icons-material/Edit';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useSelector } from 'react-redux';
 import { useUpdateUserMutation, useUploadProfileImageMutation } from '../../../redux/auth/auth-api';
 
@@ -27,23 +28,30 @@ export default function Profile() {
   const [file, setFile] = useState(null);
 
   const handleSave = async () => {
+    let uploadedImage = avatar;
 
-    const formData = new FormData();
-    formData.append('profile_image', file);
+    if (file) {
+      const formData = new FormData();
+      formData.append('profile_image', file);
 
-    const uploadData = {
-      token: user.access_token,
-      formData,
+      const uploadData = {
+        token: user.access_token,
+        formData,
+      };
+
+      const uploadedData = await uploadProfileImage(uploadData).unwrap();
+      uploadedImage = uploadedData;
+      setFile(null);
     }
 
-    const uploadedData = await uploadProfileImage(uploadData).unwrap();
     const data = {
       name,
-      ...(uploadedData.length && { image: uploadedData }),
+      image: uploadedImage,
     };
 
     await updateUser({ token: user.access_token, data });
 
+    setAvatar(uploadedImage);
     setIsEditing(false);
   };
 
@@ -53,10 +61,9 @@ export default function Profile() {
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
-    // Dosya boyutu kontrolü (3 MB = 3 * 1024 * 1024 bytes)
     const maxSize = 3 * 1024 * 1024;
     if (file.size > maxSize) {
-      alert('Dosya boyutu 5 MB\'dan küçük olmalıdır.');
+      alert('Dosya boyutu 3 MB\'dan küçük olmalıdır.');
       return;
     }
 
@@ -67,18 +74,49 @@ export default function Profile() {
         setAvatar(reader.result);
       };
       reader.readAsDataURL(file);
-
     }
+  };
+
+  const handleDeleteAvatar = async () => {
+
+    const data = {
+      name,
+      image: null,
+    };
+
+    await updateUser({ token: user.access_token, data });
+    setAvatar('https://via.placeholder.com/150?text=Profile');
+    setFile(null);
   };
 
   return (
     <Card sx={{ maxWidth: 600, mx: 'auto', mt: 5, p: 3 }}>
       <CardHeader
         avatar={
-          <Avatar
-            src={avatar}
-            sx={{ width: 80, height: 80 }}
-          />
+          <Box sx={{ position: 'relative', display: 'inline-block' }}>
+            <Avatar
+              src={avatar}
+              sx={{ width: 80, height: 80 }}
+            />
+            {isEditing && (
+              <IconButton
+                sx={{
+                  position: 'absolute',
+                  top: -8,
+                  right: -8,
+                  backgroundColor: 'white',
+                  boxShadow: 1,
+                  '&:hover': {
+                    backgroundColor: 'red',
+                    color: 'white',
+                  },
+                }}
+                onClick={handleDeleteAvatar}
+              >
+                <DeleteIcon fontSize="small" />
+              </IconButton>
+            )}
+          </Box>
         }
         title={
           <Box display="flex" alignItems="center">
