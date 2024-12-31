@@ -19,6 +19,7 @@ export default function Search({ setMessage }) {
 
     getProduct()
   }, [selectInput, getProducts])
+  
   const getProduct = (e) => {
     e.preventDefault();
     if (!isAuthenticated) {

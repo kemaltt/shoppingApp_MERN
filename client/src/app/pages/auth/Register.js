@@ -134,6 +134,7 @@ const Register = () => {
 
         <LinkWrapper>
           <Link onClick={() => navigate('/login')}>YOU HAVE ALREADY AN ACCOUNT? LOGIN</Link>
+          <Link onClick={() => navigate('/')}>BACK TO HOME PAGE</Link>
         </LinkWrapper>
       </Wrapper>
     </Container>

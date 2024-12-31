@@ -19,11 +19,11 @@ export default function ProductDetail() {
   const id = useParams().id
 
 
-  const { product, loading } = useSelector((state) => state.products);
+  const { product } = useSelector((state) => state.products);
 
   const { isAuthenticated, token } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
-  useGetProductByIdQuery({ id, token }, { skip: !token });
+  const { isLoading } = useGetProductByIdQuery({ id, token }, { skip: !token });
   const [deleteFromCart] = useDeleteFromCartMutation()
   const [addToCart] = useAddToCartMutation();
 
@@ -41,7 +41,7 @@ export default function ProductDetail() {
   };
 
   return (
-    loading
+    isLoading
       ? <Loading />
       :
       <Card className="p-5" >

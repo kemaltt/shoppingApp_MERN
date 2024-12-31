@@ -8,7 +8,7 @@ export default function AuthRoute() {
 
   if (!isAuthenticated) {
     return (
-      <MainLayout>
+      <MainLayout hideNavbar>
         <Outlet />
       </MainLayout>
     )

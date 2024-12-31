@@ -1,6 +1,5 @@
 import React from 'react'
 import { Routes, Route } from "react-router-dom";
-import Navbar from '../components/navbar/Navbar';
 import Register from '../pages/auth/Register';
 import CompareList from '../pages/CompareList';
 import ProductDetail from '../pages/ProductDetail';
@@ -16,6 +15,7 @@ import Home from '../pages/Home';
 import CartList from '../pages/CartList';
 import Profile from '../pages/auth/Profile';
 import VerifyAccount from '../pages/auth/VerifyAccount';
+import PublicRoute from './PublicRoute';
 
 
 
@@ -25,9 +25,10 @@ export default function Router() {
 
   return (
     <>
-      <Navbar />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route element={<PublicRoute />}>
+          <Route path="/" element={<Home />} />
+        </Route>
         <Route element={<AuthRoute />} >
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />

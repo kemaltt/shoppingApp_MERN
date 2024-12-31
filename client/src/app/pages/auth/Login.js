@@ -117,8 +117,9 @@ const Login = () => {
         </Form>
 
         <LinkWrapper>
+          <Link onClick={() => navigate('/register')}>DON'T HAVE AN ACCOUNT? REGISTER FOR FREE</Link>
           <Link onClick={() => navigate('/forgot-password')} >FORGOT PASSWORD?</Link>
-          <Link onClick={() => navigate('/register')}>CREATE A NEW ACCOUNT</Link>
+          <Link onClick={() => navigate('/')}>BACK TO HOME PAGE</Link>
         </LinkWrapper>
 
       </Wrapper>
@@ -201,7 +202,7 @@ const LinkWrapper = styled.div`
 `;
 const Link = styled.a`
   font-size: 12px;
-  text-decoration: underline;
+  text-decoration: none;
   cursor: pointer;
 `;
 
