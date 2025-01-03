@@ -22,7 +22,7 @@ function App() {
 
   useEffect(() => {
     if (error) {
-      logout(token)
+      logout()
     }
   }, [error, logout, token])
   useGetCartQuery({ skip: !token })

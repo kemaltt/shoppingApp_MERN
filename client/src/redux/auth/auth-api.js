@@ -1,11 +1,11 @@
 // Need to use the React-specific entry point to import createApi
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { BASE_URL } from '../../constants/api/apiUrl'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { baseQueryWithAuth } from '../../constants/api/apiUrl'
 
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
     login: builder.mutation({
       query: (credentials) => ({
@@ -42,32 +42,32 @@ export const authApi = createApi({
       })
     }),
     logout: builder.mutation({
-      query: (token) => ({
+      query: () => ({
         url: '/logout',
         method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       })
     }),
     uploadProfileImage: builder.mutation({
-      query: ({ token, formData }) => ({
+      query: (formData) => ({
         url: '/upload-profile-image',
         method: 'POST',
         body: formData,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       })
     }),
     updateUser: builder.mutation({
-      query: ({ token, data }) => ({
+      query: (data) => ({
         url: '/update-user',
         method: 'PUT',
         body: data,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       })
     }),
   }),

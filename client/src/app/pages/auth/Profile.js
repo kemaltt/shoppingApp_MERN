@@ -34,12 +34,7 @@ export default function Profile() {
       const formData = new FormData();
       formData.append('profile_image', file);
 
-      const uploadData = {
-        token: user.access_token,
-        formData,
-      };
-
-      const uploadedData = await uploadProfileImage(uploadData).unwrap();
+      const uploadedData = await uploadProfileImage(formData).unwrap();
       uploadedImage = uploadedData;
       setFile(null);
     }
@@ -49,7 +44,7 @@ export default function Profile() {
       image: uploadedImage,
     };
 
-    await updateUser({ token: user.access_token, data });
+    await updateUser(data);
 
     setAvatar(uploadedImage);
     setIsEditing(false);
@@ -84,7 +79,7 @@ export default function Profile() {
       image: null,
     };
 
-    await updateUser({ token: user.access_token, data });
+    await updateUser(data);
     setAvatar('https://via.placeholder.com/150?text=Profile');
     setFile(null);
   };
