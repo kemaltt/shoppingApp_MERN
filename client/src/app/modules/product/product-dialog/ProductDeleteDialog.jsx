@@ -18,13 +18,13 @@ export default function ProductDeleteDialog({ open, setOpen, productId, token, t
     if (token && productId) {
       switch (type) {
         case 'favorite':
-          await deleteFavorite({ id: productId, token });
+          await deleteFavorite(productId);
           break;
         case 'product':
-          await deleteProduct({ id: productId, token });
+          await deleteProduct(productId );
           break;
         case 'cart':
-          await deleteFromCart({ id: productId, token })
+          await deleteFromCart(productId)
           break;
         default:
           break;

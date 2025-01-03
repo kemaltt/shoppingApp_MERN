@@ -27,21 +27,21 @@ export const productApi = createApi({
       }),
     }),
     getProductById: builder.query({
-      query: ({ id, token }) => ({
+      query: (id) => ({
         url: `/product/${id}`,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       }),
     }),
     updateProductById: builder.mutation({
-      query: ({ id, token, updatedCountInStock }) => ({
+      query: ({ id, updatedCountInStock }) => ({
         url: `/product/${id}`,
         method: 'PATCH',
         body: { updatedCountInStock },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       }),
     }),
     addProduct: builder.mutation({
@@ -55,33 +55,33 @@ export const productApi = createApi({
       }),
     }),
     deleteProduct: builder.mutation({
-      query: ({ id, token }) => ({
+      query: (id) => ({
         url: `/delete-product/${id}`,
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       }),
     }),
     editProduct: builder.mutation({
-      query: ({ id, token, data }) => ({
+      query: ({ id, data }) => ({
         url: `/edit-product/${id}`,
         method: 'PUT',
         body: data,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       }),
     }),
 
     uploadImages: builder.mutation({
-      query: ({ formData, id, token }) => ({
+      query: ({ formData, id }) => ({
         url: `upload-images/${id}`,
         method: 'POST',
         body: formData,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       }),
     }),
   }),

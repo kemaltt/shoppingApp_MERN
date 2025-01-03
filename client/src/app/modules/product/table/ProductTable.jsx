@@ -78,7 +78,7 @@ export default function ProductTable({ isLoading }) {
     const id = updatedRow._id;
 
     if (token && newRow) {
-      await editProduct({ id, token, data: updatedRow });
+      await editProduct({ id, data: updatedRow });
     }
 
     return updatedRow;
@@ -104,27 +104,27 @@ export default function ProductTable({ isLoading }) {
       editable: true,
       renderCell: (params) => (
         <Box
-        display="flex"
-        alignItems="center"
-        sx={{
-          '& img': {
-            width: '50px', 
-            height: '50px', 
-            objectFit: 'contain',
-            borderRadius: '5px',
-            marginRight: '10px',
-            flexShrink: 0,     
-          },
-        }}
-      >
-        <img
-          src={params?.row?.images[0]?.url || params?.row?.image}
-          alt={params.row.name}
-        />
-        <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-          {params.row.name}
-        </span>
-      </Box>
+          display="flex"
+          alignItems="center"
+          sx={{
+            '& img': {
+              width: '50px',
+              height: '50px',
+              objectFit: 'contain',
+              borderRadius: '5px',
+              marginRight: '10px',
+              flexShrink: 0,
+            },
+          }}
+        >
+          <img
+            src={params?.row?.images[0]?.url || params?.row?.image}
+            alt={params.row.name}
+          />
+          <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            {params.row.name}
+          </span>
+        </Box>
       ),
     },
     {

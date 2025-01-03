@@ -20,17 +20,28 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
   const [editProduct, { isLoading }] = useEditProductMutation()
   const [uploadImages, { isLoading: uploadLoading }] = useUploadImagesMutation()
   const [getProducts] = useGetProductsMutation()
-  useGetProductByIdQuery({ id: productId, token }, { skip: !token });
+  // const [getProductById] = useGetProductByIdMutation()
+
+  useGetProductByIdQuery(productId);
 
   const { product } = useSelector((state) => state.products);
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: product
   });
 
-  const [existingImages, setExistingImages] = useState([]); // Daha önce yüklü resimler
 
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     await getProductById(productId )
+  //   }
+  //   fetchData()
+  // }, [getProductById, productId])
+
+
+  const [existingImages, setExistingImages] = useState([]); // Daha önce yüklü resimler
   // Product değiştiğinde, mevcut resimleri state'e yükle
   useEffect(() => {
+
     if (product?.images) {
       setExistingImages(product.images);
     }
@@ -105,7 +116,6 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
     const uploadData = {
       formData,
       id: productId,
-      token,
     }
 
     const uploadedData = await uploadImages(uploadData).unwrap();
@@ -118,7 +128,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
       images: finalImages,
     }
 
-    await editProduct({ id: productId, token, data }).unwrap();
+    await editProduct({ id: productId, data }).unwrap();
     await getProducts()
     setOpen(false);
   };
