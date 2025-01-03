@@ -33,12 +33,12 @@ export default function ProductCard({ product, id }) {
   };
   const delFav = async () => {
     if (token) {
-      await deleteFavorite({ id, token });
+      await deleteFavorite(id);
     }
   }
   const addFav = async () => {
     if (token) {
-      await addFavorite({ token, id });
+      await addFavorite(id);
     }
   }
 

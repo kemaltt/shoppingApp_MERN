@@ -1,18 +1,9 @@
 // Need to use the React-specific entry point to import createApi
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { BASE_URL, getToken } from '../../constants/api/apiUrl'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { baseQueryWithAuth } from '../../constants/api/apiUrl'
 
 
-const baseQueryWithAuth = fetchBaseQuery({
-  baseUrl: BASE_URL,
-  prepareHeaders: (headers) => {
-    const token = getToken(); // Token'ı alın
-    if (token) {
-      headers.set('Authorization', `Bearer ${token}`);
-    }
-    return headers;
-  },
-});
+
 
 export const productApi = createApi({
   reducerPath: 'productApi',

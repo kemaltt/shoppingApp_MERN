@@ -38,10 +38,10 @@ export default function CartList() {
     // await deleteFromCart({ id, token })
   };
   const delFav = async (id) => {
-    await deleteFavorite({ id, token });
+    await deleteFavorite(id);
   }
   const addFav = async (id) => {
-    await addFavorite({ token, id });
+    await addFavorite(id);
   }
   const updateProduct = async (id, e) => {
     const quantity = e.target.value;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Dialog from '@mui/material/Dialog';
@@ -12,7 +12,6 @@ import SaveIcon from '@mui/icons-material/Save';
 import { CATEGORIES_OPTION } from '../../../helpers/UIHelper';
 import UploadIcon from '@mui/icons-material/Upload';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { getToken } from '../../../../constants/api/apiUrl';
 
 
 
@@ -27,7 +26,7 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
   const { register, handleSubmit } = useForm();
   // const { token } = useSelector((state) => state.user);
 
-  const [addProduct, { isLoading, status }] = useAddProductMutation()
+  const [addProduct, { isLoading }] = useAddProductMutation()
   // const [uploadImages] = useUploadImagesMutation()
 
   const handleImageChange = (e) => {

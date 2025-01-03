@@ -23,7 +23,7 @@ export default function ProductDetail() {
 
   const { isAuthenticated, token } = useSelector((state) => state.user);
   const { cart } = useSelector((state) => state.cart);
-  const { isLoading } = useGetProductByIdQuery({ id, token }, { skip: !token });
+  const { isLoading } = useGetProductByIdQuery(id, { skip: !token });
   const [deleteFromCart] = useDeleteFromCartMutation()
   const [addToCart] = useAddToCartMutation();
 

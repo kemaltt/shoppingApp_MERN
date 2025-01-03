@@ -1,19 +1,19 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { BASE_URL } from '../../constants/api/apiUrl'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import { baseQueryWithAuth } from '../../constants/api/apiUrl'
 
 
 
 export const cartApi = createApi({
   reducerPath: 'cartApi',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
+  baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
     getCart: builder.query({
       query: (token) => ({
         url: '/cart',
         method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       }),
     }),
     addToCart: builder.mutation({

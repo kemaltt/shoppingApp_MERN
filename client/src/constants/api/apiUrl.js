@@ -1,8 +1,10 @@
+import { fetchBaseQuery } from "@reduxjs/toolkit/query";
+
 // Desc: API URL
 export const BASE_URL = process.env.REACT_APP_API_PATH === "production" ? 'https://shoppingapp-mern.onrender.com' : 'http://localhost:9090'
 // export const BASE_URL = process.env.REACT_APP_API_PATH === "production" ? 'https://shopping-app-mern-indol.vercel.app/api' : 'http://localhost:9090/api'
 
-export const getToken = () => {
+ const getToken = () => {
   // `persist:user`'i localStorage'den al
   const persistUser = localStorage.getItem('persist:user');
   
@@ -16,3 +18,14 @@ export const getToken = () => {
   }
   return null; // Token yoksa null döndür
 };
+
+export const baseQueryWithAuth = fetchBaseQuery({
+  baseUrl: BASE_URL,
+  prepareHeaders: (headers) => {
+    const token = getToken(); // Token'ı alın
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+    return headers;
+  },
+});

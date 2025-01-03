@@ -22,7 +22,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
   const [getProducts] = useGetProductsMutation()
   // const [getProductById] = useGetProductByIdMutation()
 
-  useGetProductByIdQuery(productId);
+  useGetProductByIdQuery(productId,{ skip: !token });
 
   const { product } = useSelector((state) => state.products);
   const { register, handleSubmit, reset, formState: { errors } } = useForm({

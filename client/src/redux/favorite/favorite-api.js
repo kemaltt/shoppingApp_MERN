@@ -1,45 +1,39 @@
 // Need to use the React-specific entry point to import createApi
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { BASE_URL } from '../../constants/api/apiUrl'
+import { createApi } from '@reduxjs/toolkit/query/react'
+import {baseQueryWithAuth } from '../../constants/api/apiUrl'
+
 
 
 
 export const favApi = createApi({
   reducerPath: 'favApi',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
-  // prepareHeaders: (headers, { getState }) => {
-  //   const token = getState().user.token; // user slice'ından token bilgisini al
-  //   if (token) {
-  //     headers['Authorization'] = `Bearer ${token}`; // headers'a token'i ekle
-  //   }
-  //   return headers;
-  // },
+  baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
     getFavorite: builder.query({
-      query: (token) => ({
+      query: () => ({
         url: '/get-favorites',
         method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       }),
     }),
     addFavorite: builder.mutation({
-      query: ({ token, id }) => ({
+      query: (id) => ({
         url: `/add-favorite/${id}`,
         method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       }),
     }),
     deleteFavorite: builder.mutation({
-      query: ({ id, token }) => ({
+      query: (id) => ({
         url: `/delete-favorite/${id}`,
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       })
     }),
 

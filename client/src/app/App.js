@@ -17,7 +17,7 @@ function App() {
 
   // useGetProductsQuery()
   const { token } = useSelector((state) => state.user);
-  const { error } = useGetFavoriteQuery(token, { skip: !token })
+  const { error } = useGetFavoriteQuery({ skip: !token })
   const [logout] = useLogoutMutation()
 
   useEffect(() => {
