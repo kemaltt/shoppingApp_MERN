@@ -267,10 +267,10 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
               // autoFocus
               // color="secondary"
               {...register("image", {
-                required: true,
+                // required: true,
                 pattern: {
                   value: /^.{2,700}$/,
-                  message: "Name must be between 2 and 25 characters",
+                  message: "Name must be between 2 and 700 characters",
                 },
               })}
             />

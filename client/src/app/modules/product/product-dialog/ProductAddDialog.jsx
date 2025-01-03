@@ -5,7 +5,7 @@ import Dialog from '@mui/material/Dialog';
 import Textarea from '@mui/joy/Textarea';
 import CloseIcon from '@mui/icons-material/Close';
 import { useForm } from "react-hook-form";
-import { Button, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select } from '@mui/material';
+import { Alert, Button, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select } from '@mui/material';
 import { Col, Row } from 'react-bootstrap';
 import { useAddProductMutation } from '../../../../redux/product/product-api';
 import SaveIcon from '@mui/icons-material/Save';
@@ -22,11 +22,14 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
   const [imagePreviews, setImagePreviews] = useState([]);
   const handleClose = () => {
     setOpen(false);
+    setSelectedImages([]);
+    setImagePreviews([]);
+    reset();
   };
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
   // const { token } = useSelector((state) => state.user);
 
-  const [addProduct, { isLoading }] = useAddProductMutation()
+  const [addProduct, { isLoading, error, isError, status }] = useAddProductMutation()
   // const [uploadImages] = useUploadImagesMutation()
 
   const handleImageChange = (e) => {
@@ -73,12 +76,16 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
       formData.append("price", +price);
     }
 
-    try {
-      await addProduct(formData).unwrap();
+
+    await addProduct(formData).unwrap();
+
+    if (!isError) {
       await getProducts();
-    } catch (error) {
-      console.error("Error saving product:", error);
+      setOpen(false);
+      reset();
     }
+
+
 
     // const imageDetails = selectedImages.map((image) => ({
     //   url: URL.createObjectURL(image),
@@ -98,7 +105,7 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
 
     //   await getProducts()
     // }
-    setOpen(false);
+
   };
 
 
@@ -159,10 +166,16 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
                   required: true,
                   pattern: {
                     value: /^.{2,25}$/,
-                    message: "Name must be between 2 and 25 characters",
+                    message: "Title must be between 2 and 25 characters",
                   },
                 })}
               />
+              {errors.name &&
+                <Alert variant="outlined" severity="error">
+                  {errors.name.message}
+                </Alert>
+              }
+
               <Row >
                 <Col lg='6' >
                   <TextField
@@ -209,14 +222,18 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
                   required: true,
                   pattern: {
                     value: /^.{2,500}$/,
-                    message: "Name must be between 2 and 25 characters",
+                    message: "Description must be between 2 and 500 characters",
                   },
                 })}
               />
+              {errors.description &&
+                <Alert variant="outlined" severity="error">
+                  {errors.description.message}
+                </Alert>
+              }
 
 
               <TextField
-                required
                 type='text'
                 id="image"
                 name="image"
@@ -224,16 +241,16 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
                 // autoFocus
                 // color="secondary"
                 {...register("image", {
-                  required: true,
                   pattern: {
                     value: /^.{2,700}$/,
-                    message: "Name must be between 2 and 25 characters",
+                    message: "Name must be between 2 and 700 characters",
                   },
                 })}
               />
               <FormControl >
                 <InputLabel id="demo-simple-select-label">Category</InputLabel>
                 <Select
+                  required
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Category"
@@ -279,8 +296,7 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
                   </Box>
                 ))}
               </Box>
-
-
+              {isError && <Alert severity="error">{error.data.message}</Alert>}
             </Box>
           </DialogContent>
           <DialogActions>
