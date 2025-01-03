@@ -1,5 +1,5 @@
 import multer from "multer";
-import {ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import {ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { fireBaseStorage } from "../config/FireBase.js";
 
 
@@ -15,9 +15,9 @@ export const uploadToFirebase = async (file, fileType, id, userId) => {
 
     const timestamp = Date.now() + Math.floor(Math.random() * 1000);
     const originalname = file.originalname;
-    // const filename = `${originalname}-${timestamp}`
+    const filename = `${originalname}-${timestamp}`
 
-    const storageRef = ref(fireBaseStorage, `ShoppingApp/${folderPath}/${originalname}`);
+    const storageRef = ref(fireBaseStorage, `ShoppingApp/${folderPath}/${filename}`);
 
     await uploadBytes(storageRef, file.buffer);
 
@@ -35,6 +35,24 @@ export const uploadToFirebase = async (file, fileType, id, userId) => {
     };
   } catch (error) {
     console.error("Error uploading to Firebase:", error);
+    throw error;
+  }
+};
+
+export const deleteFromFirebase = async (fileUrl) => {
+  try {
+    // URL'den dosya yolunu çıkar
+    const decodedPath = decodeURIComponent(fileUrl.split("/o/")[1].split("?")[0]);
+
+    // Firebase Storage referansı oluştur
+    const storageRef = ref(fireBaseStorage, decodedPath);
+
+    // Dosyayı sil
+    await deleteObject(storageRef);
+
+    console.log("File deleted successfully");
+  } catch (error) {
+    console.error("Error deleting from Firebase:", error);
     throw error;
   }
 };

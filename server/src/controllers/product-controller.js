@@ -1,6 +1,5 @@
 import ProductModel from "../models/ProductModel.js";
-import { uploadToFirebase } from "../services/file-upload.service.js";
-import jwt from "jsonwebtoken";
+import { deleteFromFirebase, uploadToFirebase } from "../services/file-upload.service.js";
 
 export const getAllProducts = async (req, res) => {
   try {
@@ -131,9 +130,17 @@ export const deleteProduct = async (req, res) => {
   const { id } = req.params;
   try {
     const deletedProduct = await ProductModel.findByIdAndDelete(id);
+
     if (!deletedProduct) {
       return res.status(404).json({ message: "Product not found" });
     }
+    // Delete images from firebase
+    if (deletedProduct.images && deletedProduct.images.length) {
+      await Promise.all(
+        deletedProduct.images.map((image) => deleteFromFirebase(image.url))
+      );
+    }
+
     res.status(200).json(deletedProduct);
   }
   catch (error) {
