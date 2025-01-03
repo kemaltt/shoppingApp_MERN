@@ -15,9 +15,9 @@ export const uploadToFirebase = async (file, fileType, id, userId) => {
 
     const timestamp = Date.now() + Math.floor(Math.random() * 1000);
     const originalname = file.originalname;
-    const filename = `${originalname}-${timestamp}`
+    // const filename = `${originalname}-${timestamp}`
 
-    const storageRef = ref(fireBaseStorage, `ShoppingApp/${folderPath}/${filename}`);
+    const storageRef = ref(fireBaseStorage, `ShoppingApp/${folderPath}/${originalname}`);
 
     await uploadBytes(storageRef, file.buffer);
 
