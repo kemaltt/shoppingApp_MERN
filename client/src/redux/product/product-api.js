@@ -75,7 +75,18 @@ export const productApi = createApi({
         // },
       }),
     }),
+
+    deleteImage: builder.mutation({
+      query: (fileUrl) => ({
+        url: '/delete-image',
+        method: 'DELETE',
+        body: { fileUrl },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
+      }),
+    }),
   }),
 })
 
-export const { useGetProductsMutation, useGetProductByIdQuery, useUpdateProductByIdMutation, useAddProductMutation, useDeleteProductMutation, useEditProductMutation, useUploadImagesMutation } = productApi
+export const { useGetProductsMutation, useGetProductByIdQuery, useUpdateProductByIdMutation, useAddProductMutation, useDeleteProductMutation, useEditProductMutation, useUploadImagesMutation, useDeleteImageMutation } = productApi

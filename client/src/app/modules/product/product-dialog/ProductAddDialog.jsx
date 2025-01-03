@@ -29,7 +29,7 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   // const { token } = useSelector((state) => state.user);
 
-  const [addProduct, { isLoading, error, isError, status }] = useAddProductMutation()
+  const [addProduct, { isLoading, error, isError }] = useAddProductMutation()
   // const [uploadImages] = useUploadImagesMutation()
 
   const handleImageChange = (e) => {

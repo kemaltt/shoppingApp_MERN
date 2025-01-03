@@ -16,9 +16,11 @@ import CancelIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSelector } from 'react-redux';
 import { useUpdateUserMutation, useUploadProfileImageMutation } from '../../../redux/auth/auth-api';
+import { useDeleteImageMutation } from '../../../redux/product/product-api';
 
 export default function Profile() {
   const [uploadProfileImage, { isLoading: uploadLoading }] = useUploadProfileImageMutation();
+  const [deleteImage]=useDeleteImageMutation()
   const [updateUser, { isLoading: updateLoading }] = useUpdateUserMutation();
   const { user } = useSelector((state) => state.user);
   const [isEditing, setIsEditing] = useState(false);
@@ -80,6 +82,7 @@ export default function Profile() {
     };
 
     await updateUser(data);
+    await deleteImage(avatar)
     setAvatar('https://via.placeholder.com/150?text=Profile');
     setFile(null);
   };

@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import CloseIcon from '@mui/icons-material/Close';
 import { Alert, Box, Button, DialogActions, DialogContent, DialogTitle, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { useEditProductMutation, useGetProductByIdQuery, useGetProductsMutation, useUploadImagesMutation } from '../../../../redux/product/product-api';
+import { useDeleteImageMutation, useEditProductMutation, useGetProductByIdQuery, useGetProductsMutation, useUploadImagesMutation } from '../../../../redux/product/product-api';
 import { useSelector } from 'react-redux';
 import { Col, Row } from 'react-bootstrap';
 import Textarea from '@mui/joy/Textarea';
@@ -20,9 +20,11 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
   const [editProduct, { isLoading }] = useEditProductMutation()
   const [uploadImages, { isLoading: uploadLoading }] = useUploadImagesMutation()
   const [getProducts] = useGetProductsMutation()
+  const [deleteImage] = useDeleteImageMutation()
+
   // const [getProductById] = useGetProductByIdMutation()
 
-  useGetProductByIdQuery(productId,{ skip: !token });
+  useGetProductByIdQuery(productId, { skip: !token });
 
   const { product } = useSelector((state) => state.products);
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
@@ -48,7 +50,7 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
   }, [product]);
 
   // Daha önce yüklenmiş bir resmi kaldır
-  const removeExistingImage = (index) => {
+  const removeExistingImage = async (index) => {
     const updatedImages = [...existingImages];
     updatedImages.splice(index, 1);
     setExistingImages(updatedImages);
@@ -122,12 +124,17 @@ export default function ProductEditDialog({ open, setOpen, productId, token }) {
     // Mevcut ve yeni yüklenen resimleri birleştir
     const finalImages = [...existingImages, ...uploadedData];
 
+    const imagesToDelete = product.images.filter((image) => 
+      !finalImages.some((finalImage) => finalImage.url === image.url)
+    );
+    
     const data = {
       ...product,
       ...value,
       images: finalImages,
     }
-
+    
+    await deleteImage(imagesToDelete).unwrap();
     await editProduct({ id: productId, data }).unwrap();
     await getProducts()
     setOpen(false);
