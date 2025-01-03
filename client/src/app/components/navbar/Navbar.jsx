@@ -48,7 +48,7 @@ export default function Navbar() {
         <ul className="nav_item_desktop">
           {isAuthenticated
             ? <>
-              {user.user.role === 'admin' && <Product badge={productBadge} />}
+              {user?.user?.role === 'admin' && <Product badge={productBadge} />}
               <Compare badge={compareBadge} />
               <Cart badge={cartBadge} />
               <WishList badge={wishBadge} />

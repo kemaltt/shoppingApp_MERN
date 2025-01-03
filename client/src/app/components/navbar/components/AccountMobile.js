@@ -100,7 +100,7 @@ export default function AccountMobile({ isAuthenticated, cartBadge, wishBadge, p
             </MenuItem>
 
             <Divider />
-            {user.user.role === 'admin'
+            {user?.user?.role === 'admin'
               ? <MenuItem className='d-flex gap-1' onClick={() => { handleClose(); navigate('/product-list') }}>
                 <Product badge={productBadge} color={{ color: 'secondary', fontSize: 30 }} />
                 <Typography >Products</Typography>
