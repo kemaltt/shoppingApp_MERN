@@ -12,6 +12,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { CATEGORIES_OPTION } from '../../../helpers/UIHelper';
 import UploadIcon from '@mui/icons-material/Upload';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { getToken } from '../../../../constants/api/apiUrl';
 
 
 
@@ -28,7 +29,6 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
 
   const [addProduct, { isLoading, status }] = useAddProductMutation()
   // const [uploadImages] = useUploadImagesMutation()
-
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -55,51 +55,53 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
 
   const saveProduct = async (value) => {
 
-
     const formData = new FormData();
     selectedImages.forEach((image) => {
       formData.append('productImages', image);
     });
 
-
-    const imageDetails = selectedImages.map((image) => ({
-      url: URL.createObjectURL(image),
-      name: image.name,
-      type: image.type,
-      size: image.size,
-    }));
-
+    // Diğer input alanlarını formData'ya ekliyoruz
     const { countInStock, price, ...rest } = value;
-    if (countInStock && price) {
-      const data = {
-        ...rest,
-        countInStock: +countInStock,
-        price: +price,
-        images: imageDetails,
-      }
-      await addProduct(data);
-    }
-    // if (status === 'fulfilled') {
+    Object.entries(rest).forEach(([key, val]) => {
+      formData.append(key, val);
+    });
 
+    // Numeric alanları dönüştürüp ekliyoruz
+    if (countInStock) {
+      formData.append("countInStock", +countInStock);
+    }
+    if (price) {
+      formData.append("price", +price);
+    }
+
+    try {
+      await addProduct(formData).unwrap();
+      await getProducts();
+    } catch (error) {
+      console.error("Error saving product:", error);
+    }
+
+    // const imageDetails = selectedImages.map((image) => ({
+    //   url: URL.createObjectURL(image),
+    //   name: image.name,
+    //   type: image.type,
+    //   size: image.size,
+    // }));
+
+    // const { countInStock, price, ...rest } = value;
+    // if (countInStock && price) {
     //   const data = {
-    //     formData,
-    //     id: status.data.id
+    //     ...rest,
+    //     countInStock: +countInStock,
+    //     price: +price,
     //   }
-    //   // await uploadImages(formData);
+    //   await addProduct(data).unwrap();
+
+    //   await getProducts()
     // }
     setOpen(false);
   };
 
-  useEffect(() => {
-
-    if (status === 'fulfilled') {
-
-      const getProduct = async () => {
-        await getProducts()
-      }
-      getProduct()
-    }
-  }, [status, getProducts])
 
   const removeImage = (index) => {
     const updatedImages = [...selectedImages];

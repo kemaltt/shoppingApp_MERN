@@ -1,4 +1,6 @@
 import ProductModel from "../models/ProductModel.js";
+import { uploadToFirebase } from "../services/file-upload.service.js";
+import jwt from "jsonwebtoken";
 
 export const getAllProducts = async (req, res) => {
   try {
@@ -28,9 +30,30 @@ export const getSingleProduct = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   const product = req.body;
+  const userId = req.user.id;
   const newProduct = new ProductModel(product);
+
   try {
-    await newProduct.save();
+
+    const createdProduct = await newProduct.save();
+
+    const files = req.files;
+
+    if (files && files.length) {
+
+      const productId = createdProduct._id.toString();
+
+      const uploadedFiles = await Promise.all(
+        files.map((file) => uploadToFirebase(file, "productImages", productId, userId))
+      );
+      console.log('uploadedFiles', uploadedFiles);
+
+      await ProductModel.findByIdAndUpdate(productId, { images: uploadedFiles });
+    }
+
+
+
+
     const products = await ProductModel.find({});
     if (!products) {
       return res.status(404).json({ message: "No product found" });
