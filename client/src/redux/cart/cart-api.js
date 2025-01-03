@@ -11,9 +11,9 @@ export const cartApi = createApi({
       query: (token) => ({
         url: '/cart',
         method: 'GET',
-        // headers: {
-        //   Authorization: `Bearer ${token}`,
-        // },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }),
     }),
     addToCart: builder.mutation({

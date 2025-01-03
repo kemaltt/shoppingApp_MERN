@@ -10,12 +10,12 @@ export const favApi = createApi({
   baseQuery: baseQueryWithAuth,
   endpoints: (builder) => ({
     getFavorite: builder.query({
-      query: () => ({
+      query: (token) => ({
         url: '/get-favorites',
         method: 'GET',
-        // headers: {
-        //   Authorization: `Bearer ${token}`,
-        // },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }),
     }),
     addFavorite: builder.mutation({

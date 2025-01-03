@@ -17,7 +17,7 @@ function App() {
 
   // useGetProductsQuery()
   const { token } = useSelector((state) => state.user);
-  const { error } = useGetFavoriteQuery({ skip: !token })
+  const { error } = useGetFavoriteQuery(token, { skip: !token })
   const [logout] = useLogoutMutation()
 
   useEffect(() => {
@@ -25,22 +25,22 @@ function App() {
       logout()
     }
   }, [error, logout, token])
-  useGetCartQuery({ skip: !token })
+  useGetCartQuery(token, { skip: !token })
 
 
 
   return (
     <div className="App">
       <ToastContainer
-      position="bottom-right" 
-      autoClose={5000} 
-      hideProgressBar={false} 
-      newestOnTop={false} 
-      closeOnClick 
-      rtl={false} 
-      pauseOnFocusLoss 
-      draggable 
-      pauseOnHover 
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
       />
       <BrowserRouter>
         <Routes>
