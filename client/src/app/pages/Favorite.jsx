@@ -10,7 +10,7 @@ import { useAddToCartMutation } from '../../redux/cart/cart-api';
 export default function Favorite() {
   const [open, setOpen] = useState(false);
   const [productId, setProductId] = useState(null);
-  const [addToCart,{isLoading}] = useAddToCartMutation();
+  const [addToCart, { isLoading }] = useAddToCartMutation();
 
   const { token, favorite } = useSelector((state) => ({
     favorite: state.favorite.favorite,
@@ -27,7 +27,7 @@ export default function Favorite() {
       quantity: 1,
       price: product.price
     }
-    await addToCart({ token, data })
+    await addToCart(data)
   };
   return (
     (favorite.length <= 0)
@@ -79,9 +79,9 @@ export default function Favorite() {
                       </IconButton>
                     </Tooltip>
                     <Tooltip placement="top" title="Add to cart">
-                    <IconButton onClick={() => addCart(product)} disabled={isLoading} aria-label="add to cart" >
-                      <AddShoppingCartIcon color='success' />
-                    </IconButton>
+                      <IconButton onClick={() => addCart(product)} disabled={isLoading} aria-label="add to cart" >
+                        <AddShoppingCartIcon color='success' />
+                      </IconButton>
                     </Tooltip>
                   </Box>
 

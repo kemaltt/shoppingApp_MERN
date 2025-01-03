@@ -25,7 +25,7 @@ function App() {
       logout(token)
     }
   }, [error, logout, token])
-  useGetCartQuery(token, { skip: !token })
+  useGetCartQuery({ skip: !token })
 
 
 

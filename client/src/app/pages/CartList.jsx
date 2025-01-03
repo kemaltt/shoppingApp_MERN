@@ -29,7 +29,7 @@ export default function CartList() {
     cart: state.cart.cart,
   }), shallowEqual);
 
-  const { error } = useGetCartQuery(token, { refetchOnMountOrArgChange: true })
+  const { error } = useGetCartQuery({ refetchOnMountOrArgChange: true })
   const optionValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
   const removeFromCart = async (id) => {
@@ -62,7 +62,7 @@ export default function CartList() {
       updatedCountInStock
     }
 
-    await updateCartById({ id, token, data });
+    await updateCartById({ id, data });
   }
 
   const shipping_cost = 4.99

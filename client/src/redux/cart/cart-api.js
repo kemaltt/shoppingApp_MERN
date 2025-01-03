@@ -17,32 +17,32 @@ export const cartApi = createApi({
       }),
     }),
     addToCart: builder.mutation({
-      query: ({ token, data }) => ({
+      query: (data) => ({
         url: `/add-to-cart`,
         method: 'POST',
         body: data,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       }),
     }),
     deleteFromCart: builder.mutation({
-      query: ({ token, id }) => ({
+      query: (id) => ({
         url: `/delete-from-cart/${id}`,
         method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       })
     }),
     updateCartById: builder.mutation({
-      query: ({ id, token, data }) => ({
+      query: ({ id, data }) => ({
         url: `/update-cart/${id}`,
         method: 'PATCH',
         body: data,
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        // },
       }),
     }),
   }),

@@ -25,10 +25,10 @@ export const ProductContextProvider = (props) => {
       el.name?.toLowerCase().includes(searchInput?.toLowerCase())
     );
   };
-  const addCart = (product, token) => {
+  const addCart = (product) => {
 
     // addCart(dispatch, product, token);
-    addToCart({ token, product })
+    addToCart(product)
 
     // if (selectedCartProducts.includes(product)) {
     //   console.log('product already in cart');
@@ -38,8 +38,8 @@ export const ProductContextProvider = (props) => {
     // }
 
   };
-  const removeFromCart = (id, token) => {
-    deleteFromCart({ id, token })
+  const removeFromCart = (id) => {
+    deleteFromCart(id)
 
   };
   const addToCompare = (product) => {

@@ -33,11 +33,11 @@ export default function ProductDetail() {
       quantity: 1,
       price: product.price
     }
-    await addToCart({ token, data })
+    await addToCart(data)
   };
 
   const removeFromCart = async (id) => {
-    await deleteFromCart({ id, token })
+    await deleteFromCart(id)
   };
 
   return (
