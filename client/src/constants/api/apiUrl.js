@@ -1,8 +1,8 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query";
 
 // Desc: API URL
-// export const BASE_URL = process.env.REACT_APP_API_PATH === "production" ? 'https://shoppingapp-mern.onrender.com' : 'http://localhost:9090'
-export const BASE_URL = process.env.REACT_APP_API_PATH === "production" ? 'https://shopping-app-mern-indol.vercel.app' : 'http://localhost:9090'
+export const BASE_URL = process.env.REACT_APP_API_PATH === "production" ? 'https://shoppingapp-mern.onrender.com' : 'http://localhost:9090'
+// export const BASE_URL = process.env.REACT_APP_API_PATH === "production" ? 'https://shopping-app-mern-indol.vercel.app' : 'http://localhost:9090'
 
  const getToken = () => {
   // `persist:user`'i localStorage'den al
