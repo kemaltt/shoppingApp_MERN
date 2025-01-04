@@ -17,15 +17,16 @@ function App() {
 
   // useGetProductsQuery()
   const { token } = useSelector((state) => state.user);
-  const { error } = useGetFavoriteQuery(token, { skip: !token })
+ useGetFavoriteQuery(token,{ skip: !token })
+ useGetCartQuery(token,{ skip: !token })
   const [logout] = useLogoutMutation()
 
   useEffect(() => {
-    if (error) {
-      logout()
+    // Eğer token yoksa kullanıcıyı logout yap
+    if (!token) {
+      logout();
     }
-  }, [error, logout, token])
-  useGetCartQuery(token, { skip: !token })
+  }, [token, logout]);
 
 
 

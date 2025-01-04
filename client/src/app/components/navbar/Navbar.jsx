@@ -22,6 +22,10 @@ export default function Navbar() {
   const { cart } = useSelector((state) => state.cart);
 
   const cartBadge = cart?.products?.length;
+  console.log(cart, "cart");
+  
+  console.log(cartBadge, "cartBadge");
+  
   const wishBadge = favorite?.length;
   const compareBadge = selectedCompareProducts?.length;
   const productBadge = selectedCompareProducts?.length;
