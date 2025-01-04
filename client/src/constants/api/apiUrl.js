@@ -19,6 +19,7 @@ export const BASE_URL = process.env.REACT_APP_API_PATH === "production" ? 'https
   return null; // Token yoksa null döndür
 };
 
+
 export const baseQueryWithAuth = fetchBaseQuery({
   baseUrl: BASE_URL,
   prepareHeaders: (headers) => {

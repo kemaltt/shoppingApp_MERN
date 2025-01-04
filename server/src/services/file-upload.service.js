@@ -39,6 +39,7 @@ export const uploadToFirebase = async (file, fileType, id, userId) => {
   }
 };
 
+
 export const deleteFromFirebase = async (fileUrl) => {
   try {
     // URL'den dosya yolunu çıkar
