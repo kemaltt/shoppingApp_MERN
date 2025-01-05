@@ -83,7 +83,7 @@ export class EmailService {
             <p>For any questions or concerns, feel free to contact our support team.</p>
         </div>
         <div class="footer">
-            <p>&copy; 2024 Your Dein Shop. All rights reserved.</p>
+            <p>&copy; ${options?.currentYear} Your Dein Shop. All rights reserved.</p>
         </div>
     </div>
 </body>
@@ -183,7 +183,7 @@ export class EmailService {
             <p>For any questions or concerns, feel free to contact our support team.</p>
         </div>
         <div class="footer">
-            <p>&copy; 2024 Dein Shop. All rights reserved.</p>
+            <p>&copy; ${options?.currentYear} Your Dein Shop. All rights reserved.</p>
         </div>
     </div>
 </body>

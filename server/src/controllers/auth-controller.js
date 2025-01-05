@@ -40,6 +40,7 @@ export const register = async (req, res) => {
       name: user.name,
       email: user.email,
       subject: "Dein Shop [Welcome to Our App! Verify Your Account]",
+      currentYear: new Date().getFullYear(),
       verificationURL,
     };
 
@@ -208,6 +209,7 @@ export const forgotPassword = async (req, res) => {
       name: user.name,
       email: user.email,
       subject: "Dein Shop [Reset your password]",
+      currentYear: new Date().getFullYear(),
       resetURL,
     };
 
