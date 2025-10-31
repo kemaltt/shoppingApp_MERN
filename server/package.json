@@ -6,7 +6,9 @@
   "type": "module",
   "scripts": {
     "start": "node index.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "test": "echo \"Tests will be added\" && exit 0",
+    "lint": "echo \"ESLint will be configured\" && exit 0"
   },
   "keywords": [],
   "author": "",

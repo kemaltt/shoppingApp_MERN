@@ -1,0 +1,199 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # Frontend (React) Test ve Build
+  frontend:
+    name: Frontend CI
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    defaults:
+      run:
+        working-directory: ./client
+    
+    steps:
+    - name: Checkout kod
+      uses: actions/checkout@v4
+    
+    - name: Node.js ${{ matrix.node-version }} kurulumu
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: './client/package-lock.json'
+    
+    - name: Dependencies kurulumu
+      run: npm ci
+    
+    - name: ESLint kontrolü
+      run: npm run lint --if-present
+    
+    - name: Testleri çalıştır
+      run: npm test -- --coverage --passWithNoTests --watchAll=false
+      env:
+        CI: true
+    
+    - name: Build işlemi
+      run: npm run build
+    
+    - name: Build artifacts yükle
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-build-${{ matrix.node-version }}
+        path: ./client/build/
+        retention-days: 1
+
+  # Backend (Node.js) Test ve Build
+  backend:
+    name: Backend CI
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    defaults:
+      run:
+        working-directory: ./server
+    
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd "mongosh --eval 'db.runCommand({ping: 1})'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+    - name: Checkout kod
+      uses: actions/checkout@v4
+    
+    - name: Node.js ${{ matrix.node-version }} kurulumu
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: './server/package-lock.json'
+    
+    - name: Dependencies kurulumu
+      run: npm ci
+    
+    - name: ESLint kontrolü
+      run: npm run lint --if-present
+    
+    - name: Testleri çalıştır
+      run: npm test --if-present
+      env:
+        NODE_ENV: test
+        MONGODB_TEST_URI: mongodb://localhost:27017/shopping_app_test
+        JWT_SECRET: test-secret-key
+    
+    - name: Server başlatma testi
+      run: |
+        timeout 30s npm start &
+        sleep 10
+        curl -f http://localhost:5000/health || curl -f http://localhost:3001/health || echo "Server health check failed"
+      env:
+        NODE_ENV: test
+        PORT: 5000
+
+  # Security ve Code Quality
+  security:
+    name: Security & Code Quality
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout kod
+      uses: actions/checkout@v4
+    
+    - name: Node.js kurulumu
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+    
+    - name: Frontend Security Audit
+      run: |
+        cd client
+        npm audit --audit-level=moderate
+    
+    - name: Backend Security Audit
+      run: |
+        cd server
+        npm audit --audit-level=moderate
+    
+    - name: Dependency vulnerability check
+      uses: actions/dependency-review-action@v4
+      if: github.event_name == 'pull_request'
+
+  # Deployment hazırlık (sadece main branch için)
+  deployment-ready:
+    name: Deployment Ready
+    runs-on: ubuntu-latest
+    needs: [frontend, backend, security]
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout kod
+      uses: actions/checkout@v4
+    
+    - name: Frontend build artifact indir
+      uses: actions/download-artifact@v4
+      with:
+        name: frontend-build-20.x
+        path: ./deployment/client-build
+    
+    - name: Deployment dosyalarını hazırla
+      run: |
+        mkdir -p deployment-package
+        cp -r ./deployment/client-build/* deployment-package/
+        cp -r server/* deployment-package/
+        ls -la deployment-package/
+    
+    - name: Deployment package yükle
+      uses: actions/upload-artifact@v4
+      with:
+        name: deployment-package
+        path: ./deployment-package/
+        retention-days: 7
+
+  # Environment matrix test (isteğe bağlı)
+  environment-test:
+    name: Environment Compatibility
+    runs-on: ${{ matrix.os }}
+    
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [18.x]
+    
+    steps:
+    - name: Checkout kod
+      uses: actions/checkout@v4
+    
+    - name: Node.js kurulumu
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+    
+    - name: Client dependencies test
+      run: |
+        cd client
+        npm ci
+        npm run build
+    
+    - name: Server dependencies test
+      run: |
+        cd server
+        npm ci

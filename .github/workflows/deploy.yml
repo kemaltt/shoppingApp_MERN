@@ -1,0 +1,74 @@
+name: Deploy to Production
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+
+jobs:
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'production' }}
+    
+    steps:
+    - name: Checkout kod
+      uses: actions/checkout@v4
+    
+    - name: Node.js kurulumu
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.x'
+        cache: 'npm'
+    
+    - name: Frontend build
+      run: |
+        cd client
+        npm ci
+        npm run build
+    
+    - name: Backend hazırlık
+      run: |
+        cd server
+        npm ci --production
+    
+    # Vercel deployment (frontend için)
+    - name: Deploy Frontend to Vercel
+      uses: amondnet/vercel-action@v25
+      with:
+        vercel-token: ${{ secrets.VERCEL_TOKEN }}
+        vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+        vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+        working-directory: ./client
+        vercel-args: '--prod'
+      if: github.event.inputs.environment == 'production' || github.event_name == 'release'
+    
+    # Railway/Heroku deployment (backend için) - seçeneklerden birini kullanabilirsiniz
+    - name: Deploy Backend to Railway
+      run: |
+        echo "Backend deployment to Railway/Heroku/DigitalOcean"
+        # Railway CLI kurulumu ve deployment
+        # npm install -g @railway/cli
+        # railway login --browserless
+        # railway up
+      env:
+        RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      if: github.event.inputs.environment == 'production' || github.event_name == 'release'
+    
+    - name: Deployment notification
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#deployments'
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+      if: always()
