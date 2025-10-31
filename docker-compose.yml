@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  # Backend API Server (Atlas MongoDB kullanıyor)
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./server/.env.docker
+    volumes:
+      - uploads:/usr/src/app/images
+    restart: unless-stopped
+    networks:
+      - shopping-network
+
+  # Local MongoDB (Development için opsiyonel)
+  mongodb:
+    image: mongo:6.0
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_DATABASE=shopping_app_local
+    volumes:
+      - mongodb_data:/data/db
+      - ./server/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    restart: unless-stopped
+    networks:
+      - shopping-network
+    profiles:
+      - local-db
+
+  # MongoDB Express (Development - Optional)
+  mongo-express:
+    image: mongo-express:latest
+    ports:
+      - "8081:8081"
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongodb
+      - ME_CONFIG_MONGODB_PORT=27017
+      - ME_CONFIG_BASICAUTH_USERNAME=admin
+      - ME_CONFIG_BASICAUTH_PASSWORD=password
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+    networks:
+      - shopping-network
+    profiles:
+      - local-db
+
+volumes:
+  mongodb_data:
+  uploads:
+
+networks:
+  shopping-network:
+    driver: bridge
