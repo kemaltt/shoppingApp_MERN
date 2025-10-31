@@ -33,13 +33,13 @@ jobs:
     - name: Frontend build
       run: |
         cd client
-        npm ci
+        npm ci || npm install --legacy-peer-deps
         npm run build
     
     - name: Backend hazırlık
       run: |
         cd server
-        npm ci --production
+        npm ci || npm install --legacy-peer-deps --production
     
     # Vercel deployment (frontend için)
     - name: Deploy Frontend to Vercel
