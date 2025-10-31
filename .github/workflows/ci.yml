@@ -32,7 +32,7 @@ jobs:
         cache-dependency-path: './client/package-lock.json'
     
     - name: Dependencies kurulumu
-      run: npm ci
+      run: npm ci || npm install --legacy-peer-deps
     
     - name: ESLint kontrolü
       run: npm run lint --if-present
@@ -88,7 +88,7 @@ jobs:
         cache-dependency-path: './server/package-lock.json'
     
     - name: Dependencies kurulumu
-      run: npm ci
+      run: npm ci || npm install --legacy-peer-deps
     
     - name: ESLint kontrolü
       run: npm run lint --if-present
@@ -126,11 +126,13 @@ jobs:
     - name: Frontend Security Audit
       run: |
         cd client
+        npm ci || npm install --legacy-peer-deps
         npm audit --audit-level=moderate
     
     - name: Backend Security Audit
       run: |
         cd server
+        npm ci || npm install --legacy-peer-deps
         npm audit --audit-level=moderate
     
     - name: Dependency vulnerability check
