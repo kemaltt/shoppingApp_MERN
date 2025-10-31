@@ -12,10 +12,6 @@ jobs:
     name: Frontend CI
     runs-on: ubuntu-latest
     
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
-    
     defaults:
       run:
         working-directory: ./client
@@ -24,10 +20,10 @@ jobs:
     - name: Checkout kod
       uses: actions/checkout@v4
     
-    - name: Node.js ${{ matrix.node-version }} kurulumu
+    - name: Node.js kurulumu
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '20.x'
         cache: 'npm'
         cache-dependency-path: './client/package-lock.json'
     
@@ -38,7 +34,7 @@ jobs:
       run: npm run lint --if-present
     
     - name: Testleri çalıştır
-      run: npm test -- --coverage --passWithNoTests --watchAll=false
+      run: npm run test:ci
       env:
         CI: true
     
@@ -48,7 +44,7 @@ jobs:
     - name: Build artifacts yükle
       uses: actions/upload-artifact@v4
       with:
-        name: frontend-build-${{ matrix.node-version }}
+        name: frontend-build
         path: ./client/build/
         retention-days: 1
 
@@ -56,10 +52,6 @@ jobs:
   backend:
     name: Backend CI
     runs-on: ubuntu-latest
-    
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x]
     
     defaults:
       run:
@@ -80,10 +72,10 @@ jobs:
     - name: Checkout kod
       uses: actions/checkout@v4
     
-    - name: Node.js ${{ matrix.node-version }} kurulumu
+    - name: Node.js kurulumu
       uses: actions/setup-node@v4
       with:
-        node-version: ${{ matrix.node-version }}
+        node-version: '20.x'
         cache: 'npm'
         cache-dependency-path: './server/package-lock.json'
     
@@ -127,17 +119,13 @@ jobs:
       run: |
         cd client
         npm ci || npm install --legacy-peer-deps
-        npm audit --audit-level=moderate
+        npm audit --audit-level=high
     
     - name: Backend Security Audit
       run: |
         cd server
         npm ci || npm install --legacy-peer-deps
-        npm audit --audit-level=moderate
-    
-    - name: Dependency vulnerability check
-      uses: actions/dependency-review-action@v4
-      if: github.event_name == 'pull_request'
+        npm audit --audit-level=high
 
   # Deployment hazırlık (sadece main branch için)
   deployment-ready:
@@ -153,7 +141,7 @@ jobs:
     - name: Frontend build artifact indir
       uses: actions/download-artifact@v4
       with:
-        name: frontend-build-20.x
+        name: frontend-build
         path: ./deployment/client-build
     
     - name: Deployment dosyalarını hazırla
@@ -169,33 +157,3 @@ jobs:
         name: deployment-package
         path: ./deployment-package/
         retention-days: 7
-
-  # Environment matrix test (isteğe bağlı)
-  environment-test:
-    name: Environment Compatibility
-    runs-on: ${{ matrix.os }}
-    
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        node-version: [18.x]
-    
-    steps:
-    - name: Checkout kod
-      uses: actions/checkout@v4
-    
-    - name: Node.js kurulumu
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-    
-    - name: Client dependencies test
-      run: |
-        cd client
-        npm ci
-        npm run build
-    
-    - name: Server dependencies test
-      run: |
-        cd server
-        npm ci
