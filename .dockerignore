@@ -1,0 +1,26 @@
+# Root level .dockerignore
+node_modules
+npm-debug.log
+.git
+.gitignore
+README.md
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.DS_Store
+coverage
+.nyc_output
+
+# Client build files (we don't need them in backend container)
+client/
+
+# CI/CD files
+.github/
+.vscode/
+
+# Docker files
+Dockerfile
+docker-compose*.yml
+.dockerignore
