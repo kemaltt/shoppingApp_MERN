@@ -266,21 +266,7 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
                 </Select>
               </FormControl>
 
-              {/* Image Upload Section */}
-              <Button
-                variant="outlined"
-                component="label"
-                startIcon={<UploadIcon />}
-              >
-                Upload Images
-                <input
-                  type="file"
-                  hidden
-                  accept="image/*"
-                  multiple
-                  onChange={handleImageChange}
-                />
-              </Button>
+
 
               {/* Display Image Previews */}
               <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
@@ -296,6 +282,22 @@ export default function ProductAddDialog({ open, setOpen, getProducts }) {
                   </Box>
                 ))}
               </Box>
+
+              {/* Image Upload Section */}
+              <Button
+                variant="outlined"
+                component="label"
+                startIcon={<UploadIcon />}
+              >
+                Upload Images
+                <input
+                  type="file"
+                  hidden
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageChange}
+                />
+              </Button>
               {isError && <Alert severity="error">{error.data.message}</Alert>}
             </Box>
           </DialogContent>
