@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import CartSide from "../components/CartSide";
 import Loading from "../components/Loading";
 import ProductCard from "../modules/product/ProductCard";
@@ -13,6 +14,7 @@ export default function Home() {
 
   const [getProducts, { isLoading }] = useGetProductsMutation()
   const [message, setMessage] = useState("");
+  const { t } = useTranslation();
   const { filterProducts } = useProductContext();
   const { products } = useSelector((state) => state.products);
   const { cart } = useSelector((state) => state.cart);
@@ -36,6 +38,7 @@ export default function Home() {
         </>}
       <Search setMessage={setMessage} />
       <p style={{ textAlign: "center" }}> {message}</p>
+      <h2 style={{ textAlign: "center", marginBottom: "20px" }}>{t('products.title')}</h2>
 
       <div className="products_container">
         {filterProducts(products).map((product, i) => (

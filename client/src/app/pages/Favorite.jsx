@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { shallowEqual, useSelector } from 'react-redux';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Box, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Tooltip, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import ProductDeleteDialog from '../modules/product/product-dialog/ProductDeleteDialog';
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import { useAddToCartMutation } from '../../redux/cart/cart-api';
@@ -11,6 +12,7 @@ export default function Favorite() {
   const [open, setOpen] = useState(false);
   const [productId, setProductId] = useState(null);
   const [addToCart, { isLoading }] = useAddToCartMutation();
+  const { t } = useTranslation();
 
   const { token, favorite } = useSelector((state) => ({
     favorite: state.favorite.favorite,
@@ -31,11 +33,11 @@ export default function Favorite() {
   };
   return (
     (favorite.length <= 0)
-      ? <h1 className="text-center text-danger mt-5">{<span> you have no favorite product</span>}</h1>
+      ? <h1 className="text-center text-danger mt-5">{<span>{t('favorites.noProducts')}</span>}</h1>
       : <>
         <Card className="p-5">
           <CardHeader
-            title='Favorite'
+            title={t('favorites.title')}
             subheader={`${favorite?.length} Products`}
           />
 
@@ -73,12 +75,12 @@ export default function Favorite() {
                 <CardActions sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }} >
 
                   <Box>
-                    <Tooltip placement="top" title="Delete">
+                    <Tooltip placement="top" title={t('favorites.delete')}>
                       <IconButton onClick={() => delFav(product._id)} aria-label="add to favorites" >
                         <DeleteIcon color='error' />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip placement="top" title="Add to cart">
+                    <Tooltip placement="top" title={t('favorites.addToCart')}>
                       <IconButton onClick={() => addCart(product)} disabled={isLoading} aria-label="add to cart" >
                         <AddShoppingCartIcon color='success' />
                       </IconButton>

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import ProductTable from './table/ProductTable'
 import { Card, CardContent, CardHeader, Typography } from '@mui/material'
 import Button from '../../components/Button'
@@ -9,6 +10,7 @@ import ProductAddDialog from './product-dialog/ProductAddDialog'
 
 export default function Product() {
   const [open, setOpen] = useState(false);
+  const { t } = useTranslation();
 
   const [getProducts, { isLoading }] = useGetProductsMutation()
 
@@ -24,9 +26,9 @@ export default function Product() {
     <>
       <Card className='p-5'>
         <CardHeader
-          title='Product List'
+          title={t('products.title')}
           action={<Typography >
-            <Button onClick={() => setOpen(true)} title={'Add Product'} />
+            <Button onClick={() => setOpen(true)} title={t('productForm.addProduct')} />
           </Typography>}
         />
 

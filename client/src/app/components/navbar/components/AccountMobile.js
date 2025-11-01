@@ -16,8 +16,10 @@ import Cart from './Cart';
 import { Typography } from '@mui/material';
 import WishList from './WishList';
 import Product from './Product';
+import { useTranslation } from 'react-i18next';
 
 export default function AccountMobile({ isAuthenticated, cartBadge, wishBadge, productBadge, user }) {
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -32,10 +34,9 @@ export default function AccountMobile({ isAuthenticated, cartBadge, wishBadge, p
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <Tooltip placement="top" title="Account settings">
+        <Tooltip placement="top" title={t('account.settings')}>
           <IconButton
             onClick={handleClick}
-            // size="small"
             sx={{ ml: 2 }}
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
@@ -91,40 +92,40 @@ export default function AccountMobile({ isAuthenticated, cartBadge, wishBadge, p
 
             <MenuItem onClick={() => { handleClose(); navigate('/favorite-list') }}>
               <WishList badge={wishBadge} color={{ color: 'green', fontSize: 30 }} />
-              <Typography >Favorite</Typography>
+              <Typography>{t('wishlist.favorite')}</Typography>
             </MenuItem>
 
             <MenuItem className='d-flex gap-1' onClick={() => { handleClose(); navigate('/cart-list') }}>
               <Cart badge={cartBadge} color={{ color: 'orange', fontSize: 30 }} />
-              <Typography >Cart</Typography>
+              <Typography>{t('cart.title')}</Typography>
             </MenuItem>
 
             <Divider />
             {user?.user?.role === 'admin'
               ? <MenuItem className='d-flex gap-1' onClick={() => { handleClose(); navigate('/product-list') }}>
                 <Product badge={productBadge} color={{ color: 'secondary', fontSize: 30 }} />
-                <Typography >Products</Typography>
+                <Typography>{t('products.title')}</Typography>
               </MenuItem>
               : null
             }
 
             <MenuItem className='d-flex gap-1' onClick={() => navigate('/profile')}>
               <Avatar sx={{ width: 32, height: 32, marginRight: 1 }} />
-              <Typography >Profile</Typography>
+              <Typography>{t('account.profile')}</Typography>
             </MenuItem>
             
             <MenuItem onClick={handleClose}>
               <ListItemIcon>
                 <Settings fontSize="small" />
               </ListItemIcon>
-              Settings
+              {t('account.settings')}
             </MenuItem>
 
             <MenuItem onClick={() => { logout(); navigate('/') }}>
               <ListItemIcon>
                 <Logout fontSize="small" />
               </ListItemIcon>
-              Logout
+              {t('account.logout')}
             </MenuItem>
           </div>
         ) : (
@@ -132,7 +133,7 @@ export default function AccountMobile({ isAuthenticated, cartBadge, wishBadge, p
             <ListItemIcon>
               <Login fontSize="small" />
             </ListItemIcon>
-            Login
+            {t('auth.login')}
           </MenuItem>
         )}
       </Menu>

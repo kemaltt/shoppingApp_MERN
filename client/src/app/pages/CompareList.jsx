@@ -2,26 +2,28 @@ import React from "react";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { useTranslation } from "react-i18next";
 import { useProductContext } from "../contexts/ProductContext";
 
 export default function Compare() {
   const { selectedCompareProducts, removeFromCompare, addCart } =
     useProductContext();
+  const { t } = useTranslation();
 
   return (
     <div className="compare">
       {selectedCompareProducts.length > 0 ? (
         <>
           <h1 style={{ color: "green", textAlign: "center" }}>
-            Product comparison
+            {t('compare.title')}
           </h1>
 
           <div className="compare_container">
             <div style={{ width: "20%", textAlign: "left" }}>
-              <h3>Title </h3>
-              <h3>Price </h3>
-              <h3>Category </h3>
-              <h3>Rating </h3>
+              <h3>{t('compare.titleLabel')}</h3>
+              <h3>{t('compare.priceLabel')}</h3>
+              <h3>{t('compare.categoryLabel')}</h3>
+              <h3>{t('compare.ratingLabel')}</h3>
             </div>
             <div
               style={{
@@ -64,7 +66,7 @@ export default function Compare() {
                         color="error"
                         startIcon={<DeleteIcon />}
                       >
-                        Delete
+                        {t('compare.delete')}
                       </Button>
                     </th>
                   </tr>
@@ -77,7 +79,7 @@ export default function Compare() {
                         color="success"
                         startIcon={<AddShoppingCartIcon />}
                       >
-                        Add to cart
+                        {t('compare.addToCart')}
                       </Button>
                     </th>
                   </tr>
@@ -90,7 +92,7 @@ export default function Compare() {
         <p
           style={{ textAlign: "center", color: "yellowgreen", margin: "3vh 0" }}
         >
-          you have not selected any product
+          {t('compare.noProducts')}
         </p>
       )}
     </div>

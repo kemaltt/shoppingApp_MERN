@@ -2,6 +2,7 @@ import { useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../redux/auth/auth-api";
+import { useTranslation } from "react-i18next";
 import Button from "../../components/Button";
 import { Alert, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import Visibility from '@mui/icons-material/Visibility';
@@ -15,6 +16,7 @@ import { useForm } from "react-hook-form";
 const Login = () => {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const { t } = useTranslation();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -41,14 +43,14 @@ const Login = () => {
   return (
     <Container>
       <Wrapper>
-        <Title>SIGN IN</Title>
+        <Title>{t('auth.signIn')}</Title>
         <Form onSubmit={handleSubmit(handleClick)}>
           <FormControl fullWidth >
             <TextField
               required
               fullWidth
               id="email"
-              label="Email"
+              label={t('auth.email')}
               name="email"
               autoComplete="email"
               type="email"
@@ -59,7 +61,7 @@ const Login = () => {
                 required: true,
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i,
-                  message: "invalid email address",
+                  message: t('validation.invalidEmail'),
                 },
               })}
             />
@@ -71,7 +73,7 @@ const Login = () => {
           </FormControl>
 
           <FormControl fullWidth >
-            <InputLabel htmlFor="outlined-adornment-password" color={errors.password ? 'error' : 'secondary'} >Password *</InputLabel>
+            <InputLabel htmlFor="outlined-adornment-password" color={errors.password ? 'error' : 'secondary'} >{t('auth.password')} *</InputLabel>
             <OutlinedInput
               id="outlined-adornment-password"
               type={showPassword ? 'text' : 'password'}
@@ -82,7 +84,7 @@ const Login = () => {
                 <InputAdornment position="end">
                   <IconButton
                     aria-label={
-                      showPassword ? 'hide the password' : 'display the password'
+                      showPassword ? t('auth.hidePassword') : t('auth.showPassword')
                     }
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
@@ -98,7 +100,7 @@ const Login = () => {
                 required: true,
                 pattern: {
                   value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
-                  message: "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
+                  message: t('validation.passwordRequired'),
                 },
               })}
 
@@ -111,15 +113,15 @@ const Login = () => {
 
           </FormControl>
 
-          <Button onClick={handleClick} isLoading={isLoading} title={'Login'} />
+          <Button onClick={handleClick} isLoading={isLoading} title={t('auth.login')} />
           {isError && <Alert variant="outlined" severity="error"> {error?.data?.message} </Alert>}
 
         </Form>
 
         <LinkWrapper>
-          <Link onClick={() => navigate('/register')}>DON'T HAVE AN ACCOUNT? REGISTER FOR FREE</Link>
-          <Link onClick={() => navigate('/forgot-password')} >FORGOT PASSWORD?</Link>
-          <Link onClick={() => navigate('/')}>BACK TO HOME PAGE</Link>
+          <Link onClick={() => navigate('/register')}>{t('auth.noAccount')}</Link>
+          <Link onClick={() => navigate('/forgot-password')} >{t('auth.forgotPassword')}</Link>
+          <Link onClick={() => navigate('/')}>{t('auth.backToHome')}</Link>
         </LinkWrapper>
 
       </Wrapper>

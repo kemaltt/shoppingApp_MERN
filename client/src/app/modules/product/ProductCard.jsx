@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { CardActions, CardContent, CardMedia, Typography, Card, IconButton, Box, Tooltip } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -18,6 +19,7 @@ export default function ProductCard({ product, id }) {
   const [openEdit, setOpenEdit] = useState(false);
   const [addFavorite] = useAddFavoriteMutation()
   const [deleteFavorite] = useDeleteFavoriteMutation()
+  const { t } = useTranslation();
   // const [deleteProduct] = useDeleteProductMutation()
   const navigate = useNavigate();
   const { token, favorite, user, isAuthenticated } = useSelector((state) => ({
@@ -87,13 +89,13 @@ export default function ProductCard({ product, id }) {
           <Box>
 
             {favorite.some(el => el._id === id) ?
-              <Tooltip placement="top" title="Delete from favorite">
+              <Tooltip placement="top" title={t('products.removeFromFavorites')}>
                 <IconButton onClick={isAuthenticated ? delFav : login} aria-label="add to favorites" >
                   <FavoriteIcon color='warning' />
                 </IconButton>
               </Tooltip>
               :
-              <Tooltip placement="top" title="Add to favorite">
+              <Tooltip placement="top" title={t('products.addToFavorites')}>
                 <IconButton onClick={isAuthenticated ? addFav : login} aria-label="add to favorites" >
                   <FavoriteIcon />
                 </IconButton>
@@ -102,12 +104,12 @@ export default function ProductCard({ product, id }) {
 
             {user?.user?.role === 'admin' &&
               <>
-                <Tooltip placement="top" title="Delete">
+                <Tooltip placement="top" title={t('common.delete')}>
                   <IconButton onClick={() => setOpenDelete(true)} aria-label="delete from card" >
                     <DeleteIcon color='error' />
                   </IconButton>
                 </Tooltip>
-                <Tooltip placement="top" title="Edit">
+                <Tooltip placement="top" title={t('common.edit')}>
                   <IconButton onClick={() => setOpenEdit(true)} aria-label="edit" >
                     <EditIcon color='primary' />
                   </IconButton>
@@ -118,7 +120,7 @@ export default function ProductCard({ product, id }) {
 
           <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'end', fontStyle: 'italic' }}>
             <Typography color={product.countInStock === 0 ? "error" : product.countInStock <= 3 ? "warning" : "secondary"}>
-              Stock  {product.countInStock}
+              {product.countInStock === 0 ? t('products.outOfStock') : `${t('products.inStock')} ${product.countInStock}`}
             </Typography>
             <Typography fontWeight='bold' color="text.secondary">
               {product.price}€

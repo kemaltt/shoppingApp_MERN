@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Alert, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from "@mui/material";
 import { useRegisterMutation } from "../../../redux/auth/auth-api";
+import { useTranslation } from "react-i18next";
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Visibility from '@mui/icons-material/Visibility';
 import { useNavigate } from "react-router-dom";
@@ -12,6 +13,7 @@ import styled from "styled-components";
 
 const Register = () => {
   const { register: signUp, handleSubmit, formState: { errors } } = useForm();
+  const { t } = useTranslation();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -36,7 +38,7 @@ const Register = () => {
   return (
     <Container>
       <Wrapper>
-        <Title> {isSuccess ? 'CHECK YOUR EMAIL' : 'REGISTER'}   </Title>
+        <Title> {isSuccess ? t('auth.checkEmail') : t('auth.register')}   </Title>
         {isSuccess ? <Alert variant="outlined" severity="success">{data?.message}</Alert>
           : <>
             <Form onSubmit={handleSubmit(handleClick)} >
@@ -46,7 +48,7 @@ const Register = () => {
                   required
                   fullWidth
                   id="name"
-                  label="Name"
+                  label={t('auth.name')}
                   name="name"
                   size='small'
                   autoComplete="current-name"
@@ -56,7 +58,7 @@ const Register = () => {
                     required: true,
                     pattern: {
                       value: /^.{2,25}$/,
-                      message: "Name must be between 2 and 25 characters",
+                      message: t('validation.nameRequired'),
                     },
                   })}
                 />
@@ -68,7 +70,7 @@ const Register = () => {
                   required
                   fullWidth
                   id="email"
-                  label="Email"
+                  label={t('auth.email')}
                   name="email"
                   size='small'
                   autoComplete="email"
@@ -78,7 +80,7 @@ const Register = () => {
                     required: true,
                     pattern: {
                       value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,15}$/i,
-                      message: "invalid email address",
+                      message: t('validation.invalidEmail'),
                     },
                   })}
                 />
@@ -90,7 +92,7 @@ const Register = () => {
               </FormControl>
 
               <FormControl fullWidth >
-                <InputLabel htmlFor="outlined-adornment-password" color={errors?.password ? 'error' : 'secondary'} >Password *</InputLabel>
+                <InputLabel htmlFor="outlined-adornment-password" color={errors?.password ? 'error' : 'secondary'} >{t('auth.password')} *</InputLabel>
                 <OutlinedInput
                   id="outlined-adornment-password"
                   type={showPassword ? 'text' : 'password'}
@@ -100,7 +102,7 @@ const Register = () => {
                     <InputAdornment position="end">
                       <IconButton
                         aria-label={
-                          showPassword ? 'hide the password' : 'display the password'
+                          showPassword ? t('auth.hidePassword') : t('auth.showPassword')
                         }
                         onClick={handleClickShowPassword}
                         onMouseDown={handleMouseDownPassword}
@@ -116,7 +118,7 @@ const Register = () => {
                     required: true,
                     pattern: {
                       value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,15}$/,
-                      message: "Password must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters",
+                      message: t('validation.passwordRequired'),
                     },
                   })}
                 />
@@ -126,15 +128,15 @@ const Register = () => {
   Register {isLoading && <Spinner animation="border" size="sm" />
   }
 </Button> */}
-              <Button onClick={handleClick} isLoading={isLoading} title={'Register'} />
+              <Button onClick={handleClick} isLoading={isLoading} title={t('auth.register')} />
               {isError && <Alert variant="outlined" severity="error"> {error?.data?.message} </Alert>}
             </Form>
           </>
         }
 
         <LinkWrapper>
-          <Link onClick={() => navigate('/login')}>YOU HAVE ALREADY AN ACCOUNT? LOGIN</Link>
-          <Link onClick={() => navigate('/')}>BACK TO HOME PAGE</Link>
+          <Link onClick={() => navigate('/login')}>{t('auth.haveAccount')}</Link>
+          <Link onClick={() => navigate('/')}>{t('auth.backToHome')}</Link>
         </LinkWrapper>
       </Wrapper>
     </Container>

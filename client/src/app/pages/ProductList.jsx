@@ -6,6 +6,7 @@ import Container from "@mui/material/Container";
 import Textarea from '@mui/joy/Textarea';
 import { useForm } from "react-hook-form";
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import Button from '../components/Button';
 import { Col, Row } from 'react-bootstrap';
 import { useAddProductMutation } from '../../redux/product/product-api';
@@ -14,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 export default function ProductList() {
   const { register, handleSubmit } = useForm();
+  const { t } = useTranslation();
   // const { token } = useSelector((state) => state.user);
 
   const [addProduct, { isLoading, status }] = useAddProductMutation()
@@ -54,7 +56,7 @@ export default function ProductList() {
       >
         <Box sx={{ display: "flex", flexDirection: "column", padding: "1rem", gap: '15px', width: '100%', marginTop: '2vh' }} >
           <Typography sx={{ marginBottom: 1 }} component="h1" variant="h5"        >
-            Add Product Page
+            {t('productForm.title')}
           </Typography>
 
           <TextField
@@ -62,14 +64,14 @@ export default function ProductList() {
             type='text'
             id="name"
             name="name"
-            label="Product Title"
+            label={t('productForm.name')}
             // autoFocus
             // color="secondary"
             {...register("name", {
               required: true,
               pattern: {
                 value: /^.{2,25}$/,
-                message: "Name must be between 2 and 25 characters",
+                message: t('validation.nameRequired'),
               },
             })}
           />
@@ -77,7 +79,7 @@ export default function ProductList() {
             <Col lg='6' >
               <TextField
                 id="outlined-number"
-                label="Quantity"
+                label={t('productForm.quantity')}
                 type="number"
                 name='countInStock'
                 fullWidth
@@ -97,7 +99,7 @@ export default function ProductList() {
             <Col lg='6' >
               <TextField
                 id="outlined-number"
-                label="Price"
+                label={t('productForm.price')}
                 type="number"
                 name='price'
                 fullWidth
@@ -125,14 +127,14 @@ export default function ProductList() {
             sx={{ borderStyle: 'solid', borderColor: 'gray', borderRadius: '5px', borderWidth: '1px' }}
             type="text"
             name="description"
-            placeholder="Product Description"
+            placeholder={t('productForm.description')}
             id="description"
             // color="secondary"
             {...register("description", {
               required: true,
               pattern: {
                 value: /^.{2,500}$/,
-                message: "Name must be between 2 and 25 characters",
+                message: t('validation.descriptionRequired'),
               },
             })}
           />
@@ -143,23 +145,23 @@ export default function ProductList() {
             type='text'
             id="image"
             name="image"
-            label="Product image URL"
+            label={t('productForm.imageUrl')}
             // autoFocus
             // color="secondary"
             {...register("image", {
               required: true,
               pattern: {
                 value: /^.{2,700}$/,
-                message: "Name must be between 2 and 25 characters",
+                message: t('validation.imageRequired'),
               },
             })}
           />
           <FormControl >
-            <InputLabel id="demo-simple-select-label">Category</InputLabel>
+            <InputLabel id="demo-simple-select-label">{t('productForm.category')}</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
-              label="Category"
+              label={t('productForm.category')}
               name='category'
               defaultValue="" // Boş bir başlangıç değeri
               {...register("category", {
@@ -167,12 +169,12 @@ export default function ProductList() {
               })}
             >
               {categories.map((el, i) => (
-                <MenuItem key={i} value={el.value}>{el.label}</MenuItem>
+                <MenuItem key={i} value={el.value}>{t(`productForm.${el.value.replace(' ', '').toLowerCase()}`)}</MenuItem>
               ))}
             </Select>
           </FormControl>
 
-          <Button onClick={handleClick} disabled={isLoading} isLoading={isLoading} title={'Add Product'} />
+          <Button onClick={handleClick} disabled={isLoading} isLoading={isLoading} title={t('productForm.addProduct')} />
         </Box>
       </form>
     </Container>

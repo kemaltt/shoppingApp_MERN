@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Box, styled } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SaveIcon from '@mui/icons-material/Save';
@@ -15,6 +16,7 @@ import ProductDeleteDialog from '../product-dialog/ProductDeleteDialog';
 
 
 export default function ProductTable({ isLoading }) {
+  const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
   const [productId, setProductId] = useState(null);
@@ -99,7 +101,7 @@ export default function ProductTable({ isLoading }) {
     // },
     {
       field: 'name',
-      headerName: 'Name',
+      headerName: t('productTable.name'),
       width: 180,
       editable: true,
       renderCell: (params) => (
@@ -129,7 +131,7 @@ export default function ProductTable({ isLoading }) {
     },
     {
       field: 'price',
-      headerName: 'Price',
+      headerName: t('productTable.price'),
       type: 'number',
       width: 120,
       align: 'left',
@@ -138,7 +140,7 @@ export default function ProductTable({ isLoading }) {
     },
     {
       field: 'countInStock',
-      headerName: 'Quantity',
+      headerName: t('productTable.quantity'),
       type: 'number',
       width: 120,
       align: 'left',
@@ -147,7 +149,7 @@ export default function ProductTable({ isLoading }) {
     },
     {
       field: 'createdAt',
-      headerName: 'Created Date',
+      headerName: t('productTable.createdDate'),
       type: 'date',
       width: 180,
       editable: true,
@@ -160,7 +162,7 @@ export default function ProductTable({ isLoading }) {
     },
     {
       field: 'updatedAt',
-      headerName: 'Updated Date',
+      headerName: t('productTable.updatedDate'),
       type: 'date',
       width: 180,
       editable: true,
@@ -172,7 +174,7 @@ export default function ProductTable({ isLoading }) {
     },
     {
       field: 'category',
-      headerName: 'Category',
+      headerName: t('productTable.category'),
       width: 220,
       editable: true,
       type: 'singleSelect',
@@ -180,8 +182,8 @@ export default function ProductTable({ isLoading }) {
     },
     {
       field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
+  type: 'actions',
+  headerName: t('productTable.actions'),
       width: 100,
       cellClassName: 'actions',
       getActions: ({ id, row }) => {
@@ -191,7 +193,7 @@ export default function ProductTable({ isLoading }) {
           return [
             <GridActionsCellItem
               icon={<SaveIcon />}
-              label="Save"
+              label={t('common.save')}
               sx={{
                 color: 'primary.main',
               }}
@@ -199,7 +201,7 @@ export default function ProductTable({ isLoading }) {
             />,
             <GridActionsCellItem
               icon={<CancelIcon />}
-              label="Cancel"
+              label={t('common.cancel')}
               className="textPrimary"
               onClick={handleCancelClick(id)}
               color="inherit"
@@ -210,14 +212,14 @@ export default function ProductTable({ isLoading }) {
         return [
           <GridActionsCellItem
             icon={<EditOutlinedIcon />}
-            label="Edit"
+            label={t('common.edit')}
             className="textPrimary"
             onClick={handleEditClick(id, row)}
             color="inherit"
           />,
           <GridActionsCellItem
             icon={<DeleteIcon />}
-            label="Delete"
+            label={t('common.delete')}
             onClick={handleDeleteClick(id)}
             color="inherit"
             sx={{ ":hover": { color: 'error.main' } }}
@@ -282,6 +284,7 @@ const StyledGridOverlay = styled('div')(({ theme }) => ({
 }));
 
 function CustomNoRowsOverlay() {
+  const { t } = useTranslation();
   return (
     <StyledGridOverlay>
       <svg
@@ -309,7 +312,7 @@ function CustomNoRowsOverlay() {
           d="M0 10C0 4.477 4.477 0 10 0h380c5.523 0 10 4.477 10 10s-4.477 10-10 10H10C4.477 20 0 15.523 0 10ZM0 59c0-5.523 4.477-10 10-10h231c5.523 0 10 4.477 10 10s-4.477 10-10 10H10C4.477 69 0 64.523 0 59ZM0 106c0-5.523 4.477-10 10-10h203c5.523 0 10 4.477 10 10s-4.477 10-10 10H10c-5.523 0-10-4.477-10-10ZM0 153c0-5.523 4.477-10 10-10h195.5c5.523 0 10 4.477 10 10s-4.477 10-10 10H10c-5.523 0-10-4.477-10-10ZM0 200c0-5.523 4.477-10 10-10h203c5.523 0 10 4.477 10 10s-4.477 10-10 10H10c-5.523 0-10-4.477-10-10ZM0 247c0-5.523 4.477-10 10-10h231c5.523 0 10 4.477 10 10s-4.477 10-10 10H10c-5.523 0-10-4.477-10-10Z"
         />
       </svg>
-      <Box sx={{ mt: 2 }}>Product list not found. Please add e product</Box>
+      <Box sx={{ mt: 2 }}>{t('productTable.noProductsMessage')}</Box>
     </StyledGridOverlay>
   );
 }

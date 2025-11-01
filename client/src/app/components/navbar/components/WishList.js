@@ -3,38 +3,16 @@ import { Link } from 'react-router-dom'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import { IconButton, Tooltip } from '@mui/material';
 import { StyledBadge, StyledIcon } from '../../../helpers/UIHelper';
-
-
+import { useTranslation } from 'react-i18next';
 
 export default function WishList({ badge, color }) {
 
+  const { t } = useTranslation();
+
   return (
-    // <Link to="/wishlist" style={{ color: 'white' }}>
-    //   <SlHeart style={{ fontSize: "3rem" }} />
-
-    //   {badge > 0 && (
-
-    //     <>
-    //       <Badge
-    //         style={{
-    //           position: "absolute",
-    //           top: "-5px",
-    //           right: "60px",
-    //           width: "23px",
-    //         }}
-    //         bg="danger"
-    //       >
-    //         {badge}
-    //       </Badge>
-    //       <span className="visually-hidden">unread messages</span>
-    //     </>
-
-    //   )}
-
-    // </Link>
     <Link to="/favorite-list" >
-      <Tooltip placement="top-end" title="Favorite">
-        <IconButton aria-label="favorite">
+      <Tooltip placement="top-end" title={t('wishlist.favorite')}>
+        <IconButton aria-label={t('wishlist.favorite')}>
           <StyledBadge badgeContent={badge} color="primary">
             <FavoriteBorderOutlinedIcon sx={color ? color : StyledIcon} />
           </StyledBadge>

@@ -3,12 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { MdLogin } from "react-icons/md";
 import { useProductContext } from "../../contexts/ProductContext";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import Compare from "./components/Compare";
 import WishList from "./components/WishList";
 import AccountMenu from "./components/Account";
 import Cart from "./components/Cart";
 import Product from "./components/Product";
 import AccountMobile from "./components/AccountMobile";
+import LanguageSelector from "../../../components/LanguageSelector";
 
 
 
@@ -16,6 +18,7 @@ import AccountMobile from "./components/AccountMobile";
 
 export default function Navbar() {
   const { selectedCompareProducts } = useProductContext();
+  const { t } = useTranslation();
   // const [logout] = useLogoutMutation()
   const { user, isAuthenticated } = useSelector((state) => state.user);
   const { favorite } = useSelector((state) => state.favorite);
@@ -50,6 +53,7 @@ export default function Navbar() {
           alt="logo"
         />
         <ul className="nav_item_desktop">
+          <LanguageSelector />
           {isAuthenticated
             ? <>
               {user?.user?.role === 'admin' && <Product badge={productBadge} />}
@@ -58,7 +62,7 @@ export default function Navbar() {
               <WishList badge={wishBadge} />
               <AccountMenu />
             </>
-            : <Link to="/login" style={{ color: 'white' }}>
+            : <Link to="/login" style={{ color: 'white' }} title={t('nav.login')}>
               {/* Login */}
               <MdLogin style={{ fontSize: "2rem" }} />
             </Link>

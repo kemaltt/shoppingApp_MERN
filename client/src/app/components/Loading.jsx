@@ -1,6 +1,8 @@
-import React from 'react'
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 export default function Loading() {
+  const { t } = useTranslation();
   return (
     <div
       style={{
@@ -11,8 +13,8 @@ export default function Loading() {
       }}
     >
       <div className="spinner-grow text-primary" role="status">
-        <span className="visually-hidden">Loading...</span>
+        <span className="visually-hidden">{t('loading.spinner')}</span>
       </div>
     </div>
-  )
+  );
 }

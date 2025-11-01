@@ -3,9 +3,11 @@ import { useProductContext } from "../contexts/ProductContext";
 import { useGetProductsMutation } from "../../redux/product/product-api";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { categories } from "../helpers/UIHelper";
+import { useTranslation } from 'react-i18next';
 
 export default function Search({ setMessage }) {
   const [selectInput, setSelectInput] = useState('All');
+  const { t } = useTranslation();
 
   const { isAuthenticated, searchInput, setSearchInput, filterProducts } = useProductContext();
   // useGetProductsQuery(selectInput)
@@ -23,22 +25,21 @@ export default function Search({ setMessage }) {
   const getProduct = (e) => {
     e.preventDefault();
     if (!isAuthenticated) {
-      alert("please log in before continuing");
+      alert(t('search.loginBeforeContinuing'));
     } else {
       if (!searchInput) {
-        alert("enter a product");
+        alert(t('search.enterProduct'));
       } else {
         filterProducts();
 
         if (filterProducts().length === 0) {
           setMessage(
-            <span style={{ color: "red" }}>No matching information</span>
+            <span style={{ color: 'red' }}>{t('search.noMatchingInformation')}</span>
           );
         } else {
-          filterProducts();
           setMessage(
-            <span style={{ color: "yellowgreen" }}>
-              There are {filterProducts().length} matches
+            <span style={{ color: 'yellowgreen' }}>
+              {t('search.matchCount', { count: filterProducts().length })}
             </span>
           );
         }
@@ -49,16 +50,16 @@ export default function Search({ setMessage }) {
   return (
     <div className="search_container d-flex justify-content-center align-items-center gap-lg-4 gap-2 my-4 mx-auto">
       <FormControl sx={{ m: 1, width:160 }} size="small">
-        <InputLabel id="demo-select-small-label">Category</InputLabel>
+        <InputLabel id="demo-select-small-label">{t('common.category')}</InputLabel>
         <Select
           labelId="demo-select-small-label"
           id="demo-select-small"
           value={selectInput}
-          label="Category"
+          label={t('common.category')}
           onChange={(e) => { setSelectInput(e.target.value) }}
         >
           {categories.map((el, i) => (
-            <MenuItem key={i} value={el}>{el}</MenuItem>
+            <MenuItem key={i} value={el}>{t(`categories.${el}`)}</MenuItem>
           ))}
         </Select>
       </FormControl>
@@ -69,7 +70,7 @@ export default function Search({ setMessage }) {
           onChange={(e) => setSearchInput(e.target.value)}
           value={searchInput}
           id="search"
-          label="Search"
+          label={t('common.search')}
           name="search"
           type="search"
           size="small"

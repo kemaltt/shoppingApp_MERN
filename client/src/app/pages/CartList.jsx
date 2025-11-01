@@ -4,6 +4,7 @@ import { Col, Row } from "react-bootstrap";
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { useTranslation } from "react-i18next";
 import { useGetCartQuery, useUpdateCartByIdMutation } from "../../redux/cart/cart-api";
 import { useAddFavoriteMutation, useDeleteFavoriteMutation } from "../../redux/favorite/favorite-api";
 import Button from "../components/Button";
@@ -16,6 +17,7 @@ export default function CartList() {
 
   const [open, setOpen] = useState(false);
   const [productId, setProductId] = useState(null);
+  const { t } = useTranslation();
 
   const [addFavorite] = useAddFavoriteMutation()
   const [deleteFavorite] = useDeleteFavoriteMutation()
@@ -82,11 +84,11 @@ export default function CartList() {
 
   return (
     cart?.products?.length <= 0 || error
-      ? <h1 className="text-center text-danger mt-5">{error?.data?.message ?? <span> There are no items in the cart</span>}</h1>
+      ? <h1 className="text-center text-danger mt-5">{error?.data?.message ?? <span>{t('cart.emptyMessage')}</span>}</h1>
       : <>
         <Card className="p-5">
           <CardHeader
-            title='Warenkorb'
+            title={t('cart.title')}
             subheader={`${cart?.products?.length} Products`}
             action={
               <Typography fontWeight='bold' fontStyle='italic' color="text.secondary">

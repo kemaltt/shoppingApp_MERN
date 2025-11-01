@@ -15,6 +15,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { useUpdateUserMutation, useUploadProfileImageMutation } from '../../../redux/auth/auth-api';
 import { useDeleteImageMutation } from '../../../redux/product/product-api';
 
@@ -23,6 +24,7 @@ export default function Profile() {
   const [deleteImage]=useDeleteImageMutation()
   const [updateUser, { isLoading: updateLoading }] = useUpdateUserMutation();
   const { user } = useSelector((state) => state.user);
+  const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState(false);
   const [name, setName] = useState(user?.user?.name);
   const [email, setEmail] = useState(user?.user?.email);
@@ -60,7 +62,7 @@ export default function Profile() {
     const file = e.target.files[0];
     const maxSize = 3 * 1024 * 1024;
     if (file.size > maxSize) {
-      alert('Dosya boyutu 3 MB\'dan küçük olmalıdır.');
+      alert(t('profile.fileSizeError'));
       return;
     }
 
@@ -154,7 +156,7 @@ export default function Profile() {
               <Box flex={1}>
                 <TextField
                   fullWidth
-                  label="Email"
+                  label={t('auth.email')}
                   variant="outlined"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -170,7 +172,7 @@ export default function Profile() {
               disabled={!isEditing}
               fullWidth
             >
-              Change Profile Picture
+              {t('profile.changeProfilePicture')}
               <input
                 type="file"
                 accept="image/*"

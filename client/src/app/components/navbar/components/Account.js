@@ -12,8 +12,10 @@ import Logout from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useLogoutMutation } from '../../../../redux/auth/auth-api';
+import { useTranslation } from 'react-i18next';
 
 export default function AccountMenu() {
+  const { t } = useTranslation();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -29,10 +31,9 @@ export default function AccountMenu() {
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-        <Tooltip placement="top" title="Account settings">
+        <Tooltip placement="top" title={t('account.settings')}>
           <IconButton
             onClick={handleClick}
-            // size="small"
             sx={{ ml: 2 }}
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
@@ -83,11 +84,11 @@ export default function AccountMenu() {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={() => navigate('/profile')}>
-          <Avatar sx={{ width: 32, height: 32, marginRight: 1 }} /> Profile
+          <Avatar sx={{ width: 32, height: 32, marginRight: 1 }} /> {t('account.profile')}
         </MenuItem>
 
         <MenuItem onClick={handleClose}>
-          <Avatar sx={{ width: 32, height: 32, marginRight: 1 }} /> My account
+          <Avatar sx={{ width: 32, height: 32, marginRight: 1 }} /> {t('account.myAccount')}
         </MenuItem>
 
         <Divider />
@@ -95,13 +96,13 @@ export default function AccountMenu() {
           <ListItemIcon>
             <Settings fontSize="small" />
           </ListItemIcon>
-          Settings
+          {t('account.settings')}
         </MenuItem>
         <MenuItem onClick={() => { logout(); navigate('/') }}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
-          Logout
+          {t('account.logout')}
         </MenuItem>
       </Menu>
     </React.Fragment>

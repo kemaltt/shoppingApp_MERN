@@ -6,6 +6,7 @@ import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import RemoveShoppingCartIcon from "@mui/icons-material/RemoveShoppingCart";
 import { useNavigate, useParams } from "react-router-dom";
 import { Carousel, Col, Row } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 import { useGetProductByIdQuery } from "../../redux/product/product-api";
 import { useAddToCartMutation, useDeleteFromCartMutation } from "../../redux/cart/cart-api";
 import { Card, CardContent, CardHeader, Typography } from '@mui/material'
@@ -17,6 +18,7 @@ export default function ProductDetail() {
   const [activeIndex, setActiveIndex] = useState(0);
   const navigate = useNavigate();
   const id = useParams().id
+  const { t } = useTranslation();
 
 
   const { product } = useSelector((state) => state.products);
@@ -46,7 +48,7 @@ export default function ProductDetail() {
       :
       <Card className="p-5" >
         <CardHeader
-          title='Product Detail'
+          title={t('productDetail.title')}
           action={
             <div className="cart_buttons">
               {cart && cart?.products?.some((el) => el.product?._id === product._id) ? (
@@ -56,7 +58,7 @@ export default function ProductDetail() {
                   color="error"
                   startIcon={<RemoveShoppingCartIcon />}
                 >
-                  Delete from Cart
+                  {t('productDetail.deleteFromCart')}
                 </Button>
               ) : (
                 <Button
@@ -65,7 +67,7 @@ export default function ProductDetail() {
                   color="success"
                   startIcon={<AddShoppingCartIcon />}
                 >
-                  Add to Cart
+                  {t('productDetail.addToCart')}
                 </Button>
               )}
             </div>
@@ -154,7 +156,7 @@ export default function ProductDetail() {
                 {product?.price}€
               </Typography>
               <Typography component="div" variant="h5">
-                category:   {product?.category}
+                {t('productDetail.category')}:   {product?.category}
               </Typography>
               <Typography component="div" >
                 {product.description}

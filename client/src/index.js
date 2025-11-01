@@ -5,6 +5,7 @@ import { ProductContextProvider } from "./app/contexts/ProductContext";
 import { Provider } from "react-redux";
 import { store, persistor } from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
+import "./i18n"; // i18n konfigürasyonunu import et
 
 
 
